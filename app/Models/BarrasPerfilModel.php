@@ -7,19 +7,12 @@ class BarrasPerfilModel extends Model
 {
     protected $table      = 'barras_perfil';
     protected $primaryKey = 'idbarras_perfil';
-    protected $allowedFields = ['idbarras_perfil','descripcion', 'padre', 'ruta','ruta_ci', 'logo', 'acceso', 'idperfil', 'perfil', 'tipo'];
-
+    protected $allowedFields = ['descripcion', 'padre', 'ruta','ruta_ci', 'logo', 'acceso', 'idperfil', 'perfil', 'tipo'];
+    
     public function geturlsxperfil($perfil)
     {
-        return $this->where('perfil',$perfil)
-                    ->where('acceso','SI')
-                    ->whereNotIn('padre',[0])
-                    ->findAll();
-    }
-    public function geturlsxperfil_aside($perfil)
-    {
-        return $this->where('perfil',$perfil)
-                    ->where('acceso','SI')
+        return $this->select('ruta_ci')
+                    ->where('perfil', $perfil)
                     ->findAll();
     }
 

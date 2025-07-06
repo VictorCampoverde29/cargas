@@ -14,7 +14,6 @@ class UsuariosModel extends Model
     {
         return $this->select('idusuarios,usuario')
                     ->where('estado','ACTIVO')
-                    ->whereNotIn('perfil', ['CONDUCTOR'])
                     ->orderBy('usuario','ASC')
                     ->findAll();
     }

@@ -16,50 +16,59 @@ class LoginController extends Controller
         return view('login/login.php');
     }
 
-    public function logueo_ingreso()
+    public function unauthorized()
     {
-    
-   
-      $clave = $this->request->getPost('clave');
-      $usuario = strtoupper($this->request->getPost('usuario'));
-      log_message('error', 'Datos recibidos: ' . json_encode(['usuario' => $usuario, 'clave' => $clave]));
+        return view('login/unauthorized');
+    }
 
-      try {
+    public function salir()
+    {
+        $session = session();
+        $session->destroy();
+        return redirect()->to('login');
+    }
+
+    public function logueo_Ingreso()
+    {
+        $clave = $this->request->getPost('password');
+        $usuario = $this->request->getPost('usuario');
+
+        try {
             $usuarioModel = new UsuariosModel();
-            $barrasperfilModel=new BarrasPerfilModel();
-            // Verifica el usuario y la contraseña
-            $userData = $usuarioModel->getUser($usuario, $clave); // Implementa este método en tu modelo
-            //log_message('error', 'Datos recibidos: ' . json_encode($userData));
+            $BarrasperfilModel = new BarrasPerfilModel();
 
-            if ($userData) {
-                // Si se encontró el usuario, verifica el acceso
-                $url_x_perfil=$barrasperfilModel->geturlsxperfil_aside($userData['perfil']); 
-                
-                        // Almacena en sesión los datos necesarios
-                        session()->set([
-                            'ca_nombrepersonal' => $userData['nombre'],
-                            'ca_nombreusuariocorto' => $userData['usuario'],          
-                            'ca_usuario' => $userData['idusuarios'],
-                            'ca_perfil'=>$userData['perfil'],
-                            'ca_password' => $clave,                          
-                            'ca_urls'=>$url_x_perfil,                    
-                            'ca_is_logged'=>true
-                        ]);
-                        
-                        return $this->response->setJSON([
-                            'success' => true
-                            ]);  
-                } else {
-                    return $this->response->setJSON([
+            $userData = $usuarioModel->getUser($usuario, $clave);
+
+            if (!$userData) {
+                return $this->response->setJSON([
                     'success' => false,
                     'mensaje' => 'Usuario o Clave Incorrecto'
-                    ]);
-                }
+                ]);
+            }
+
+            // Obtener todas las rutas permitidas para este perfil
+            $perfil = $userData['perfil'];
+            $rutasPermitidas = $BarrasperfilModel->geturlsxperfil($perfil);
+
+            session()->set([
+                'ca_nombreusuariocorto' => $userData['usuario'],
+                'ca_usuario' => $userData['idusuarios'],
+                'ca_password' => $clave,
+                'ca_perfil' => $userData['perfil'],
+                'ca_nombre_personal' => $userData['nombre'] ?? '',
+                'ca_rutas_permitidas' => array_column($rutasPermitidas, 'ruta'),
+                'ca_is_logged' => true
+            ]);
+
+            return $this->response->setJSON([
+                'success' => true,
+                'redirect' => '/dashboard'
+            ]);
         } catch (\Exception $e) {
-            return json_encode(['error' => ['text' => $e->getMessage()]]);
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Error en el sistema: ' . $e->getMessage()
+            ]);
         }
     }
 }
-
-
-?>

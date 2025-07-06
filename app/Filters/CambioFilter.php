@@ -10,7 +10,7 @@ class CambioFilter implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-      if (!session()->get('is_logged')) {
+      if (!session()->get('ca_is_logged')) {
             return redirect()->route('login');
         }
     }

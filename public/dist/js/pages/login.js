@@ -30,7 +30,7 @@ $('#txtpassword').keyup(function(e){
 
 function loguear() {
     var clave = $('#txtpassword').val().trim();
-    var usuario = $('#cmbusuario').val();
+    var usuario = $('#txtusuario').val();
     var recordar = $('#recordarPass').is(':checked');
 
     // Validaciones antes de enviar la petición
@@ -63,7 +63,7 @@ function loguear() {
         borrarCookie('recordarMarcado');
     }
 
-    var parametros = $.param({ clave: clave, usuario: usuario });
+    var parametros = $.param({ password: clave, usuario: usuario });
     const url = URLPY + 'login/login';
 
     $.ajax({

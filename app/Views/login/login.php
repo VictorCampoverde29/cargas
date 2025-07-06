@@ -27,7 +27,7 @@
 
         <!-- Input usuario -->
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Usuario" id="cmbusuario" name="cmbusuario" required>
+          <input type="email" class="form-control" placeholder="Usuario" id="txtusuario" name="txtusuario" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>

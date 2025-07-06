@@ -19,3 +19,10 @@ $routes->group('login', function ($routes) {
     $routes->get('logout', 'LoginController::salir');
     $routes->get('unauthorized', 'LoginController::unauthorized');
 });
+
+$routes->group('dashboard', ['filter' => 'AuthFilter'], function ($routes) {
+    $routes->get('mant_viajes', 'MantenimientoViajesController::index');
+    $routes->get('reg_servicio', 'RegistrarServicioController::index');
+    $routes->get('mant_carga', 'MantenimientoCargaController::index');
+    $routes->get('mant_destino', 'MantenimientoDestinoController::index');
+});

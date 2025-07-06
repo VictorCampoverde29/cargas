@@ -27,7 +27,7 @@ class AuthFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (!session()->get('is_logged')) {
+        if (!session()->get('ca_is_logged')) {
             return redirect()->route('login');
         }
 
@@ -35,7 +35,7 @@ class AuthFilter implements FilterInterface
         $routePath = implode('/', $uri->getSegments());
         log_message('error','variable routepath:'.$routePath); 
 
-        $perfil = session()->get('perfil');
+        $perfil = session()->get('ca_perfil');
         $barrasperfil=new BarrasPerfilModel();
         $urls = $barrasperfil->geturlsxperfil($perfil); 
      

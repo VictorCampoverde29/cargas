@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <menu>
   <modulo nombre="VIAJES" icono="fas fa-route">
-    <item nombre="Mant. Viajes" ruta="dashboard/cons_stock" icono="fas fa-search"/>
-    <item nombre="Reg. Servicio" ruta="dashboard/mant_articulos" icono="fas fa-cogs"/>
+    <item nombre="Mant. Viajes" ruta="dashboard/mant_viajes" icono="fas fa-search"/>
+    <item nombre="Reg. Servicio" ruta="dashboard/reg_servicio" icono="fas fa-cogs"/>
   </modulo>
   <modulo nombre="MANTENIMIENTO" icono="fas fa-wrench">
-    <item nombre="Mant. Carga" ruta="dashboard/imp_cert" icono="fas fa-boxes-stacked"/>
-    <item nombre="Mant. Destino" ruta="dashboard/ing_cert" icono="fas fa-map-marker-alt"/>
+    <item nombre="Mant. Carga" ruta="dashboard/mant_carga" icono="fas fa-boxes-stacked"/>
+    <item nombre="Mant. Destino" ruta="dashboard/mant_destino" icono="fas fa-map-marker-alt"/>
   </modulo>
 </menu>

@@ -187,9 +187,6 @@
   <script>
     var baseURL = '<?= base_url(); ?>';
   </script>
-  <script>
-    var codalmacenses = "<?= session()->get('codigoalmacen') ?? 'NL' ?>";
-  </script>
   <!-- jQuery -->
   <script src="<?= base_url('public/plugins/jquery/jquery.min.js') ?>"></script>
   <script src="<?= base_url('public/plugins/jquery-ui/jquery-ui.min.js') ?>"></script>
@@ -203,20 +200,6 @@
   <script src="<?= base_url('public/dist/js/adminlte.js') ?>"></script>
   <script src="<?= base_url('public/dist/js/pages/generales.js') ?>"></script>
   <?= $this->renderSection('scripts'); ?>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var codalmacenses = "<?= session()->get('codigoalmacen') ?? 'NL' ?>";
-      if (codalmacenses === 'NL' || codalmacenses === '') {
-        const mainContentWrapper = document.getElementById('main-content-wrapper');
-        if (mainContentWrapper) {
-          mainContentWrapper.style.opacity = '0.6';
-          mainContentWrapper.style.pointerEvents = 'none';
-        }
-      }
-    });
-  </script>
-
 </body>
 
 </html>

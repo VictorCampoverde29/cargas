@@ -26,3 +26,9 @@ $routes->group('dashboard', ['filter' => 'AuthFilter'], function ($routes) {
     $routes->get('mant_carga', 'MantenimientoCargaController::index');
     $routes->get('mant_destino', 'MantenimientoDestinoController::index');
 });
+
+$routes->group('mant_carga', ['filter' => 'CambioFilter'], function ($routes) {
+    $routes->get('datatables', 'MantenimientoCargaController::traerCarga');
+    $routes->post('agregar_carga', 'MantenimientoCargaController::agregarCarga');
+    $routes->post('editar_carga', 'MantenimientoCargaController::editarCarga');
+});

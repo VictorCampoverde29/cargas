@@ -9,8 +9,8 @@ class MantenimientoCargaController extends Controller
 {
     public function index()
     {
-        $TipoCarga = new TipoCargaModel();
-        $data['tipo'] = $TipoCarga->traerTipoCarga();
+        $Carga = new CargaModel();
+        $data['carga'] = $Carga->traerCarga();
         return view('mantcarga/index', $data);
     }
 
@@ -23,15 +23,12 @@ class MantenimientoCargaController extends Controller
     public function agregarCarga()
     {
         $model = new CargaModel();
-
-        $tipo_doc  = $this->request->getPost('tipo_doc');
         $descripcion  = $this->request->getPost('descripcion');
         $estado       = $this->request->getPost('estado');
 
         $data = [
             'descripcion' => $descripcion,
             'estado' => $estado,
-            'idtipo_carga' => $tipo_doc
         ];
 
         try {
@@ -47,11 +44,9 @@ class MantenimientoCargaController extends Controller
         $idcarga = $this->request->getPost('cod');
         $descripcion = $this->request->getPost('descripcion');
         $estado = $this->request->getPost('estado');
-        $tipo_carga = $this->request->getPost('tipo_carga');
         $data = [
             'descripcion' => $descripcion,
             'estado' => $estado,
-            'idtipo_carga' => $tipo_carga
         ];
         try {
             // Llama al método de actualización

@@ -15,110 +15,7 @@ $(document).ready(function () {
     if (codInicial) {
         mostrarDatosVehi(codInicial);
     }
-    $('#cmbdeporigen').change(function (e) {
-        traerProvinciaOrigen();
-    });
-
-    $('#cmbprovorigen').change(function (e) {
-        traerDistritosOrigen();
-    });
-    traerProvinciaOrigen();
-    $('#cmbdepllegada').change(function (e) {
-        traerProvinciaLlegada();
-    });
-
-    $('#cmbprovllegada').change(function (e) {
-        traerDistritosLlegada();
-    });
-    traerProvinciaLlegada();
 });
-
-
-function traerProvinciaOrigen() {
-    var parametros = 'dep=' + $('#cmbdeporigen').val();
-    const url = baseURL + 'mant_viajes/cmbprovincia';
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: parametros,
-        success: function (response) {
-            var provincia = response[0];
-            $('#cmbprovorigen').empty();
-            if (Array.isArray(provincia)) {
-                provincia.forEach(function (provincia) {
-                    $('#cmbprovorigen').append('<option value="' + provincia.provincia + '">' + provincia.provincia + '</option>');
-                });
-                if (provincia.length > 0) {
-                    traerDistritosOrigen();
-                }
-            }
-        }
-    });
-
-}
-
-function traerDistritosOrigen() {
-    var parametros = 'prov=' + $('#cmbprovorigen').val();
-    const url = baseURL + 'mant_viajes/cmbdistrito';
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: parametros,
-        success: function (response) {
-            var distritos = response[0];
-            $('#cmbdistorigen').empty();
-            if (Array.isArray(distritos)) {
-                distritos.forEach(function (distritos) {
-                    $('#cmbdistorigen').append('<option value="' + distritos.iddestino + '">' + distritos.distrito + '</option>');
-                });
-            }
-
-        }
-    });
-}
-
-function traerProvinciaLlegada() {
-    var parametros = 'dep=' + $('#cmbdepllegada').val();
-    const url = baseURL + 'mant_viajes/cmbprovincia2';
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: parametros,
-        success: function (response) {
-            var provincia = response[0];
-            $('#cmbprovllegada').empty();
-            if (Array.isArray(provincia)) {
-                provincia.forEach(function (provincia) {
-                    $('#cmbprovllegada').append('<option value="' + provincia.provincia + '">' + provincia.provincia + '</option>');
-                });
-                if (provincia.length > 0) {
-                    traerDistritosLlegada();
-                }
-            }
-        }
-    });
-
-}
-
-function traerDistritosLlegada() {
-    var parametros = 'prov=' + $('#cmbprovllegada').val();
-    const url = baseURL + 'mant_viajes/cmbdistrito2';
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: parametros,
-        success: function (response) {
-            var distritos = response[0];
-            $('#cmbdistllegada').empty();
-            if (Array.isArray(distritos)) {
-                distritos.forEach(function (distritos) {
-                    $('#cmbdistllegada').append('<option value="' + distritos.iddestino + '">' + distritos.distrito + '</option>');
-                });
-            }
-
-        }
-    });
-}
 
 function mostrarDatosConduc(cod) {
     var parametros = 'cod=' + cod;
@@ -157,8 +54,8 @@ function registrarViaje(){
     var fecha_inicio = $("#dtfinicio").val();
     var fecha_fin = $("#dtffin").val();
     var descripcion = $("#txtdescripcion").val();
-    var desti_origen = $("#cmbdistorigen").val();
-    var desti_llegada = $("#cmbdistllegada").val();
+    var desti_origen = $("#cmborigen").val();
+    var desti_llegada = $("#cmbdestino").val();
 
     if (descripcion === "") {
         Swal.fire({

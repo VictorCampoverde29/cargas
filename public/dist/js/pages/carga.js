@@ -4,6 +4,10 @@ $(document).ready(function () {
     cargarCarga();
 });
 
+function abrirModalCarga() {
+    $('#mdlcarga').modal('show');
+}
+
 function cargarCarga() {
     const url = baseURL + "mant_carga/datatables"; // Asegúrate que esta ruta coincide con la definida en Routes.php
     table = $("#tblcarga").DataTable({
@@ -53,24 +57,6 @@ function cargarCarga() {
         "columns": [
             { "data": "idcarga" },
             {
-                "data": "tipo_carga_nombre",
-                "width": "20%",
-                "render": function (data, type, row) {
-                    let options = '';
-                    tiposCarga.forEach(function(tipo) {
-                        const selected = tipo.tipo === data ? 'selected' : '';
-                        options += `<option value="${tipo.idtipo_carga}" ${selected}>${tipo.tipo}</option>`;
-                    });
-                    return `
-                        <div class="input-group input-group-sm">
-                            <select class="form-control form-control-sm perfil-input" data-field="tipo_carga" data-id="${row.idcarga}">
-                                ${options}
-                            </select>
-                        </div>
-                    `;
-                }
-            },
-            {
                 "data": null,
                 "orderable": false,
                 "render": function (data, type, row) {
@@ -101,6 +87,7 @@ function cargarCarga() {
             },
             {
                 "data": null,
+                "width": "10%",
                 "orderable": false,
                 "render": function (data, type, row) {
                     return `<div class="d-flex flex-row gap-1 justify-content-center">
@@ -115,7 +102,6 @@ function cargarCarga() {
 }
 
 function agregarCarga(){
-    var tipo_doc = $("#cmbtipocarga").val();
     var descripcion = $("#txtdescripcion").val();
     var estado = $("#cmbestadocarga").val();
 
@@ -142,8 +128,7 @@ function agregarCarga(){
             }
         });
     }else{
-        var parametros = "tipo_doc=" + tipo_doc +
-            "&descripcion=" + descripcion +
+        var parametros ="descripcion=" + descripcion +
             "&estado=" + estado;
         $.ajax({
             type: "POST",
@@ -169,6 +154,7 @@ function agregarCarga(){
                         }, 800);
                     });
                 }
+                $('#mdlcarga').modal('hide');
             },
         });
     }

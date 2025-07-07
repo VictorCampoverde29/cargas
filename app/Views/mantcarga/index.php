@@ -18,43 +18,23 @@ Mantenimiento Carga
                 <i class="fas fa-boxes-packing"></i>
                 Carga
             </h3>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-sm-3 col-md-3 mb-4">
-                    <h6><i class="fas fa-box"></i>&nbsp;Tipo:</h6>
-                    <select class="form-control form-control-sm" id="cmbtipocarga" name="cmbtipocarga">
-                        <?php foreach ($tipo as $tipos): ?>
-                            <option value="<?= esc($tipos['idtipo_carga']); ?>">
-                                <?= esc($tipos['tipo']); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="col-sm-3 col-md-3 mb-4">
-                    <h6><i class="fas fa-align-left"></i>&nbsp;Descripcion:</h6>
-                    <input type="text" id="txtdescripcion" name="txtdescripcion" class="form-control form-control-sm" >
-                </div>
-                <div class="col-sm-2 col-md-2 mb-4">
-                    <h6><i class="fas fa-sync-alt"></i>&nbsp;Estado:</h6>
-                    <select class="form-control form-control-sm" id="cmbestadocarga">
-                        <option value="ACTIVO">ACTIVO</option>
-                        <option value="INACTIVO">INACTIVO</option>
-                    </select>
-                </div>
-                <div class="col-sm-2 col-md-2 mb-4">
-                    <h6>&nbsp;</h6>
-                    <button type="button" class="btn btn-primary btn-sm" id="btnagregar" onclick="agregarCarga()">
-                        <i class="fas fa-plus"></i>&nbsp;AGREGAR
+            <div class="card-tools">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-wrench"></i>
                     </button>
+                    <div class="dropdown-menu dropdown-menu-right" role="menu">
+                        <a href="#" class="dropdown-item" onclick="abrirModalCarga()">+ AGREGAR NUEVA CARGA</a>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="card-body">
             <div class="table-responsive">
                 <table id="tblcarga" class="table table-bordered table-striped">
                     <thead>
                         <tr style="background-color: #000000; color:#FFFFFF;">
                             <th>ID</th>
-                            <th>TIPO CARGA</th>
                             <th>DESCRIPCION</th>
                             <th>ESTADO</th>
                             <th>ACCION</th>
@@ -63,6 +43,46 @@ Mantenimiento Carga
                     <tbody>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mdlcarga" tabindex="-1" aria-labelledby="mdlcargaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-people-fill"></i>&nbsp;REGISTRAR CARGA
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="mb-3 fw-bold"><i class="fas fa-align-left"></i>&nbsp;DESCRIPCION</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control mb-3 form-control-sm" id="txtdescripcion" name="txtdescripcion" placeholder="DESCRIPCION">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="mb-3 fw-bold"><i class="fas fa-sync-alt"></i>&nbsp;ESTADO</label>
+                        <select class="form-control form-control-sm" id="cmbestadocarga">
+                            <option value="ACTIVO">ACTIVO</option>
+                            <option value="INACTIVO">INACTIVO</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <h6 class="mb-3 fw-bold">&nbsp;</h6>
+                        <button type="button" class="btn btn-primary btn-sm" id="btnagregar" onclick="agregarCarga()">
+                            <i class="fas fa-plus"></i>&nbsp;AGREGAR
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa-solid fa-circle-xmark"></i> CERRAR
+                </button>
             </div>
         </div>
     </div>
@@ -82,8 +102,5 @@ Mantenimiento Carga
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.html5.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.print.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
-<script>
-    var tiposCarga = <?= json_encode($tipo) ?>;
-</script>
 <script src="<?= base_url('public/dist/js/pages/carga.js') ?>"></script>
 <?= $this->endsection('scripts'); ?>

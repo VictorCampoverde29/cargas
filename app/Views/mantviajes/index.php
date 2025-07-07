@@ -55,10 +55,7 @@ Registrar Viaje
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-6">
-                                <?= $this->include('mantviajes/destinoorigen.php') ?>
-                            </div>
-                            <div class="col-md-6">
-                                <?= $this->include('mantviajes/destinollegada.php') ?>
+                                <?= $this->include('mantviajes/destinos.php') ?>
                             </div>
                         </div>
                     </div>

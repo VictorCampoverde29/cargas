@@ -15,10 +15,15 @@ class MantenimientoViajesController extends Controller
         $Destinos = new DestinosModel();
         $Conductores = new ConductorModel();
         $Vehiculos = new VehiculosModel();
-        $data['departamento'] = $Destinos->getDepartamentos();
+        $data['destino'] = $Destinos->getDestinos();
         $data['conductor'] = $Conductores->getConductoresViaje();
         $data['vehiculo'] = $Vehiculos->getUnidadesGuia();
         return view('mantviajes/index', $data);
+    }
+    public function traerViajes(){
+        $model = new ViajesModel();
+        $data = $model->traerViajeReg();
+        return $this->response->setJSON($data);
     }
 
     public function registrarViaje()
@@ -51,6 +56,24 @@ class MantenimientoViajesController extends Controller
         }
     }
 
+    public function editarViaje(){
+        $model = new ViajesModel();
+        $idviaje = $this->request->getPost('cod');
+        $estado = $this->request->getPost('estado');
+        $data = [
+            'estado' => $estado
+        ];
+        try {
+            // Llama al método de actualización
+            if ($model->update($idviaje, $data)) {
+                return $this->response->setJSON(['success' => true, 'message' => 'Viaje actualizado.']);
+            } else {
+                return $this->response->setJSON(['error' => 'Viaje no encontrado.']);
+            }
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['error' => 'Ocurrió un error al actualizar el Viaje: ' . $e->getMessage()]);
+        }
+    }
 }
 
 ?>

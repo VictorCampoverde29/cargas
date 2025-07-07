@@ -8,13 +8,12 @@ class CargaModel extends Model
 {
     protected $table      = 'carga';
     protected $primaryKey = 'idcarga';
-    protected $allowedFields = ['descripcion', 'estado', 'idtipo_carga'];
+    protected $allowedFields = ['descripcion', 'estado'];
 
     public function traerCarga()
     {
-        return $this->select('carga.idcarga, carga.descripcion, carga.estado, tipo_carga.tipo as tipo_carga_nombre')
-            ->join('tipo_carga', 'tipo_carga.idtipo_carga = carga.idtipo_carga')
-            ->orderBy('carga.descripcion', 'ASC')
-            ->findAll();
+        return $this->select('idcarga, descripcion, estado')
+                    ->orderBy('descripcion', 'ASC')
+                    ->findAll();
     }
 }

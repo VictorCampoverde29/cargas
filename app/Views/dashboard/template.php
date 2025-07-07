@@ -34,12 +34,14 @@
       display: flex;
       align-items: center;
     }
+
     .marquee-track {
       display: inline-block;
       white-space: nowrap;
       will-change: transform;
       animation: marquee-track 30s linear infinite;
     }
+
     .marquee-message {
       display: inline-block;
       padding: 0 40px;
@@ -47,23 +49,41 @@
       line-height: 54px;
       vertical-align: middle;
     }
+
     .marquee-message .fas {
       margin-right: 8px;
     }
+
     .marquee-message a {
       color: #721c24;
       font-weight: bold;
       text-decoration: underline;
     }
+
     @keyframes pulse-warning {
-      0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5); }
-      70% { box-shadow: 0 0 0 12px rgba(220, 53, 69, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+      0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+      }
+
+      70% {
+        box-shadow: 0 0 0 12px rgba(220, 53, 69, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+      }
     }
+
     @keyframes marquee-track {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
     }
+
     .warning-banner:hover .marquee-track {
       animation-play-state: paused;
     }
@@ -115,73 +135,8 @@
       <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
-   <?= $this->include('Views/dashboard/footer') ?>
-
-  <div class="modal fade" id="modal-cambio" tabindex="-1" role="dialog" aria-labelledby="tituloModalCambio" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content border-primary">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="tituloModalCambio"><i class="fas fa-warehouse"></i> Elegir Almacén</h5>
-        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <div class="form-group">
-          <label for="cmbempresa"><i class="fas fa-building"></i> Empresa</label>
-          <select class="form-control form-control-sm" id="cmbempresa" name="cmbempresa"></select>
-        </div>
-      </div>
-
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          <i class="fas fa-times"></i> Cerrar
-        </button>
-        <button type="button" class="btn btn-primary" onclick="cambio_almacen()">
-          <i class="fas fa-retweet"></i> Cambiar Almacén
-        </button>
-      </div>
-    </div>
+    <?= $this->include('Views/dashboard/footer') ?>
   </div>
-</div>
-
-
-<div class="modal fade" id="modal-clave" tabindex="-1" role="dialog" aria-labelledby="tituloModalClave" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content border-info">
-      <div class="modal-header bg-info text-white">
-        <h5 class="modal-title" id="tituloModalClave"><i class="fas fa-key"></i> Cambio de Clave</h5>
-        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <p class="text-muted mb-3 text-center">Ingrese su nueva contraseña para actualizarla.</p>
-
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Nueva Clave" id="txtclave" name="txtclave">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          <i class="fas fa-times-circle"></i> Cancelar
-        </button>
-        <button type="submit" class="btn btn-info" onclick="actualizar_password()">
-          <i class="fas fa-user-lock"></i> Cambiar Clave
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
   </div>
   <!-- ./wrapper -->
   <script>

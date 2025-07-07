@@ -41,4 +41,13 @@ $routes->group('mant_viajes', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->get('datos_conductores', 'ConductorController::getDatosXcod');
     $routes->get('datos_vehiculos', 'VehiculosController::getDatosXcod');
     $routes->post('registrar_viaje', 'MantenimientoViajesController::registrarViaje');
+    $routes->get('datatables', 'MantenimientoViajesController::traerViajes');
+    $routes->post('editar_viaje', 'MantenimientoViajesController::editarViaje');
+});
+
+$routes->group('reg_servicio', ['filter' => 'CambioFilter'], function ($routes) {
+    $routes->get('cmbprovincia', 'DestinosController::getProvinciaXDep');
+    $routes->get('cmbdistrito', 'DestinosController::getDistritoXProvDep');
+    $routes->get('cmbprovincia2', 'DestinosController::getProvinciaXDep');
+    $routes->get('cmbdistrito2', 'DestinosController::getDistritoXProvDep');
 });

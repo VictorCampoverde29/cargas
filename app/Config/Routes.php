@@ -45,6 +45,12 @@ $routes->group('mant_viajes', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->post('editar_viaje', 'MantenimientoViajesController::editarViaje');
 });
 
+$routes->group('mant_destino', ['filter' => 'CambioFilter'], function ($routes) {
+    $routes->get('datatables', 'MantenimientoDestinosController::getDestinos');
+    $routes->post('agregar_destino', 'MantenimientoDestinosController::agregarDestino');
+    $routes->post('editar_destino', 'MantenimientoDestinosController::editarDestino');
+});
+
 $routes->group('reg_servicio', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->get('cmbprovincia', 'DestinosController::getProvinciaXDep');
     $routes->get('cmbdistrito', 'DestinosController::getDistritoXProvDep');

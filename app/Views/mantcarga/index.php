@@ -16,7 +16,7 @@ Mantenimiento Carga
         <div class="card-header">
             <h3 class="card-title">
                 <i class="fas fa-boxes-packing"></i>
-                Carga
+                REGISTRO DE CARGAS
             </h3>
             <div class="card-tools">
                 <div class="btn-group">
@@ -58,22 +58,21 @@ Mantenimiento Carga
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="mb-3 fw-bold"><i class="fas fa-align-left"></i>&nbsp;DESCRIPCION</label>
+                    <div class="form-group col-md-7">
+                        <label><i class="fas fa-align-left"></i>&nbsp;DESCRIPCION</label>
                         <div class="input-group">
-                            <input type="text" class="form-control mb-3 form-control-sm" id="txtdescripcion" name="txtdescripcion" placeholder="DESCRIPCION">
+                            <input type="text" class="form-control form-control-sm" id="txtdescripcion" name="txtdescripcion" placeholder="DESCRIPCION">
                         </div>
                     </div>
                     <div class="form-group col-md-3">
-                        <label class="mb-3 fw-bold"><i class="fas fa-sync-alt"></i>&nbsp;ESTADO</label>
+                        <label><i class="fas fa-sync-alt"></i>&nbsp;ESTADO</label>
                         <select class="form-control form-control-sm" id="cmbestadocarga">
                             <option value="ACTIVO">ACTIVO</option>
                             <option value="INACTIVO">INACTIVO</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-3">
-                        <h6 class="mb-3 fw-bold">&nbsp;</h6>
-                        <button type="button" class="btn btn-primary btn-sm" id="btnagregar" onclick="agregarCarga()">
+                    <div class="form-group col-md-2 d-flex align-items-end">
+                        <button type="button" class="btn btn-primary btn-sm w-100" id="btnagregar" onclick="agregarCarga()">
                             <i class="fas fa-plus"></i>&nbsp;AGREGAR
                         </button>
                     </div>

@@ -1,16 +1,16 @@
 table = '';
 
 $(document).ready(function () {
-    cargarCarga();
+    cargarDestinos();
 });
 
-function abrirModalCarga() {
-    $('#mdlcarga').modal('show');
+function abrirModalDestino() {
+    $('#mdldestino').modal('show');
 }
 
-function cargarCarga() {
-    const url = baseURL + "mant_carga/datatables"; // Asegúrate que esta ruta coincide con la definida en Routes.php
-    table = $("#tblcarga").DataTable({
+function cargarDestinos() {
+    const url = baseURL + "mant_destino/datatables"; // Asegúrate que esta ruta coincide con la definida en Routes.php
+    table = $("#tbldestinos").DataTable({
         "destroy": true,
         "language": Español,
         "autoWidth": true,
@@ -50,11 +50,12 @@ function cargarCarga() {
             "method": "GET",
             "url": url,
             "dataSrc": function (json) {
+                console.log(json);
                 return json;
             }
         },
         "columns": [
-            { "data": "idcarga" },
+            { "data": "iddestino" },
             {
                 "data": null,
                 "orderable": false,
@@ -62,8 +63,8 @@ function cargarCarga() {
                     return `
                         <div class="d-flex align-items-center justify-content-center">
                             <input type="text" class="form-control form-control-sm me-2" 
-                                value="${data.descripcion}" 
-                                id="descripcion_${data.idcarga}" 
+                                value="${data.nombre}" 
+                                id="descripcion_${data.iddestino}" />
                         </div>
                     `;
                 }
@@ -76,7 +77,7 @@ function cargarCarga() {
                     var selected_inactivo = (data === 'INACTIVO') ? 'selected' : '';
                     return `
                         <div class="input-group input-group-sm">
-                            <select class="form-control form-control-sm perfil-input" data-field="estado" data-id="${data.idcarga}">
+                            <select class="form-control form-control-sm perfil-input" data-field="estado" data-id="${data.iddestino}">
                                 <option value="ACTIVO" ${selected_activo}>ACTIVO</option>
                                 <option value="INACTIVO" ${selected_inactivo}>INACTIVO</option>
                             </select>
@@ -90,7 +91,7 @@ function cargarCarga() {
                 "orderable": false,
                 "render": function (data, type, row) {
                     return `<div class="d-flex flex-row gap-1 justify-content-center">
-                                <button class="btn btn-2 btn-warning btn-sm btn-pill w-80" onclick="editarCarga(this, ${data.idcarga})">
+                                <button class="btn btn-2 btn-warning btn-sm btn-pill w-80" onclick="editarDestino(this, ${data.iddestino})">
                                 <i class="fas fa-check"></i>
                                 </button>
                             </div>`;
@@ -100,13 +101,13 @@ function cargarCarga() {
     });
 }
 
-function agregarCarga(){
-    var descripcion = $("#txtdescripcion").val();
-    var estado = $("#cmbestadocarga").val();
+function agregarDestino(){
+    var descripcion = $("#txtdescripciondestino").val();
+    var estado = $("#cmbestadodestino").val();
 
     if (descripcion === "") {
         Swal.fire({
-            title: "MANT. CARGA",
+            title: "MANT. DESTINOS",
             text: "FALTA INGRESAR DESCRIPCION!",
             icon: "error",
             showCancelButton: false,
@@ -115,7 +116,7 @@ function agregarCarga(){
             confirmButtonText: "Ok",
         }).then((result) => {
             if (result.isConfirmed) {
-                var documentoField = $("#txtdescripcion");
+                var documentoField = $("#txtdescripciondestino");
 
                 // Enfocar el campo inmediatamente
                 documentoField.focus();
@@ -131,19 +132,19 @@ function agregarCarga(){
             "&estado=" + estado;
         $.ajax({
             type: "POST",
-            url: baseURL + "mant_carga/agregar_carga",
+            url: baseURL + "mant_destino/agregar_destino",
             data: parametros,
             success: function (response) {
                 if (response.error) {
                     Swal.fire({
-                        title: "REGISTRO CARGA",
+                        title: "REGISTRO DESTINO",
                         text: response.error,
                         icon: "error",
                     });
                 } else {
                     Swal.fire({
                         icon: "success",
-                        title: "REGISTRO DE CARGA",
+                        title: "REGISTRO DESTINO",
                         text: response.message,
                     }).then(function () {
                         var paginaActual = table.page.info().page;
@@ -153,20 +154,19 @@ function agregarCarga(){
                         }, 800);
                     });
                 }
-                $('#mdlcarga').modal('hide');
+                $('#mdldestino').modal('hide');
             },
         });
     }
 }
 
-function editarCarga(btn, idcarga){
+function editarDestino(btn, iddestino){
     var row = $(btn).closest('tr');
-    var tipo_carga = row.find('select[data-field="tipo_carga"]').val();
     var descripcion = row.find('input[id^="descripcion_"]').val();
     var estado = row.find('select[data-field="estado"]').val();
     if (descripcion === '') {
         Swal.fire({
-            title: "MANT. CARGA",
+            title: "MANT. DESTINO",
             text: "FALTA INGRESAR DESCRIPCIÓN!",
             icon: "error",
             showCancelButton: false,
@@ -175,7 +175,7 @@ function editarCarga(btn, idcarga){
             confirmButtonText: "Ok"
         }).then((result) => {
             if (result.isConfirmed) {
-                var documentoField = $('#serie_' + idseries_correlativos);
+                var documentoField = $('#descripcion_' + iddestino);
                 documentoField.focus();
                 setTimeout(function () {
                     documentoField.focus();
@@ -186,24 +186,23 @@ function editarCarga(btn, idcarga){
         var parametros =
             'descripcion=' + descripcion +
             '&estado=' + estado +
-            '&tipo_carga=' + tipo_carga +
-            '&cod=' + idcarga;
+            '&cod=' + iddestino;
         $.ajax({
             type: "POST",
-            url: baseURL + 'mant_carga/editar_carga',
+            url: baseURL + 'mant_destino/editar_destino',
             data: parametros,
             success: function (response) {
                 console.log(response);
                 if (response.error) {
                     Swal.fire({
                         icon: "error",
-                        title: 'EDICION CARGA',
+                        title: 'EDICION DESTINO',
                         text: response.error
                     });
                 } else {
                     Swal.fire({
                         icon: 'success',
-                        title: 'EDICION CARGA',
+                        title: 'EDICION DESTINO',
                         text: response.message,
                     }).then(function () {
                         var paginaActual = table.page.info().page;

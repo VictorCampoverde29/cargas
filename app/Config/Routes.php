@@ -24,11 +24,21 @@ $routes->group('dashboard', ['filter' => 'AuthFilter'], function ($routes) {
     $routes->get('mant_viajes', 'MantenimientoViajesController::index');
     $routes->get('reg_servicio', 'RegistrarServicioController::index');
     $routes->get('mant_carga', 'MantenimientoCargaController::index');
-    $routes->get('mant_destino', 'MantenimientoDestinoController::index');
+    $routes->get('mant_destino', 'MantenimientoDestinosController::index');
 });
 
 $routes->group('mant_carga', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->get('datatables', 'MantenimientoCargaController::traerCarga');
     $routes->post('agregar_carga', 'MantenimientoCargaController::agregarCarga');
     $routes->post('editar_carga', 'MantenimientoCargaController::editarCarga');
+});
+
+$routes->group('mant_viajes', ['filter' => 'CambioFilter'], function ($routes) {
+    $routes->get('cmbprovincia', 'DestinosController::getProvinciaXDep');
+    $routes->get('cmbdistrito', 'DestinosController::getDistritoXProvDep');
+    $routes->get('cmbprovincia2', 'DestinosController::getProvinciaXDep');
+    $routes->get('cmbdistrito2', 'DestinosController::getDistritoXProvDep');
+    $routes->get('datos_conductores', 'ConductorController::getDatosXcod');
+    $routes->get('datos_vehiculos', 'VehiculosController::getDatosXcod');
+    $routes->post('registrar_viaje', 'MantenimientoViajesController::registrarViaje');
 });

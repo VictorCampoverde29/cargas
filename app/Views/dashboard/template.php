@@ -116,11 +116,7 @@
               <h1 class="m-0"><?= $this->renderSection('titulo'); ?> </h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item">
-                  <h6><i class="fa fa-building"></i> <?= esc(session()->get('n_sucursal') ?? '----') ?> / <i class="fa fa-home"></i> <?= esc(session()->get('nombrealmacen') ?? '----') ?> </h6>
-                </li>
-              </ol>
+              
             </div><!-- /.col -->
           </div><!-- /.row -->
         </div><!-- /.container-fluid -->

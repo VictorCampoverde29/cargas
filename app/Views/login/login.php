@@ -22,7 +22,7 @@
     <div class="card">
       <div class="card-body login-card-body">
         <div class="login-logo">
-          <img src="<?= base_url('public/dist/img/logo/logogasiu.png') ?>" width="200" alt="Logo GASIU">
+          <img src="<?= base_url('public/dist/img/logofoxnegro.png') ?>" width="200" alt="Logo GASIU">
         </div>
 
         <!-- Input usuario -->

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\ConductorModel;
 use App\Models\DestinosModel;
+use App\Models\SucursalModel;
 use App\Models\VehiculosModel;
 use App\Models\ViajesModel;
 use CodeIgniter\Controller;
@@ -15,9 +16,11 @@ class MantenimientoViajesController extends Controller
         $Destinos = new DestinosModel();
         $Conductores = new ConductorModel();
         $Vehiculos = new VehiculosModel();
+        $Sucursal = new SucursalModel();
         $data['destino'] = $Destinos->getDestinos();
         $data['conductor'] = $Conductores->getConductoresViaje();
         $data['vehiculo'] = $Vehiculos->getUnidadesGuia();
+        $data['sucursal'] = $Sucursal->traerSucursales();
         return view('mantviajes/index', $data);
     }
     public function traerViajes(){

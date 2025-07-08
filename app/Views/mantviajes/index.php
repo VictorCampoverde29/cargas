@@ -20,55 +20,318 @@ Registrar Viaje
                         <i class="fas fa-boxes-packing"></i>
                         Nuevo Viaje
                     </h3>
+                    <div class="card-tools">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-wrench"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                <a href="#" class="dropdown-item" onclick="abrirModalViaje()">+ AGREGAR NUEVo VIAJE</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-3 col-md-3 mb-4">
-                            <h6><i class="fas fa-box"></i>&nbsp;N° Viaje:</h6>
-                            <select class="form-control form-control-sm" id="cmbnviaje" name="cmbnviaje">
 
-                            </select>
-                        </div>
-                        <div class="col-sm-3 col-md-3 mb-4">
-                            <h6><i class="fas fa-align-left"></i>&nbsp;Glosa:</h6>
-                            <input type="text" id="txtdescripcion" name="txtdescripcion" class="form-control form-control-sm">
-                        </div>
-                        <div class="col-sm-3 col-md-3 mb-4">
-                            <h6><i class="fas fa-align-left"></i>&nbsp;F. Inicio:</h6>
-                            <input type="date" id="dtfinicio" name="dtfinicio" class="form-control form-control-sm" value="<?= date('Y-m-d'); ?>" min="<?= date('Y-m-d'); ?>">
-                        </div>
-                        <div class="col-sm-3 col-md-3 mb-4">
-                            <h6><i class="fas fa-align-left"></i>&nbsp;F. Fin:</h6>
-                            <input type="date" id="dtffin" name="dtffin" class="form-control form-control-sm" value="<?= date('Y-m-d'); ?>" min="<?= date('Y-m-d'); ?>">
+                    <div class="table-responsive">
+                        <table id="tblviajes" class="table table-bordered table-striped">
+                            <thead>
+                                <tr style="background-color: #000000; color:#FFFFFF;">
+                                    <th>ID</th>
+                                    <th>CONDUCTOR</th>
+                                    <th>UNIDAD</th>
+                                    <th>F. INICIO</th>
+                                    <th>F. FIN</th>
+                                    <th>OBSERVACIONES</th>
+                                    <th>ORIGEN</th>
+                                    <th>LLEGADA</th>
+                                    <th>ESTADO</th>
+                                    <th>ACCION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="mdlviaje" tabindex="-1" aria-labelledby="mdlviajeLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-people-fill"></i>&nbsp;REGISTRAR VIAJE
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-4 col-md-4 mb-4">
+                        <label><i class="fas fa-align-left"></i>&nbsp;GLOSA:</label>
+                        <input type="text" id="txtdescripcion" name="txtdescripcion" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-sm-2 col-md-2 mb-4">
+                        <label><i class="fas fa-align-left"></i>&nbsp;F. INICIO:</label>
+                        <input type="date" id="dtfinicio" name="dtfinicio" class="form-control form-control-sm" value="<?= date('Y-m-d'); ?>" min="<?= date('Y-m-d'); ?>">
+                    </div>
+                    <div class="col-sm-2 col-md-2 mb-4">
+                        <label><i class="fas fa-align-left"></i>&nbsp;F. FIN:</label>
+                        <input type="date" id="dtffin" name="dtffin" class="form-control form-control-sm" value="<?= date('Y-m-d'); ?>" min="<?= date('Y-m-d'); ?>">
+                    </div>
+                    <div class="col-sm-2 col-md-2 mb-4">
+                        <label><i class="fas fa-align-left"></i>&nbsp;ORIGEN:</label>
+                        <select class="form-control form-control-sm" id="cmborigen">
+                            <?php foreach ($destino as $destinos): ?>
+                                <option value="<?= esc($destinos['iddestino']); ?>">
+                                    <?= esc($destinos['nombre']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-sm-2 col-md-2 mb-4">
+                        <label><i class="fas fa-align-left"></i>&nbsp;DESTINO:</label>
+                        <select class="form-control form-control-sm" id="cmbdestino">
+                            <?php foreach ($destino as $destinos): ?>
+                                <option value="<?= esc($destinos['iddestino']); ?>">
+                                    <?= esc($destinos['nombre']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 col-md-2 mb-4">
+                        <label><i class="fas fa-align-left"></i>&nbsp;VEHICULO:</label>
+                        <select class="form-control form-control-sm" id="cmbvehiculo">
+                            <?php foreach ($vehiculo as $vehiculos): ?>
+                                <option value="<?= esc($vehiculos['idunidades']); ?>">
+                                    <?= esc($vehiculos['descripcion']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        <label><i class="fas fa-align-left"></i>&nbsp;CONDUCTOR:</label>
+                        <select class="form-control form-control-sm" id="cmbconductor">
+                            <?php foreach ($conductor as $conductores): ?>
+                                <option value="<?= esc($conductores['idconductor']); ?>">
+                                    <?= esc($conductores['nombrecompleto']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2 text-star">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-sm btn-success btn-block" onclick="registrarViaje()">
+                            <i class="fas fa-arrow-up-right-from-square"></i>&nbsp;REGISTRAR VIAJE
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa-solid fa-circle-xmark"></i> CERRAR
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!---->
+<div class="modal fade" id="mdlservicios" tabindex="-1" aria-labelledby="mdlserviciosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-people-fill"></i>&nbsp;SERVICIOS DE VIAJE
+                </h5>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="txtidservicio" name="txtidservicio">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;BUSCAR GUIA</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control form-control-sm" id="txtviajeprin" name="txtviajeprin" placeholder="VIAJE" disabled>
+                            <button class="btn btn-primary btn-sm" type="button" id="btneleremi" name="btneleremi" onclick="abrirModalGuia()"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?= $this->include('mantviajes/vehiculos.php') ?>
-                            </div>
-                            <div class="col-md-6">
-                                <?= $this->include('mantviajes/conductor.php') ?>
-                            </div>
+                    <div class="form-group col-md-3">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;N° GUIA</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control mb-3 form-control-sm" id="txtnguiaserv" name="txtnguiaserv" placeholder="N° GUIA">
                         </div>
                     </div>
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?= $this->include('mantviajes/destinos.php') ?>
+                    <div class="form-group col-md-3">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;F. SERVICIO</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control mb-3 form-control-sm" id="dtfserv" name="dtfserv">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;ORIGEN</label>
+                        <select class="form-control form-control-sm" id="cmborigenserv" name="cmborigenserv">
+                            <?php foreach ($destino as $destinos): ?>
+                                <option value="<?= esc($destinos['iddestino']); ?>">
+                                    <?= esc($destinos['nombre']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;DESTINO</label>
+                        <select class="form-control form-control-sm" id="cmbllegadaserv" name="cmbllegadaserv">
+                            <?php foreach ($destino as $destinos): ?>
+                                <option value="<?= esc($destinos['iddestino']); ?>">
+                                    <?= esc($destinos['nombre']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;FLETE</label>
+                        <select class="form-control form-control-sm" id="cmbfleteserv" name="cmbfleteserv">
+                            <option value="SI">SI</option>
+                            <option value="NO">NO</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;DESTINATARIO</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control mb-3 form-control-sm" id="txtdestiserv" name="txtdestiserv" placeholder="DESTINATARIO">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;ESTADO</label>
+                        <select class="form-control form-control-sm" id="cmbfleteserv" name="cmbfleteserv">
+                            <option value="EN CAMINO">EN CAMINO</option>
+                            <option value="ENTREGADO">ENTREGADO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;GLOSA</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control mb-3 form-control-sm" id="txtglosaserv" name="txtglosaserv" placeholder="GLOSA">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tblchasis" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr style="background-color: #000000; color:#FFFFFF;">
+                                                <th>TIPO CARGA</th>
+                                                <th>N° GUIA</th>
+                                                <th>F. SERVICIO</th>
+                                                <th>ORIGEN</th>
+                                                <th>LLEGADA</th>
+                                                <th>FLETE</th>
+                                                <th>RECEPTOR</th>
+                                                <th>GLOSA</th>
+                                                <th>ESTADO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <div class="row justify-content-star">
-                        <div class="col-md-3 text-star">
-                            <button class="btn btn-sm btn-success btn-block" onclick="registrarViaje()">
-                                <i class="fas fa-arrow-up-right-from-square"></i>&nbsp;REGISTRAR VIAJE
-                            </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa-solid fa-circle-xmark"></i> CERRAR
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- FIN DIV-->
+<div class="modal fade" id="mdlbuscarguia" tabindex="-1" aria-labelledby="mdlbuscarguiaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-people-fill"></i>&nbsp;BUSCAR GUIA
+                </h5>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="txtidguia" name="txtidguia">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;F. INICIO</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control mb-3 form-control-sm" id="dtfiniguia" name="dtfiniguia">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;F. FIN</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control mb-3 form-control-sm" id="dtffinguia" name="dtffinguia">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;SURCURSAL</label>
+                        <select class="form-control form-control-sm" id="cmbsucursalguia" name="cmbsucursalguia">
+                            <?php foreach ($sucursal as $sucursales): ?>
+                                <option value="<?= esc($sucursales['idsucursal']); ?>">
+                                    <?= esc($sucursales['descripcion']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-2 text-star">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-sm btn-success btn-block" onclick="traerGuias()">
+                            <i class="fas fa-arrow-up-right-from-square"></i>&nbsp;REGISTRAR VIAJE
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tblguias" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr style="background-color: #000000; color:#FFFFFF;">
+                                                <th>N° GUIA</th>
+                                                <th>F. SERVICIO</th>
+                                                <th>ORIGEN</th>
+                                                <th>LLEGADA</th>
+                                                <th>FLETE</th>
+                                                <th>EMISOR</th>
+                                                <th>RECEPTOR</th>
+                                                <th>GLOSA</th>
+                                                <th>ESTADO</th>
+                                                <th>ACCION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa-solid fa-circle-xmark"></i> CERRAR
+                </button>
             </div>
         </div>
     </div>
@@ -89,4 +352,5 @@ Registrar Viaje
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.print.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
 <script src="<?= base_url('public/dist/js/pages/viajes.js') ?>"></script>
+<script src="<?= base_url('public/dist/js/pages/servicios.js') ?>"></script>
 <?= $this->endsection('scripts'); ?>

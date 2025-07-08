@@ -57,3 +57,7 @@ $routes->group('reg_servicio', ['filter' => 'CambioFilter'], function ($routes) 
     $routes->get('cmbprovincia2', 'DestinosController::getProvinciaXDep');
     $routes->get('cmbdistrito2', 'DestinosController::getDistritoXProvDep');
 });
+
+$routes->group('guias', ['filter' => 'CambioFilter'], function ($routes) {
+    $routes->get('rango', 'GuiaTransController::traerGuias');
+});

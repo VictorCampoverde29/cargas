@@ -98,9 +98,9 @@ Registrar Servicios
                     <div class="form-group col-md-2">
                         <label class="mb-3 fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;DESTINO</label>
                         <select class="form-control form-control-sm" id="cmbllegadaserv" name="cmbllegadaserv">
-                            <?php foreach ($destino as $destinos): ?>
-                                <option value="<?= esc($destinos['iddestino']); ?>">
-                                    <?= esc($destinos['nombre']); ?>
+                            <?php foreach ($sucursal as $sucursales): ?>
+                                <option value="<?= esc($sucursales['iddestino']); ?>">
+                                    <?= esc($sucursales['nombre']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -121,7 +121,6 @@ Registrar Servicios
                     <div class="form-group col-md-3">
                         <label class="mb-3 fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;ESTADO</label>
                         <select class="form-control form-control-sm" id="cmbfleteserv" name="cmbfleteserv">
-                            <option value="PENDIENTE">PENDIENTE</option>
                             <option value="EN CAMINO">EN CAMINO</option>
                             <option value="ENTREGADO">ENTREGADO</option>
                         </select>

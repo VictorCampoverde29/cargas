@@ -14,6 +14,7 @@ class SucursalModel extends Model
     public function traerSucursales(){
         return $this->select('idsucursal, descripcion')
                     ->where('estado', 'ACTIVO')
+                    ->where('idempresa', '9')
                     ->findAll();
     }
 }

@@ -19,17 +19,18 @@ class GuiaTransModel extends Model
         guia_transportista.fecha_emision,
         guia_transportista.dir_partida,
         guia_transportista.dir_llegada,
-        guia_transportista.idpaga_flete,
         guia_transportista.glosa,
         guia_transportista.estado,
         remitente.razon_social AS remitente_nombre,
         destinatario_guia.nombre AS destinatario_nombre,
+        paga_flete.razon_social AS pagaflete,
         sucursal.descripcion AS sucursal_nombre
     ');
         $builder->join('almacen', 'almacen.idalmacen = guia_transportista.idalmacen');
         $builder->join('sucursal', 'sucursal.idsucursal = almacen.idsucursal');
         $builder->join('remitente', 'remitente.idremitente = guia_transportista.idremitente');
         $builder->join('destinatario_guia', 'destinatario_guia.iddestinatario_guia = guia_transportista.iddestinatario_guia');
+        $builder->join('paga_flete', 'paga_flete.idpaga_flete = guia_transportista.idpaga_flete', 'left');
         $builder->where('guia_transportista.fecha_emision >=', $fechaInicio);
         $builder->where('guia_transportista.fecha_emision <=', $fechaFin);
         $builder->where('almacen.idsucursal', $idsucursal);

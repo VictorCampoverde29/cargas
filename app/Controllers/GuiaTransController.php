@@ -9,13 +9,12 @@ class GuiaTransController extends Controller
 {
     public function traerGuias()
     {
-        $guiasModel = new GuiaTransModel();
-        $fechaInicio = $this->request->getGet('fechaInicio');
-        $fechaFin = $this->request->getGet('fechaFin');
-        $codsucursal = $this->request->getGet('codigosucursal');
-        $data = $guiasModel->traerGuiasXRangoFechaYSucursal($fechaInicio, $fechaFin, $codsucursal);
+        $fechaInicio = $this->request->getGet("fechaInicio");
+        $fechaFin = $this->request->getGet("fechaFin");
+        $idSucursal = $this->request->getGet("codigosucursal");
+
+        $model = new GuiaTransModel();
+        $data = $model->traerGuiasXRangoFechaYSucursal($fechaInicio, $fechaFin, $idSucursal);
         return $this->response->setJSON($data);
     }
 }
-
-?>

@@ -33,7 +33,12 @@ class MantenimientoCargaController extends Controller
 
         try {
             $model->insert($data);
-            return $this->response->setJSON(['success' => true, 'message' => 'Carga registrada correctamente.']);
+            $idInsertado = $model->getInsertID(); // <-- Este es el ID que necesitas
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Carga registrada correctamente.',
+                'idcarga' => $idInsertado
+            ]);
         } catch (\Exception $e) {
             return $this->response->setJSON(['error' => 'Ocurrió un error al registrar la carga: ' . $e->getMessage()]);
         }

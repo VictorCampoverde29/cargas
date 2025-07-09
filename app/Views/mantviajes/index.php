@@ -26,7 +26,7 @@ Registrar Viaje
                                 <i class="fas fa-wrench"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right" role="menu">
-                                <a href="#" class="dropdown-item" onclick="abrirModalViaje()">+ AGREGAR NUEVo VIAJE</a>
+                                <a href="#" class="dropdown-item" onclick="abrirModalViaje()">+ AGREGAR NUEVO VIAJE</a>
                             </div>
                         </div>
                     </div>
@@ -147,19 +147,13 @@ Registrar Viaje
                 </label>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="txtidservicio" name="txtidservicio">
+                <input type="hidden" id="txtidguia" name="txtidguia">
                 <div class="row">
                     <div class="form-group col-md-2">
                         <label for="txtviajeprin"><i class="fas fa-boxes-stacked"></i>&nbsp;BUSCAR GUIA</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="txtviajeprin" name="txtviajeprin" placeholder="VIAJE" disabled>
+                            <input type="text" class="form-control form-control-sm" id="txtviajeprin" name="txtviajeprin" placeholder="VIAJE" >
                             <button class="btn btn-primary btn-sm" type="button" id="btneleremi" name="btneleremi" onclick="abrirModalGuia()"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="txtnguiaserv" class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;N° GUIA</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control mb-3 form-control-sm" id="txtnguiaserv" name="txtnguiaserv" placeholder="N° GUIA">
                         </div>
                     </div>
                     <div class="form-group col-md-2">
@@ -174,7 +168,7 @@ Registrar Viaje
                             <input type="text" class="form-control mb-3 form-control-sm" id="txtflete" name="txtflete" placeholder="FLETE">
                         </div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-5">
                         <label for="txtglosaserv" class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;GLOSA</label>
                         <div class="input-group">
                             <input type="text" class="form-control mb-3 form-control-sm" id="txtglosaserv" name="txtglosaserv" placeholder="GLOSA">
@@ -199,26 +193,30 @@ Registrar Viaje
                     <div class="form-group col-md-6">
                         <label for="txtremi" class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;ORIGEN</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="txtremi" name="txtremi">
+                            <input type="text" class="form-control form-control-sm" id="txtorigserv" name="txtorigserv">
                         </div>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtdesti" class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;LLEGADA</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="txtdesti" name="txtdesti">
+                            <input type="text" class="form-control form-control-sm" id="txtllegserv" name="txtllegserv">
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-6">
                         <label for="cmbtipocarga" class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;T. CARGA</label>
-                        <select class="form-control form-control-sm" id="cmbtipocarga" name="cmbtipocarga">
+                        <div class="input-group input-group-sm">
+                          <select class="form-control form-control-sm" id="cmbtipocarga">
                             <?php foreach ($tipo as $tipos): ?>
                                 <option value="<?= esc($tipos['idcarga']); ?>">
                                     <?= esc($tipos['descripcion']); ?>
                                 </option>
                             <?php endforeach; ?>
-                        </select>
+                            <option value="OTRO">OTRO</option>
+                          </select>
+                          <input type="text" min="1" class="form-control form-control-sm" id="txtcargaserv" name="txtcargaserv" placeholder="CARGA" disabled="">
+                        </div>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="cmbestadoserv" class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;ESTADO</label>
@@ -282,7 +280,7 @@ Registrar Viaje
                     <div class="form-group col-md-3">
                         <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;F. INICIO</label>
                         <div class="input-group">
-                            <input type="date" class="form-control mb-3 form-control-sm" id="dtfiniguia" name="dtfiniguia">
+                            <input type="date" class="form-control form-control-sm" id="dtfiniguia" name="dtfiniguia">
                         </div>
                     </div>
                     <div class="form-group col-md-3">

@@ -61,3 +61,7 @@ $routes->group('reg_servicio', ['filter' => 'CambioFilter'], function ($routes) 
 $routes->group('guias', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->get('rango', 'GuiaTransController::traerGuias');
 });
+
+$routes->group('servicios', ['filter' => 'CambioFilter'], function ($routes) {
+    $routes->post('reg_servicio', 'ServicioController::registrarServicio');
+});

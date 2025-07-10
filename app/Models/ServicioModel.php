@@ -13,8 +13,9 @@ class ServicioModel extends Model
 
     public function traerServiciosXCod($cod)
     {
-        $builder = $this->db->table('guia_transportista');
+        $builder = $this->db->table('servicio');
         $builder->select('
+        servicio.idservicio,
         servicio.n_guia,
         servicio.fecha_servicio,
         servicio.origen,
@@ -26,7 +27,7 @@ class ServicioModel extends Model
         servicio.estado,
         carga.descripcion AS nombre_carga,
     ');
-        $builder->join('carga', 'carga.idcarga = servicio.idservicio');
+        $builder->join('carga', 'carga.idcarga = servicio.idcarga');
         $builder->where('servicio.idviaje', $cod);
 
         $query = $builder->get();

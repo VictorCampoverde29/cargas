@@ -64,4 +64,5 @@ $routes->group('guias', ['filter' => 'CambioFilter'], function ($routes) {
 
 $routes->group('servicios', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->post('reg_servicio', 'ServicioController::registrarServicio');
+    $routes->get('datatables', 'ServicioController::traerServiciosXCod');
 });

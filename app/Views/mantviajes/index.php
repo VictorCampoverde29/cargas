@@ -147,7 +147,7 @@ Registrar Viaje
                 </label>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="txtidguia" name="txtidguia">
+                <input type="text" id="txtidviaje" name="txtidviaje">
                 <div class="row">
                     <div class="form-group col-md-2">
                         <label for="txtviajeprin"><i class="fas fa-boxes-stacked"></i>&nbsp;BUSCAR GUIA</label>
@@ -235,9 +235,10 @@ Registrar Viaje
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table id="tblchasis" class="table table-bordered table-striped">
+                            <table id="tblservicios" class="table table-bordered table-striped">
                                 <thead>
                                     <tr style="background-color: #000000; color:#FFFFFF;">
+                                        <th>ID SERVICIO</th>
                                         <th>N° GUIA</th>
                                         <th>F. SERVICIO</th>
                                         <th>FLETE</th>
@@ -248,6 +249,7 @@ Registrar Viaje
                                         <th>LLEGADA</th>
                                         <th>TIPO CARGA</th>
                                         <th>ESTADO</th>
+                                        <th>ACCION</th>
                                     </tr>
                                 </thead>
                                 <tbody>

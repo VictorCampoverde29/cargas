@@ -16,8 +16,9 @@ $(document).ready(function () {
 });
 
 function abrirModalServicios(idviaje) {
-    $("#txtidguia").val(idviaje);
+    $("#txtidviaje").val(idviaje);
     $("#mdlservicios").modal("show");
+    cargarServicios(idviaje);
 }
 
 function abrirModalGuia() {
@@ -108,7 +109,7 @@ function llenarDatosInput(btn) {
 }
 
 function registrarServicio() {
-    var idviaje = $("#txtidguia").val();
+    var idviaje = $("#txtidviaje").val();
     var nguia = $("#txtviajeprin").val();
     var fservicio = $("#dtfserv").val();
     var flete = $("#txtflete").val();
@@ -291,15 +292,94 @@ function registrarServicioFinal(data) {
                     icon: "success",
                     title: "REGISTRO SERVICIO",
                     text: response.message,
-                }).then(function () {
-                    var paginaActual = table.page.info().page;
-                    table.ajax.reload();
-                    setTimeout(function () {
-                        table.page(paginaActual).draw("page");
-                    }, 800);
-                });
+                })
             }
             $('#mdlservicios').modal('hide');
         },
+    });
+}
+
+function cargarServicios(cod) {
+    $.ajax({
+        type: "GET",
+        url: baseURL + "servicios/datatables",
+        data: { cod: cod },
+        success: function (response) {
+            if ($.fn.DataTable.isDataTable("#tblservicios")) {
+                $("#tblservicios").DataTable().clear().destroy();
+            }
+
+            table = $("#tblservicios").DataTable({
+                "language": Español,
+                "autoWidth": true,
+                "responsive": true,
+                "data": response,
+                "columnDefs": [{ "targets": 0, "visible": false }],
+                "createdRow": function (row, data, dataIndex) {
+                    const estado = data.estado ? data.estado.trim().toUpperCase() : '';
+                    const selectEstado = $(row).find('select[data-field="estado"]');
+                    selectEstado.removeClass('text-warning text-success text-danger');
+                    $(row).find('td').not(':last').css('color', '').removeClass('font-weight-bold');
+
+                    switch (estado) {
+                        case 'EN CAMINO':
+                            selectEstado.addClass('text-warning');
+                            $(row).find('td').not(':last').css('color', '#fd7e14').addClass('font-weight-bold');
+                            break;
+                        case 'ENTREGADO':
+                            selectEstado.addClass('text-success');
+                            $(row).find('td').not(':last').css('color', '#28a745').addClass('font-weight-bold');
+                            break;
+                    }
+                },
+                "columns": [
+                    { "data": "idservicio"},
+                    { "data": "n_guia"},
+                    { "data": "fecha_servicio" },
+                    { "data": "flete" },
+                    { "data": "glosa" },
+                    { "data": "emisor" },
+                    { "data": "receptor" },
+                    { "data": "origen" },
+                    { "data": "destino" },
+                    { "data": "nombre_carga" },
+                    {
+                        "data": "estado",
+                        "render": function (data, type, row) {
+                            const estado = data ? data.trim().toUpperCase() : '';
+                            let claseColor = '';
+                            if (estado === 'EN CAMINO') claseColor = 'text-warning';
+                            else if (estado === 'ENTREGADO') claseColor = 'text-success';
+                            else if (estado === 'INACTIVO') claseColor = 'text-danger';
+
+                            return `
+                                <div class="input-group input-group-sm">
+                                    <select class="form-control form-control-sm perfil-input font-weight-bold ${claseColor}" 
+                                            data-field="estado" 
+                                            data-id="${row.idviaje || ''}">
+                                        <option value="EN CAMINO" ${estado === 'EN CAMINO' ? 'selected' : ''}>EN CAMINO</option>
+                                        <option value="ENTREGADO" ${estado === 'ENTREGADO' ? 'selected' : ''}>ENTREGADO</option>
+                                    </select>
+                                </div>`;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            return `
+                                <div class="d-flex flex-row justify-content-center">
+                                    <button class="btn btn-2 btn-warning btn-sm btn-pill w-80" onclick="editarViaje(this, ${row.idservicio || 0})">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                </div>`;
+                        }
+                    }
+                ]
+            });
+        },
+        error: function (xhr) {
+            console.error("Error al traer servicios:", xhr.responseText);
+        }
     });
 }

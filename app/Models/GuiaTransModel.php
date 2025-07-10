@@ -34,7 +34,7 @@ class GuiaTransModel extends Model
         $builder->where('guia_transportista.fecha_emision >=', $fechaInicio);
         $builder->where('guia_transportista.fecha_emision <=', $fechaFin);
         $builder->where('almacen.idsucursal', $idsucursal);
-
+        
         $query = $builder->get();
         return $query->getResultArray();
     }

@@ -5,6 +5,7 @@ $(document).ready(function () {
 });
 
 function abrirModalCarga() {
+    $('#txtdescripcion').val("");
     $('#mdlcarga').modal('show');
 }
 
@@ -17,13 +18,13 @@ function cargarCarga() {
         "responsive": true,
         "columnDefs": [{ "targets": 0, "visible": false }],
         "createdRow": function (row, data, dataIndex) {
-            setTimeout(function() {
+            setTimeout(function () {
                 var estadoSelect = $(row).find('select[data-field="estado"]');
                 var isInactivo = data.estado && data.estado.trim().toUpperCase() === 'INACTIVO';
-                
+
                 // Aplicar font-weight-bold al select de estado siempre
                 estadoSelect.addClass('font-weight-bold');
-                
+
                 // Aplicar estilos según el estado
                 if (isInactivo) {
                     estadoSelect.addClass('text-danger');
@@ -31,11 +32,11 @@ function cargarCarga() {
                 } else {
                     estadoSelect.addClass('text-success');
                 }
-                
+
                 // Listener para cambios de estado
-                estadoSelect.on('change', function() {
+                estadoSelect.on('change', function () {
                     var nuevoInactivo = $(this).val() === 'INACTIVO';
-                    
+
                     if (nuevoInactivo) {
                         $(this).removeClass('text-success').addClass('text-danger');
                         $(row).find('input, select').not('[data-field="estado"]').css('color', '#dc3545');
@@ -56,16 +57,24 @@ function cargarCarga() {
         "columns": [
             { "data": "idcarga" },
             {
-                "data": null,
+                "data": "descripcion",
                 "orderable": false,
                 "render": function (data, type, row) {
-                    return `
-                        <div class="d-flex align-items-center justify-content-center">
-                            <input type="text" class="form-control form-control-sm me-2" 
-                                value="${data.descripcion}" 
-                                id="descripcion_${data.idcarga}" 
-                        </div>
-                    `;
+                    if (type === 'display') {
+                        return `
+                            <div class="d-flex align-items-center justify-content-center">
+                                <!-- Texto oculto para que DataTables lo pueda buscar -->
+                                <span class="d-none">${data}</span>
+                                <input type="text" class="form-control form-control-sm me-2" 
+                                    style="text-transform: uppercase;" 
+                                    value="${data}" 
+                                    id="descripcion_${row.idcarga}" 
+                                    oninput="this.value = this.value.toUpperCase();" />
+                            </div>
+                        `;
+                    }
+                    // Para otros tipos (ordenamiento, búsqueda interna), devuelve solo el dato plano
+                    return data;
                 }
             },
             {
@@ -100,7 +109,7 @@ function cargarCarga() {
     });
 }
 
-function agregarCarga(){
+function agregarCarga() {
     var descripcion = $("#txtdescripcion").val();
     var estado = $("#cmbestadocarga").val();
 
@@ -126,8 +135,8 @@ function agregarCarga(){
                 }, 300);
             }
         });
-    }else{
-        var parametros ="descripcion=" + descripcion +
+    } else {
+        var parametros = "descripcion=" + descripcion +
             "&estado=" + estado;
         $.ajax({
             type: "POST",
@@ -159,7 +168,7 @@ function agregarCarga(){
     }
 }
 
-function editarCarga(btn, idcarga){
+function editarCarga(btn, idcarga) {
     var row = $(btn).closest('tr');
     var tipo_carga = row.find('select[data-field="tipo_carga"]').val();
     var descripcion = row.find('input[id^="descripcion_"]').val();

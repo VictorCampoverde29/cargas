@@ -358,6 +358,7 @@ function cargarServicios(cod) {
                     { "data": "nombre_carga" },
                     {
                         "data": "estado",
+                        "width": "50px",
                         "render": function (data, type, row) {
                             const estado = data ? data.trim().toUpperCase() : '';
                             let claseColor = '';

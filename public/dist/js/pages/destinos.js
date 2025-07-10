@@ -5,6 +5,7 @@ $(document).ready(function () {
 });
 
 function abrirModalDestino() {
+    
     $('#mdldestino').modal('show');
 }
 
@@ -57,16 +58,24 @@ function cargarDestinos() {
         "columns": [
             { "data": "iddestino" },
             {
-                "data": null,
+                "data": "nombre",
                 "orderable": false,
                 "render": function (data, type, row) {
-                    return `
-                        <div class="d-flex align-items-center justify-content-center">
-                            <input type="text" class="form-control form-control-sm me-2" 
-                                value="${data.nombre}" 
-                                id="descripcion_${data.iddestino}" />
-                        </div>
-                    `;
+                    if (type === 'display') {
+                        return `
+                            <div class="d-flex align-items-center justify-content-center">
+                                <!-- Texto oculto para que DataTables lo pueda buscar -->
+                                <span class="d-none">${data}</span>
+                                <input type="text" class="form-control form-control-sm me-2" 
+                                    style="text-transform: uppercase;" 
+                                    value="${data}" 
+                                    id="descripcion_${row.iddestino}" 
+                                    oninput="this.value = this.value.toUpperCase();" />
+                            </div>
+                        `;
+                    }
+                    // Para otros tipos (ordenamiento, búsqueda interna), devuelve solo el dato plano
+                    return data;
                 }
             },
             {

@@ -138,21 +138,22 @@ Registrar Viaje
     </div>
 </div>
 <!---->
-<div class="modal fade" id="mdlservicios" tabindex="-1" aria-labelledby="mdlserviciosLabel" aria-hidden="true">
+<div class="modal fade" id="mdlservicios" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="mdlserviciosLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <label class="modal-title">
-                    <i class="bi bi-people-fill"></i>&nbsp;SERVICIOS DE VIAJE
-                </label>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">SERVICIOS DE VIAJE</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-                <input type="text" id="txtidviaje" name="txtidviaje">
+                <input type="hidden" id="txtidviaje" name="txtidviaje">
                 <div class="row">
                     <div class="form-group col-md-2">
                         <label for="txtviajeprin"><i class="fas fa-boxes-stacked"></i>&nbsp;BUSCAR GUIA</label>
                         <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="txtviajeprin" name="txtviajeprin" placeholder="VIAJE" >
+                            <input type="text" class="form-control form-control-sm" id="txtviajeprin" name="txtviajeprin" placeholder="VIAJE">
                             <button class="btn btn-primary btn-sm" type="button" id="btneleremi" name="btneleremi" onclick="abrirModalGuia()"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
@@ -207,15 +208,15 @@ Registrar Viaje
                     <div class="form-group col-md-6">
                         <label for="cmbtipocarga" class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;T. CARGA</label>
                         <div class="input-group input-group-sm">
-                          <select class="form-control form-control-sm" id="cmbtipocarga">
-                            <?php foreach ($tipo as $tipos): ?>
-                                <option value="<?= esc($tipos['idcarga']); ?>">
-                                    <?= esc($tipos['descripcion']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                            <option value="OTRO">OTRO</option>
-                          </select>
-                          <input type="text" min="1" class="form-control form-control-sm" id="txtcargaserv" name="txtcargaserv" placeholder="CARGA" disabled="">
+                            <select class="form-control form-control-sm" id="cmbtipocarga">
+                                <?php foreach ($tipo as $tipos): ?>
+                                    <option value="<?= esc($tipos['idcarga']); ?>">
+                                        <?= esc($tipos['descripcion']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                                <option value="OTRO">OTRO</option>
+                            </select>
+                            <input type="text" min="1" class="form-control form-control-sm" id="txtcargaserv" name="txtcargaserv" placeholder="CARGA" disabled="">
                         </div>
                     </div>
                     <div class="form-group col-md-3">
@@ -268,7 +269,7 @@ Registrar Viaje
     </div>
 </div>
 <!-- FIN DIV-->
-<div class="modal fade" id="mdlbuscarguia" tabindex="-1" aria-labelledby="mdlbuscarguiaLabel" aria-hidden="true">
+<div class="modal fade" id="mdlbuscarguia" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="mdlbuscarguiaLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
@@ -282,13 +283,13 @@ Registrar Viaje
                     <div class="form-group col-md-3">
                         <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;F. INICIO</label>
                         <div class="input-group">
-                            <input type="date" class="form-control form-control-sm" id="dtfiniguia" name="dtfiniguia">
+                            <input type="date" class="form-control form-control-sm" id="dtfiniguia" name="dtfiniguia" value="<?= date('Y-m-01') ?>">
                         </div>
                     </div>
                     <div class="form-group col-md-3">
                         <label class="fw-bold"><i class="fas fa-boxes-stacked"></i>&nbsp;F. FIN</label>
                         <div class="input-group">
-                            <input type="date" class="form-control mb-3 form-control-sm" id="dtffinguia" name="dtffinguia">
+                            <input type="date" class="form-control mb-3 form-control-sm" id="dtffinguia" name="dtffinguia" value="<?= date('Y-m-d') ?>">
                         </div>
                     </div>
                     <div class="form-group col-md-2">

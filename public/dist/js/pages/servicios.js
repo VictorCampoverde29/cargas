@@ -16,6 +16,15 @@ $(document).ready(function () {
 });
 
 function abrirModalServicios(idviaje) {
+    $("#txtviajeprin").val("");
+    $("#dtfserv").val("");
+    $("#txtorigserv").val("");
+    $("#txtllegserv").val("");
+    $("#txtflete").val("");
+    $("#txtemisor").val("");
+    $("#txtreceptor").val("");
+    $("#txtglosaserv").val("");
+    $("#txtestado").val("");
     $("#txtidviaje").val(idviaje);
     $("#mdlservicios").modal("show");
     cargarServicios(idviaje);
@@ -90,8 +99,6 @@ function llenarDatosInput(btn) {
     const fila = $(btn).closest("tr");
     const datos = table.row(fila.hasClass("child") ? fila.prev() : fila).data();
 
-    console.log("Datos seleccionados:", datos);
-
     if (!datos) {
         console.error("No se pudo recuperar la fila correctamente.");
         return;
@@ -106,6 +113,13 @@ function llenarDatosInput(btn) {
     $("#txtreceptor").val(datos.destinatario_nombre);
     $("#txtglosaserv").val(datos.glosa);
     $("#txtestado").val(datos.estado);
+    $("#mdlbuscarguia").modal("hide");
+    // Forzar que el <body> mantenga la clase modal-open si hay otro modal abierto
+    setTimeout(function () {
+        if ($(".modal.show").length > 0) {
+            $("body").addClass("modal-open");
+        }
+    }, 500);
 }
 
 function registrarServicio() {
@@ -294,7 +308,6 @@ function registrarServicioFinal(data) {
                     text: response.message,
                 })
             }
-            $('#mdlservicios').modal('hide');
         },
     });
 }
@@ -333,8 +346,8 @@ function cargarServicios(cod) {
                     }
                 },
                 "columns": [
-                    { "data": "idservicio"},
-                    { "data": "n_guia"},
+                    { "data": "idservicio" },
+                    { "data": "n_guia" },
                     { "data": "fecha_servicio" },
                     { "data": "flete" },
                     { "data": "glosa" },

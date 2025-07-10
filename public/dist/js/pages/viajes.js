@@ -108,7 +108,7 @@ function cargarViajes() {
                             <button class="btn btn-2 btn-warning btn-sm btn-pill w-80" onclick="editarViaje(this, ${row.idviaje})">
                                 <i class="fas fa-check"></i>
                             </button>
-                            <button class="btn btn-2 btn-warning btn-sm btn-pill w-80 ms-2" onclick="abrirModalServicios()">
+                            <button class="btn btn-2 btn-warning btn-sm btn-pill w-80 ms-2" onclick="abrirModalServicios(${row.idviaje})">
                                 <i class="fas fa-toolbox"></i>
                             </button>
                         </div>

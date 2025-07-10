@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<menu>
+  <modulo nombre="VIAJES" icono="fas fa-route">
+    <item nombre="Mant. Viajes" ruta="dashboard/mant_viajes" icono="fas fa-search"/>
+  </modulo>
+  <modulo nombre="MANTENIMIENTO" icono="fas fa-wrench">
+    <item nombre="Mant. Carga" ruta="dashboard/mant_carga" icono="fas fa-boxes-stacked"/>
+    <item nombre="Mant. Destino" ruta="dashboard/mant_destino" icono="fas fa-map-marker-alt"/>
+  </modulo>
+</menu>

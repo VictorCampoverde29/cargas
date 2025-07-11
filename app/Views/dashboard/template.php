@@ -155,7 +155,7 @@
   <script src="<?= base_url('public/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') ?>"></script>
   <script src="<?= base_url('public/plugins/sweetalert2/sweetalert2.all.min.js'); ?>"></script>
   <script src="<?= base_url('public/dist/js/adminlte.js') ?>"></script>
-  <script src="<?= base_url('public/dist/js/pages/generales.js') ?>"></script>
+  <script src="<?= base_url('public/dist/js/pages/generales.js?v=' . env('VERSION')) ?>"></script>
   <?= $this->renderSection('scripts'); ?>
 </body>
 

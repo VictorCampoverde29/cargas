@@ -412,6 +412,6 @@ Mantenimiento Viajes
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.html5.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.print.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
-<script src="<?= base_url('public/dist/js/pages/mant_viajes.js') ?>"></script>
-<script src="<?= base_url('public/dist/js/pages/servicios.js') ?>"></script>
+<script src="<?= base_url('public/dist/js/pages/mant_viajes.js?v=' . env('VERSION')) ?>"></script>
+<script src="<?= base_url('public/dist/js/pages/servicios.js?v=' . env('VERSION')) ?>"></script>
 <?= $this->endsection('scripts'); ?>

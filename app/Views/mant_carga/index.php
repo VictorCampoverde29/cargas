@@ -107,5 +107,5 @@ Mantenimiento Carga
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.html5.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.print.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
-<script src="<?= base_url('public/dist/js/pages/mant_carga.js') ?>"></script>
+<script src="<?= base_url('public/dist/js/pages/mant_carga.js?v=' . env('VERSION')) ?>"></script>
 <?= $this->endsection('scripts'); ?>

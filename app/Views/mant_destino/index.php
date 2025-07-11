@@ -107,5 +107,5 @@ Mantenimiento Destinos
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.html5.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.print.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
-<script src="<?= base_url('public/dist/js/pages/mant_destino.js') ?>"></script>
+<script src="<?= base_url('public/dist/js/pages/mant_destino.js?v=' . env('VERSION')) ?>"></script>
 <?= $this->endsection('scripts'); ?>

@@ -6,6 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CARGAS | Login</title>
 
+  <!-- Favicon para icono pestaña -->
+  <link rel="icon" href="<?= base_url('public/dist/img/favicon-32x32.png') ?>" sizes="32x32" />
+  <link rel="icon" href="<?= base_url('public/dist/img/favicon-192x192.png') ?>" sizes="192x192" />
+  <link rel="apple-touch-icon" href="<?= base_url('public/dist/img/apple-touch-icon.png') ?>" />
+  <meta name="msapplication-TileImage" content="<?= base_url('public/dist/img/ms-tile-144x144.png') ?>" />
+
   <!-- Google Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -69,7 +75,7 @@
   <script src="<?= base_url('public/plugins/bootstrap/js/bootstrap.bundle.min.js'); ?>"></script>
   <script src="<?= base_url('public/dist/js/adminlte.min.js'); ?>"></script>
   <script src="<?= base_url('public/plugins/sweetalert2/sweetalert2.all.min.js'); ?>"></script>
-  <script src="<?= base_url('public/dist/js/pages/login.js') ?>"></script>
+  <script src="<?= base_url('public/dist/js/pages/login.js?v=' . env('VERSION')) ?>"></script>
 
   <script>
     var URLPY = '<?= base_url(); ?>';

@@ -1,15 +1,13 @@
 <?php
-
 namespace App\Controllers;
-
 use App\Models\DestinosModel;
 use CodeIgniter\Controller;
 
-class MantenimientoDestinosController extends Controller
+class DestinosController extends Controller
 {
     public function index()
     {
-        return view('mantdestinos/index');
+        return view('mant_destino/index');
     }
 
     public function getDestinos()
@@ -24,6 +22,10 @@ class MantenimientoDestinosController extends Controller
         $model = new DestinosModel();
         $descripcion  = $this->request->getPost('descripcion');
         $estado       = $this->request->getPost('estado');
+
+        if ($model->exists($descripcion)) {
+            return $this->response->setJSON(['error' => 'El destino ingresado ya existe.']);
+        }
 
         $data = [
             'nombre' => $descripcion,
@@ -41,10 +43,15 @@ class MantenimientoDestinosController extends Controller
     public function editarDestino(){
         $model = new DestinosModel();
         $iddestino = $this->request->getPost('cod');
-        $descripcion = $this->request->getPost('descripcion');
+        $nombre = $this->request->getPost('nombre');
         $estado = $this->request->getPost('estado');
+
+        if ($model->exists($nombre, $iddestino)) {
+            return $this->response->setJSON(['error' => 'El destino ingresado ya existe']);
+        }
+
         $data = [
-            'nombre' => $descripcion,
+            'nombre' => $nombre,
             'estado' => $estado,
         ];
         try {
@@ -57,6 +64,14 @@ class MantenimientoDestinosController extends Controller
         } catch (\Exception $e) {
             return $this->response->setJSON(['error' => 'Ocurrió un error al actualizar el Destino: ' . $e->getMessage()]);
         }
+    }
+
+    public function getDestinosXcod()
+    {
+        $destinosX = new DestinosModel();
+        $cod = $this->request->getGet('cod');
+        $data = $destinosX->getDestinosXcod($cod);
+        return $this->response->setJSON([$data]);
     }
 }
 

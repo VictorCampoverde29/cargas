@@ -5,6 +5,7 @@ $(document).ready(function () {
 });
 
 function abrirModalViaje() {
+    limpiar();
     $('#mdlviaje').modal('show');
 }
 
@@ -13,9 +14,8 @@ function cargarViajes() {
     table = $("#tblviajes").DataTable({
         destroy: true,
         language: Español,
-        autoWidth: true,
+        autoWidth: false,
         responsive: true,
-        columnDefs: [{ targets: 0, visible: false }],
         createdRow: function (row, data, dataIndex) {
             setTimeout(function () {
                 const estado = data.estado ? data.estado.trim().toUpperCase() : '';
@@ -63,12 +63,11 @@ function cargarViajes() {
             method: "GET",
             url: url,
             dataSrc: function (json) {
-                console.log(json);
+                //console.log(json);
                 return json;
             }
         },
         columns: [
-            { data: "idviaje" },
             { data: "conductor" },
             { data: "unidad" },
             { data: "fecha_inicio" },
@@ -78,7 +77,7 @@ function cargarViajes() {
             { data: "dest_llegada" },
             {
                 data: "estado",
-                width: "11%",
+                width: "12%",
                 render: function (data, type, row) {
                     const estado = data ? data.trim().toUpperCase() : '';
                     let claseColor = '';
@@ -91,9 +90,14 @@ function cargarViajes() {
                             <select class="form-control form-control-sm perfil-input font-weight-bold ${claseColor}" 
                                     data-field="estado" 
                                     data-id="${row.idviaje}">
-                                <option value="EN CAMINO" ${estado === 'EN CAMINO' ? 'selected' : ''}>EN CAMINO</option>
-                                <option value="ENTREGADO" ${estado === 'ENTREGADO' ? 'selected' : ''}>ENTREGADO</option>
+                                <option value="EN CAMINO" ${estado === 'EN CAMINO' ? 'selected' : ''} class="text-warning">EN CAMINO</option>
+                                <option value="ENTREGADO" ${estado === 'ENTREGADO' ? 'selected' : ''} class="text-success">ENTREGADO</option>
                             </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-warning btn-sm" onclick="editarViaje(this, ${row.idviaje})">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </div>
                         </div>
                     `;
                 }
@@ -101,15 +105,12 @@ function cargarViajes() {
             {
                 data: null,
                 orderable: false,
-                width: "11%",
+                width: "5%",
                 render: function (data, type, row) {
                     return `
                         <div class="d-flex flex-row justify-content-center">
-                            <button class="btn btn-2 btn-warning btn-sm btn-pill w-80" onclick="editarViaje(this, ${row.idviaje})">
-                                <i class="fas fa-check"></i>
-                            </button>
-                            <button class="btn btn-2 btn-warning btn-sm btn-pill w-80 ms-2" onclick="abrirModalServicios(${row.idviaje})">
-                                <i class="fas fa-toolbox"></i>
+                            <button class="btn btn-info" onclick="abrirModalServicios(${row.idviaje})">
+                                <i class="fa fa-file-alt"></i>
                             </button>
                         </div>
                     `;
@@ -119,7 +120,23 @@ function cargarViajes() {
     });
 }
 
-function registrarViaje(){
+function limpiar() {
+    // Limpiar descripción
+    $("#txtdescripcion").val("");
+
+    // Restablecer selects a su valor inicial (primera opción)
+    $("#cmbconductor").prop('selectedIndex', 0);
+    $("#cmbvehiculo").prop('selectedIndex', 0);
+    $("#cmborigen").prop('selectedIndex', 0);
+    $("#cmbdestino").prop('selectedIndex', 0);
+
+    // Establecer fecha actual
+    var fechaHoy = new Date().toISOString().split('T')[0];
+    $("#dtfinicio").val(fechaHoy);
+    $("#dtffin").val(fechaHoy);
+}
+
+function registrarViaje() {
     var idconductor = $("#cmbconductor").val();
     var idunidad = $("#cmbvehiculo").val();
     var fecha_inicio = $("#dtfinicio").val();
@@ -127,30 +144,11 @@ function registrarViaje(){
     var descripcion = $("#txtdescripcion").val();
     var desti_origen = $("#cmborigen").val();
     var desti_llegada = $("#cmbdestino").val();
-
-    if (descripcion === "") {
-        Swal.fire({
-            title: "REGISTRO DE VIAJE",
-            text: "FALTA INGRESAR DESCRIPCION!",
-            icon: "error",
-            showCancelButton: false,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ok",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                var documentoField = $("#txtdescripcion");
-
-                // Enfocar el campo inmediatamente
-                documentoField.focus();
-
-                // Mantener el focus por más tiempo (vuelve a enfocar después de 300ms)
-                setTimeout(function () {
-                    documentoField.focus();
-                }, 300);
-            }
-        });
-    }else{
+    if ($('#txtdescripcion').val() === '') {
+        Swal.fire('REGISTRO DE VIAJE', 'La descripción es obligatoria', 'error');
+        $('#txtdescripcion').focus();
+        return;
+    } else {
         var parametros = "idconductor=" + idconductor +
             "&idunidad=" + idunidad +
             "&f_inicio=" + fecha_inicio +
@@ -158,7 +156,7 @@ function registrarViaje(){
             "&observaciones=" + descripcion +
             "&destorigen=" + desti_origen +
             "&destllegada=" + desti_llegada;
-        console.log(parametros);
+        //console.log(parametros);
         $.ajax({
             type: "POST",
             url: baseURL + "mant_viajes/registrar_viaje",
@@ -166,7 +164,7 @@ function registrarViaje(){
             success: function (response) {
                 if (response.error) {
                     Swal.fire({
-                        title: "REGISTRO VIAJE",
+                        title: "REGISTRO DE VIAJE",
                         text: response.error,
                         icon: "error",
                     });
@@ -176,31 +174,67 @@ function registrarViaje(){
                         title: "REGISTRO DE VIAJE",
                         text: response.message,
                     }).then(function () {
-                        var paginaActual = table.page.info().page;
-                        table.ajax.reload();
-                        setTimeout(function () {
-                            table.page(paginaActual).draw("page");
-                        }, 800);
+                        $('#tblviajes').DataTable().ajax.reload(null, false);
+                        $('#mdlviaje').modal('hide');
+                        limpiar();
+
+                        // Abrir automáticamente el modal de servicios del viaje recién creado
+                        if (response.idviaje) {
+                            abrirModalServicios(response.idviaje);
+                        }
                     });
                 }
-                $('#mdlviaje').modal('hide');
             },
         });
     }
 }
 
-function editarViaje(btn, idviaje){
+function editarViaje(btn, idviaje) {
     var row = $(btn).closest('tr');
     var estado = row.find('select[data-field="estado"]').val()
-    var parametros =
-        'estado=' + estado +
-        '&cod=' + idviaje;
+
+    // Si el estado es ENTREGADO, validar servicios primero
+    if (estado.toUpperCase() === 'ENTREGADO') {
+        $.ajax({
+            type: "POST",
+            url: baseURL + 'mant_viajes/validar_estado_servicios',
+            data: 'idviaje=' + idviaje,
+            success: function (validationResponse) {
+                if (validationResponse.error) {
+                    Swal.fire({
+                        icon: "error",
+                        title: 'VALIDACIÓN SERVICIOS',
+                        text: validationResponse.error
+                    });
+                } else if (!validationResponse.puede_entregar) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: 'SERVICIOS PENDIENTES',
+                        text: 'No se puede marcar el viaje como ENTREGADO. El viaje tiene servicios pendientes.',
+                        confirmButtonText: 'Entendido'
+                    }).then(function () {
+                        $('#tblviajes').DataTable().ajax.reload(null, false);
+                    });
+                } else {
+                    // Todos los servicios están entregados, proceder con el cambio
+                    ejecutarCambioEstado(estado, idviaje);
+                }
+            }
+        });
+    } else {
+        // Si no es ENTREGADO, proceder normalmente
+        ejecutarCambioEstado(estado, idviaje);
+    }
+}
+
+function ejecutarCambioEstado(estado, idviaje) {
+    var parametros = 'estado=' + estado + '&cod=' + idviaje;
     $.ajax({
         type: "POST",
         url: baseURL + 'mant_viajes/editar_viaje',
         data: parametros,
         success: function (response) {
-            console.log(response);
+            //console.log(response);
             if (response.error) {
                 Swal.fire({
                     icon: "error",
@@ -213,11 +247,7 @@ function editarViaje(btn, idviaje){
                     title: 'EDICION VIAJE',
                     text: response.message,
                 }).then(function () {
-                    var paginaActual = table.page.info().page;
-                    table.ajax.reload();
-                    setTimeout(function () {
-                        table.page(paginaActual).draw('page');
-                    }, 800);
+                    $('#tblviajes').DataTable().ajax.reload(null, false);
                 });
             }
         }

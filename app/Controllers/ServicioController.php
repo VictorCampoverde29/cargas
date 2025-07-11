@@ -31,6 +31,10 @@ class ServicioController extends Controller
         $glosa  = $this->request->getPost('glosa');
         $estado  = $this->request->getPost('estado');
 
+        if ($model->exists($nguia)) {
+            return $this->response->setJSON(['error' => 'El numero de guia ya fue registrado.']);
+        }
+
         $data = [
             'idviaje' => $idviaje,
             'idcarga' => $idcarga,
@@ -50,6 +54,79 @@ class ServicioController extends Controller
             return $this->response->setJSON(['success' => true, 'message' => 'Servicio registrado correctamente.']);
         } catch (\Exception $e) {
             return $this->response->setJSON(['error' => 'Ocurrió un error al registrar el servicio: ' . $e->getMessage()]);
+        }
+    }
+
+    public function validarServiciosViaje()
+    {
+        $servicioModel = new ServicioModel();
+        $idviaje = $this->request->getPost('idviaje');
+        
+        try {
+            // Obtener todos los servicios del viaje
+            $servicios = $servicioModel->traerServiciosXCod($idviaje);
+            
+            // Verificar si hay servicios
+            if (empty($servicios)) {
+                return $this->response->setJSON([
+                    'success' => true, 
+                    'puede_entregar' => true,
+                    'message' => 'No hay servicios asociados al viaje.'
+                ]);
+            }
+            
+            // Verificar servicios pendientes (no entregados)
+            $serviciosPendientes = [];
+            foreach ($servicios as $servicio) {
+                $estado = trim(strtoupper($servicio['estado']));
+                if ($estado !== 'ENTREGADO') {
+                    $serviciosPendientes[] = [
+                        'n_guia' => $servicio['n_guia'],
+                        'origen' => $servicio['origen'],
+                        'destino' => $servicio['destino'],
+                        'estado' => $servicio['estado']
+                    ];
+                }
+            }
+            
+            if (!empty($serviciosPendientes)) {
+                return $this->response->setJSON([
+                    'success' => true,
+                    'puede_entregar' => false,
+                    'servicios_pendientes' => $serviciosPendientes,
+                    'message' => 'Existen servicios pendientes de entrega.'
+                ]);
+            }
+            
+            return $this->response->setJSON([
+                'success' => true,
+                'puede_entregar' => true,
+                'message' => 'Todos los servicios están entregados.'
+            ]);
+            
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'error' => 'Error al validar servicios: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function update(){
+        $model = new ServicioModel();
+        $idservicio = $this->request->getPost('cod');
+        $estado = $this->request->getPost('estado');
+        $data = [
+            'estado' => $estado
+        ];
+        try {
+            // Llama al método de actualización
+            if ($model->update($idservicio, $data)) {
+                return $this->response->setJSON(['success' => true, 'message' => 'Servicio actualizado.']);
+            } else {
+                return $this->response->setJSON(['error' => 'Servicio no encontrado.']);
+            }
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['error' => 'Ocurrió un error al actualizar el Servicio: ' . $e->getMessage()]);
         }
     }
 }

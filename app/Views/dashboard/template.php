@@ -6,6 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>G.ASIU | Dashboard</title>
 
+  <!-- Favicon para icono pestaña -->
+  <link rel="icon" href="<?= base_url('public/dist/img/favicon-32x32.png') ?>" sizes="32x32" />
+  <link rel="icon" href="<?= base_url('public/dist/img/favicon-192x192.png') ?>" sizes="192x192" />
+  <link rel="apple-touch-icon" href="<?= base_url('public/dist/img/apple-touch-icon.png') ?>" />
+  <meta name="msapplication-TileImage" content="<?= base_url('public/dist/img/ms-tile-144x144.png') ?>" />
+
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="<?= base_url('public/plugins/fontawesome-free/css/all.min.css') ?>">
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">

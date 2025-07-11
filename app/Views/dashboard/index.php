@@ -20,83 +20,84 @@ Bienvenid@
       <section class="col-lg-8 connectedSortable">
         <!-- Custom tabs (Charts with tabs)-->
         <div class="row">
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="small-box bg-success">
-              <div class="inner">
-                
-                <p>Ventas Mes</p>
+          <div class="col-12 col-sm-6 col-md-4">
+            <a href="<?= base_url('dashboard/mant_viajes') ?>" style="text-decoration: none; color: inherit;">
+              <div class="small-box bg-primary">
+                <div class="inner">
+                  <p style="font-size: 20px; font-weight: bold;">NUEVO VIAJE</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-route"></i>
+                </div>
+                <div class="small-box-footer">
+                  Ir <i class="fas fa-arrow-circle-right"></i>
+                </div>
               </div>
-              <div class="icon">
-                <i class="fas fa-dollar-sign"></i>
-              </div>
-            </div>
+            </a>
           </div>
-
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="small-box bg-danger">
-              <div class="inner">
-
-                <p>Compras Mes</p>
+          <div class="col-12 col-sm-6 col-md-4">
+            <a href="<?= base_url('dashboard/mant_destino') ?>" style="text-decoration: none; color: inherit;">
+              <div class="small-box bg-warning">
+                <div class="inner">
+                  <p style="font-size: 20px; font-weight: bold;">NUEVO DESTINO</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="small-box-footer">
+                  Ir <i class="fas fa-arrow-circle-right"></i>
+                </div>
               </div>
-              <div class="icon">
-                <i class="fas fa-shopping-cart"></i>
-              </div>
-            </div>
+            </a>
           </div>
-
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="small-box bg-info">
-              <div class="inner">
-                
-                <p>N° Clientes</p>
+          <div class="col-12 col-sm-6 col-md-4">
+            <a href="<?= base_url('dashboard/mant_carga') ?>" style="text-decoration: none; color: inherit;">
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <p style="font-size: 20px; font-weight: bold;">NUEVA CARGA</p>
+                </div>
+                <div class="icon">
+                  <i class="fas fa-boxes"></i>
+                </div>
+                <div class="small-box-footer">
+                  Ir <i class="fas fa-arrow-circle-right"></i>
+                </div>
               </div>
-              <div class="icon">
-                <i class="fas fa-users"></i>
-              </div>
-            </div>
+            </a>
           </div>
-
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="small-box bg-primary">
-              <div class="inner">
-                
-                <p>N° Proveedores</p>
-              </div>
-              <div class="icon">
-                <i class="fas fa-truck-moving"></i>
-              </div>
-            </div>
-          </div>
-
-
           <!-- ./col -->
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">
-              <i class="fas fa-chart-pie mr-1"></i>
-              Compras y Ventas
-            </h3>
-
-          </div><!-- /.card-header -->
-          <div class="card-body">
-            
-        </div>
-        <!-- /.card -->
-
-
-
+        </div> <div class="card">
+            <div class="card-header bg-gradient-secondary">
+              <h3 class="card-title">
+                <i class="fa fa-bus"></i>
+                Ultimos Viajes
+              </h3>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+              <table id="tblultimosviajes" class="table table-bordered table-striped">
+                <thead class="thead-dark text-center">
+                  <tr>
+                    <th>FECHA</th>
+                    <th>ORIGEN</th>
+                    <th>DESTINO</th>
+                    <th>CONDUCTOR</th>
+                    <th>ESTADO</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
       </section>
-
       <section class="col-lg-4 connectedSortable">
         <div class="card card-primary card-outline shadow-none">
           <div class="card-header border-0">
-
             <h3 class="card-title">
               <i class="fas fa-computer"></i>
               Inicio de Sesión
             </h3>
-
           </div>
           <!-- /.card-header -->
           <div class="card-body pt-0">
@@ -106,12 +107,13 @@ Bienvenid@
                 <h6><b>FECHA:</b></h6>
               </div>
               <div class="col-9">
-                <h7><?php echo date('d/m/Y h:i a'); ?></h7>
+                <h7><?php 
+                  date_default_timezone_set('America/Lima');
+                  echo date('d/m/Y h:i a'); 
+                ?></h7>
               </div>
-
             </div>
             <div class="row">
-
               <div class="col-3">
                 <h6><b>NOMBRE:</b></h6>
               </div>
@@ -132,66 +134,23 @@ Bienvenid@
           </div>
           <!-- /.card-body -->
         </div>
-        <div class="card bg-gradient-warning">
-          <div class="card-header border-0">
-            <h3 class="card-title">
-              <i class="fas fa-chart-pie mr-1"></i>
+        <div class="card">
+          <div class="card-header bg-gradient-info">
+            <h3 class="card-title text-white">
+              <i class="fas fa-chart-pie mr-2"></i>
               Situación Actual
             </h3>
           </div>
-          
-        </div>
-
-      </section>
-    </div>
-    <!-- right col -->
-    <div class="row">
-      <!-- DEUDA SOLES CONTENEDOR -->
-      <div class="col-12 col-sm-6 col-md-3">
-        <div class="small-box border border-warning" style="background-color: #fffbe6;">
-          <div class="inner">
-            <p class="text-warning">Deuda Total por cobrar / SOLES</p>
-            
-          </div>
-          <div class="icon text-warning">
-            <i class="fas fa-money-bill-wave"></i>
-          </div>
-        </div>
-        <!-- DEUDA DOLARES CONTENEDOR -->
-        <div class="small-box border border-success mt-2" style="background-color: #e6fff2;">
-          <div class="inner">
-            <p class="text-success">Deuda Total por cobrar / DOLARES</p>
-            
-          </div>
-          <div class="icon text-success">
-            <i class="fas fa-dollar-sign"></i>
-          </div>
-        </div>
-      </div>
-      <!-- TABLA CLIENTES DEUDA -->
-      <div class="col-12 col-md-9">
-        <div class="card">
-          <div class="card-header bg-warning">
-            <h3 class="card-title"><i class="fas fa-users"></i> Clientes con Mayor Deuda</h3>
-          </div>
-          <div class="card-body p-0">
-            <div class="table-responsive">
-              <table class="table table-bordered table-striped mb-0">
-                <thead class="thead-dark">
-                  <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th class="text-end">Deuda Total (S/)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-              </table>
+          <div class="card-body" style="height: 320px;">
+            <div class="chart-responsive" style="position: relative; height: 210px; width: 210px; margin: 0 auto;">
+              <canvas id="pieChartViajes"></canvas>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
+    <!-- right col -->
+
     <!-- /.row (main row) -->
   </div><!-- /.container-fluid -->
 

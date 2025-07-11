@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controllers;
-
 use App\Models\CargaModel;
 use App\Models\ConductorModel;
 use App\Models\DestinosModel;
@@ -10,7 +9,7 @@ use App\Models\VehiculosModel;
 use App\Models\ViajesModel;
 use CodeIgniter\Controller;
 
-class MantenimientoViajesController extends Controller
+class ViajesController extends Controller
 {
     public function index()
     {
@@ -19,12 +18,12 @@ class MantenimientoViajesController extends Controller
         $Vehiculos = new VehiculosModel();
         $Sucursal = new SucursalModel();
         $Tipo = new CargaModel();
-        $data['destino'] = $Destinos->getDestinos();
+        $data['destino'] = $Destinos->selectDestinos();
         $data['conductor'] = $Conductores->getConductoresViaje();
         $data['vehiculo'] = $Vehiculos->getUnidadesGuia();
         $data['sucursal'] = $Sucursal->traerSucursales();
         $data['tipo']= $Tipo->traerCarga();
-        return view('mantviajes/index', $data);
+        return view('mant_viajes/index', $data);
     }
     public function traerViajes(){
         $model = new ViajesModel();
@@ -35,7 +34,6 @@ class MantenimientoViajesController extends Controller
     public function registrarViaje()
     {
         $model = new ViajesModel();
-
         $idconductor  = $this->request->getPost('idconductor');
         $idunidad  = $this->request->getPost('idunidad');
         $fecha_inicio  = $this->request->getPost('f_inicio');
@@ -43,6 +41,10 @@ class MantenimientoViajesController extends Controller
         $observaciones  = $this->request->getPost('observaciones');
         $destiorigen  = $this->request->getPost('destorigen');
         $destillegada  = $this->request->getPost('destllegada');
+
+        if ($model->exists($idconductor, $idunidad, $fecha_inicio, $fecha_fin, $observaciones, $destiorigen, $destillegada)) {
+            return $this->response->setJSON(['error' => 'Este viaje ya fue ingresado con los mismos datos.']);
+        }
 
         $data = [
             'idconductor' => $idconductor,
@@ -55,8 +57,12 @@ class MantenimientoViajesController extends Controller
         ];
 
         try {
-            $model->insert($data);
-            return $this->response->setJSON(['success' => true, 'message' => 'Viaje registrada correctamente.']);
+            $idViaje = $model->insert($data);
+            return $this->response->setJSON([
+                'success' => true, 
+                'message' => 'Viaje registrado correctamente.',
+                'idviaje' => $idViaje
+            ]);
         } catch (\Exception $e) {
             return $this->response->setJSON(['error' => 'Ocurrió un error al registrar el viaje: ' . $e->getMessage()]);
         }
@@ -80,6 +86,18 @@ class MantenimientoViajesController extends Controller
             return $this->response->setJSON(['error' => 'Ocurrió un error al actualizar el Viaje: ' . $e->getMessage()]);
         }
     }
-}
 
-?>
+    public function ultimosViajesDash()
+    {
+        $model = new ViajesModel();
+        $data = $model->getUltimosViajes(5);
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function estadisticasViajesDash()
+    {
+        $model = new ViajesModel();
+        $data = $model->getEstadisticasViajes();
+        return $this->response->setJSON(['data' => $data]);
+    }
+}

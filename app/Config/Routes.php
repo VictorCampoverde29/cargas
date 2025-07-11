@@ -20,17 +20,22 @@ $routes->group('login', function ($routes) {
     $routes->get('unauthorized', 'LoginController::unauthorized');
 });
 
+$routes->group('index', ['filter' => 'CambioFilter'], function ($routes) {
+   $routes->get('dt_ultimos_viajes', 'Home::dt_ultimos_viajes');
+});
+
 $routes->group('dashboard', ['filter' => 'AuthFilter'], function ($routes) {
-    $routes->get('mant_viajes', 'MantenimientoViajesController::index');
+    $routes->get('mant_viajes', 'ViajesController::index');
     $routes->get('reg_servicio', 'RegistrarServicioController::index');
-    $routes->get('mant_carga', 'MantenimientoCargaController::index');
-    $routes->get('mant_destino', 'MantenimientoDestinosController::index');
+    $routes->get('mant_carga', 'CargaController::index');
+    $routes->get('mant_destino', 'DestinosController::index');
 });
 
 $routes->group('mant_carga', ['filter' => 'CambioFilter'], function ($routes) {
-    $routes->get('datatables', 'MantenimientoCargaController::traerCarga');
-    $routes->post('agregar_carga', 'MantenimientoCargaController::agregarCarga');
-    $routes->post('editar_carga', 'MantenimientoCargaController::editarCarga');
+    $routes->get('datatables', 'CargaController::traerCarga');
+    $routes->post('agregar_carga', 'CargaController::agregarCarga');
+    $routes->get('carga_xcod', 'CargaController::getCargaXcod');
+    $routes->post('editar_carga', 'CargaController::editarCarga');
 });
 
 $routes->group('mant_viajes', ['filter' => 'CambioFilter'], function ($routes) {
@@ -40,15 +45,19 @@ $routes->group('mant_viajes', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->get('cmbdistrito2', 'DestinosController::getDistritoXProvDep');
     $routes->get('datos_conductores', 'ConductorController::getDatosXcod');
     $routes->get('datos_vehiculos', 'VehiculosController::getDatosXcod');
-    $routes->post('registrar_viaje', 'MantenimientoViajesController::registrarViaje');
-    $routes->get('datatables', 'MantenimientoViajesController::traerViajes');
-    $routes->post('editar_viaje', 'MantenimientoViajesController::editarViaje');
+    $routes->post('registrar_viaje', 'ViajesController::registrarViaje');
+    $routes->get('datatables', 'ViajesController::traerViajes');
+    $routes->post('editar_viaje', 'ViajesController::editarViaje');
+    $routes->get('ultimos_viajes_dash', 'ViajesController::ultimosViajesDash');
+    $routes->get('estadisticas_viajes_dash', 'ViajesController::estadisticasViajesDash');
+    $routes->post('validar_estado_servicios', 'ServicioController::validarServiciosViaje');
 });
 
 $routes->group('mant_destino', ['filter' => 'CambioFilter'], function ($routes) {
-    $routes->get('datatables', 'MantenimientoDestinosController::getDestinos');
-    $routes->post('agregar_destino', 'MantenimientoDestinosController::agregarDestino');
-    $routes->post('editar_destino', 'MantenimientoDestinosController::editarDestino');
+    $routes->get('datatables', 'DestinosController::getDestinos');
+    $routes->get('destinos_xcod', 'DestinosController::getDestinosXcod');
+    $routes->post('agregar_destino', 'DestinosController::agregarDestino');
+    $routes->post('editar_destino', 'DestinosController::editarDestino');
 });
 
 $routes->group('reg_servicio', ['filter' => 'CambioFilter'], function ($routes) {
@@ -65,4 +74,6 @@ $routes->group('guias', ['filter' => 'CambioFilter'], function ($routes) {
 $routes->group('servicios', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->post('reg_servicio', 'ServicioController::registrarServicio');
     $routes->get('datatables', 'ServicioController::traerServiciosXCod');
+    $routes->get('verificar_venta', 'VentasController::verificarVenta');
+    $routes->post('editar', 'ServicioController::update');
 });

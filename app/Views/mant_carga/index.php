@@ -16,7 +16,7 @@ Mantenimiento Carga
         <div class="card-header">
             <h3 class="card-title">
                 <i class="fas fa-boxes-packing"></i>
-                REGISTRO DE CARGAS
+                Cargas Registradas
             </h3>
             <div class="card-tools">
                 <div class="btn-group">
@@ -31,10 +31,9 @@ Mantenimiento Carga
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table id="tblcarga" class="table table-bordered table-striped">
-                    <thead>
-                        <tr style="background-color: #000000; color:#FFFFFF;">
-                            <th>ID</th>
+                <table id="tblcarga" class="table table-bordered table-striped table-sm">
+                    <thead class="thead-dark text-center">
+                        <tr>
                             <th>DESCRIPCION</th>
                             <th>ESTADO</th>
                             <th>ACCION</th>
@@ -47,38 +46,45 @@ Mantenimiento Carga
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="mdlcarga" tabindex="-1" aria-labelledby="mdlcargaLabel" aria-hidden="true">
+<!--------------------------------------------------- MODAL CARGA ---------------------------------------------->
+<div class="modal fade" id="mdlcarga" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-people-fill"></i>&nbsp;REGISTRAR CARGA
-                </h5>
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="lbltituloc"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="form-group col-md-7">
-                        <label><i class="fas fa-align-left"></i>&nbsp;DESCRIPCION</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control form-control-sm" id="txtdescripcion" name="txtdescripcion" placeholder="DESCRIPCION">
+                    <input type="hidden" id="txtidc" name="txtidc" value="0">
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label for="txtdescripcion"><i class="fas fa-align-left"></i> DESCRIPCION</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" id="txtdescripcion" name="txtdescripcion" placeholder="Descripcion">
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-3">
-                        <label><i class="fas fa-sync-alt"></i>&nbsp;ESTADO</label>
-                        <select class="form-control form-control-sm" id="cmbestadocarga">
-                            <option value="ACTIVO">ACTIVO</option>
-                            <option value="INACTIVO">INACTIVO</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2 d-flex align-items-end">
-                        <button type="button" class="btn btn-primary btn-sm w-100" id="btnagregar" onclick="agregarCarga()">
-                            <i class="fas fa-plus"></i>&nbsp;AGREGAR
-                        </button>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="cmbestadocarga"><i class="fas fa-sync-alt"></i> ESTADO</label>
+                            <select class="form-control form-control-sm" id="cmbestadocarga">
+                                <option value="ACTIVO">ACTIVO</option>
+                                <option value="INACTIVO">INACTIVO</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer justify-content-end">
+                <button type="button" id="btnregistrarc" name="btnregistrarc" class="btn btn-success mr-2" onclick="agregarCarga()">
+                    <i class="fa-solid fa-floppy-disk"></i> REGISTRAR
+                </button>
+                <button type="button" id="btneditarc" name="btneditarc" class="btn btn-warning mr-2" onclick="editarCarga()">
+                    <i class="fas fa-pencil-alt"></i> EDITAR
+                </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     <i class="fa-solid fa-circle-xmark"></i> CERRAR
                 </button>
@@ -101,5 +107,5 @@ Mantenimiento Carga
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.html5.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.print.min.js') ?>"></script>
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
-<script src="<?= base_url('public/dist/js/pages/carga.js') ?>"></script>
+<script src="<?= base_url('public/dist/js/pages/mant_carga.js') ?>"></script>
 <?= $this->endsection('scripts'); ?>

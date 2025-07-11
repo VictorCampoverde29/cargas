@@ -1,17 +1,16 @@
 <?php 
 
 namespace App\Controllers;
-
 use App\Models\CargaModel;
 use CodeIgniter\Controller;
-use App\Models\TipoCargaModel;
-class MantenimientoCargaController extends Controller
+
+class CargaController extends Controller
 {
     public function index()
     {
         $Carga = new CargaModel();
         $data['carga'] = $Carga->traerCarga();
-        return view('mantcarga/index', $data);
+        return view('mant_carga/index', $data);
     }
 
     public function traerCarga(){
@@ -25,6 +24,10 @@ class MantenimientoCargaController extends Controller
         $model = new CargaModel();
         $descripcion  = $this->request->getPost('descripcion');
         $estado       = $this->request->getPost('estado');
+
+        if ($model->exists($descripcion)) {
+            return $this->response->setJSON(['error' => 'La carga ingresada ya existe.']);
+        }
 
         $data = [
             'descripcion' => $descripcion,
@@ -49,6 +52,11 @@ class MantenimientoCargaController extends Controller
         $idcarga = $this->request->getPost('cod');
         $descripcion = $this->request->getPost('descripcion');
         $estado = $this->request->getPost('estado');
+
+        if ($model->exists($descripcion, $idcarga)) {
+            return $this->response->setJSON(['error' => 'La carga ingresada ya existe']);
+        }
+
         $data = [
             'descripcion' => $descripcion,
             'estado' => $estado,
@@ -63,6 +71,14 @@ class MantenimientoCargaController extends Controller
         } catch (\Exception $e) {
             return $this->response->setJSON(['error' => 'Ocurrió un error al actualizar la Carga: ' . $e->getMessage()]);
         }
+    }
+
+    public function getCargaXcod()
+    {
+        $cargasX = new CargaModel();
+        $cod = $this->request->getGet('cod');
+        $data = $cargasX->getCargaXcod($cod);
+        return $this->response->setJSON([$data]);
     }
 }
 

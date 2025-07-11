@@ -55,7 +55,7 @@ class LoginController extends Controller
                 'ca_usuario' => $userData['idusuarios'],
                 'ca_password' => $clave,
                 'ca_perfil' => $userData['perfil'],
-                'ca_nombre_personal' => $userData['nombre'] ?? '',
+                'ca_nombrepersonal' => $userData['nombre'] ?? '',
                 'ca_rutas_permitidas' => array_column($rutasPermitidas, 'ruta'),
                 'ca_is_logged' => true
             ]);

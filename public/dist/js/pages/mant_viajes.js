@@ -109,7 +109,7 @@ function cargarViajes() {
                 render: function (data, type, row) {
                     return `
                         <div class="d-flex flex-row justify-content-center">
-                            <button class="btn btn-info" onclick="abrirModalServicios(${row.idviaje})">
+                            <button class="btn btn-info" onclick="abrirModalServicios(${row.idviaje}, '${row.estado}')">
                                 <i class="fa fa-file-alt"></i>
                             </button>
                         </div>
@@ -177,10 +177,12 @@ function registrarViaje() {
                         $('#tblviajes').DataTable().ajax.reload(null, false);
                         $('#mdlviaje').modal('hide');
                         limpiar();
-
-                        // Abrir automáticamente el modal de servicios del viaje recién creado
+                        // Esperar a que el modal se cierre completamente antes de abrir el de servicios
                         if (response.idviaje) {
-                            abrirModalServicios(response.idviaje);
+                            $('#mdlviaje').on('hidden.bs.modal', function() {
+                                $(this).off('hidden.bs.modal');
+                                abrirModalServicios(response.idviaje, 'EN CAMINO');
+                            });
                         }
                     });
                 }

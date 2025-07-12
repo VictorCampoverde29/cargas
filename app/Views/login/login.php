@@ -76,6 +76,7 @@
   <script src="<?= base_url('public/dist/js/adminlte.min.js'); ?>"></script>
   <script src="<?= base_url('public/plugins/sweetalert2/sweetalert2.all.min.js'); ?>"></script>
   <script src="<?= base_url('public/dist/js/pages/login.js?v=' . env('VERSION')) ?>"></script>
+  <script src="<?= base_url('public/dist/js/pages/generales.js?v=' . env('VERSION')) ?>"></script>
 
   <script>
     var URLPY = '<?= base_url(); ?>';

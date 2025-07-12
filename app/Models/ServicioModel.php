@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use CodeIgniter\Model;
 
 class ServicioModel extends Model
@@ -40,5 +41,25 @@ class ServicioModel extends Model
             $query->where('idservicio !=', $id);
         }
         return $query->first() !== null;
+    }
+
+    public function actualizarEstadoServicio($xmlData)
+    {
+        try {
+            $this->db->query("CALL SP_ACTUALIZAR_ESTADO_SERVICIO(?, @message)", [$xmlData]);
+
+            while ($this->db->connID->more_results() && $this->db->connID->next_result()) {
+                $this->db->connID->use_result();
+            }
+
+            $result = $this->db->query("SELECT @message AS message");
+            $mensaje = $result->getRow()->message;
+
+            return $mensaje;
+        } catch (\mysqli_sql_exception $e) {
+            return 'Error: ' . $e->getMessage();
+        } catch (\Exception $e) {
+            return 'Error: ' . $e->getMessage();
+        }
     }
 }

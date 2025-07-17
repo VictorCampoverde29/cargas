@@ -447,7 +447,6 @@ function cargarServicios(cod) {
                                         <i class="fa-solid fa-file-pdf"></i>
                                     </button>`;
                     }
-
                     botones += `</div>`;
                     return botones;
                 }

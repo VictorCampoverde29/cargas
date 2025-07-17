@@ -397,6 +397,32 @@ Mantenimiento Viajes
         </div>
     </div>
 </div>
+<!----------------------------------------- MODAL PDF ----------------------------------------------------->
+<div class="modal fade" id="modalpdf" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog">
+        <form class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    &nbsp;<i class="fas fa-file-pdf"></i> VISOR DE DOCUMENTO PDF
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body p-0">
+                <div class="embed-responsive" style="height: 80vh;">
+                    <iframe id="iframepdf" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+                </div>
+            </div>
+           <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa-solid fa-circle-xmark"></i> CERRAR
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 <?= $this->endsection(); ?>
 
 <?= $this->section('scripts'); ?>

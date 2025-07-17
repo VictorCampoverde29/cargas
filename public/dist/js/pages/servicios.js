@@ -443,7 +443,7 @@ function cargarServicios(cod) {
                     // Agregar botón rojo si tiene venta asociada
                     if (row.tiene_venta && row.tiene_venta == 1) {
                         botones += `
-                                    <button class="btn btn-danger btn-sm" onclick="verVenta('${row.n_guia}')" title="Ver venta asociada">
+                                    <button class="btn btn-danger btn-sm" onclick="verPdf('${row.n_guia}')" title="Ver PDF">
                                         <i class="fa-solid fa-file-pdf"></i>
                                     </button>`;
                     }
@@ -605,3 +605,13 @@ function verVenta(numeroGuia) {
     });
 }
 
+function verPdf(rutaRelativa) {
+    const visor = baseURL+'public/pdfjs/web/viewer.html?file=';
+    const pdfUrl = visor + encodeURIComponent(baseURL +rutaRelativa);
+
+    const iframe = document.getElementById('iframepdf');
+    iframe.src = pdfUrl;
+
+    const modal = new bootstrap.Modal(document.getElementById('modalpdf'));
+    modal.show();
+}

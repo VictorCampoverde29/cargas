@@ -46,6 +46,22 @@ $(document).ready(function () {
     $("#mdlservicios").on("hidden.bs.modal", function () {
         $(window).off('resize.servicios');
     });
+    
+    // Event listener para mantener el scroll en el modal de servicios cuando se cierre el modal PDF
+    $("#modalpdf").on("hidden.bs.modal", function () {
+        // Asegurar que el modal de servicios mantenga el scroll
+        setTimeout(function() {
+            const modalServicios = $("#mdlservicios");
+            if (modalServicios.hasClass("show") && modalServicios.data("mantener-scroll")) {
+                modalServicios.css("overflow-y", "auto");
+                $("body").addClass("modal-open");
+                // Prevenir que el scroll se vaya al body principal
+                $("body").css("overflow", "hidden");
+                // Limpiar el flag
+                modalServicios.removeData("mantener-scroll");
+            }
+        }, 100);
+    });
 });
 
 // Función para actualizar la tabla de viajes en la página padre
@@ -122,20 +138,26 @@ function desbloquearModalServicios() {
 // Función auxiliar para aplicar el bloqueo a la tabla
 function aplicarBloqueoTabla() {
     if ($('#mdlservicios').data('bloqueado') === true) {
-        // Buscar en la tabla normal y en elementos responsivos
-        $('#tblservicios select, #tblservicios button').prop('disabled', true);
-        
+        // Deshabilitar todos los select y botones, excepto los que tengan la clase btn-nunca-bloquear
+        $('#tblservicios select').prop('disabled', true);
+        $('#tblservicios button:not(.btn-nunca-bloquear)').prop('disabled', true);
+
         // También buscar en los elementos expandidos del modo responsivo
-        $('#tblservicios_wrapper .dtr-details select, #tblservicios_wrapper .dtr-details button').prop('disabled', true);
-        
+        $('#tblservicios_wrapper .dtr-details select').prop('disabled', true);
+        $('#tblservicios_wrapper .dtr-details button:not(.btn-nunca-bloquear)').prop('disabled', true);
+
         // Aplicar a todos los elementos de control dentro del wrapper de DataTables
-        $('#tblservicios_wrapper select[data-field="estado"], #tblservicios_wrapper button').prop('disabled', true);
-        
+        $('#tblservicios_wrapper select[data-field="estado"]').prop('disabled', true);
+        $('#tblservicios_wrapper button:not(.btn-nunca-bloquear)').prop('disabled', true);
+
         // Usar un timeout pequeño para asegurar que se aplique después del renderizado
         setTimeout(function() {
-            $('#tblservicios select, #tblservicios button').prop('disabled', true);
-            $('#tblservicios_wrapper .dtr-details select, #tblservicios_wrapper .dtr-details button').prop('disabled', true);
-            $('#tblservicios_wrapper select[data-field="estado"], #tblservicios_wrapper button').prop('disabled', true);
+            $('#tblservicios select').prop('disabled', true);
+            $('#tblservicios button:not(.btn-nunca-bloquear)').prop('disabled', true);
+            $('#tblservicios_wrapper .dtr-details select').prop('disabled', true);
+            $('#tblservicios_wrapper .dtr-details button:not(.btn-nunca-bloquear)').prop('disabled', true);
+            $('#tblservicios_wrapper select[data-field="estado"]').prop('disabled', true);
+            $('#tblservicios_wrapper button:not(.btn-nunca-bloquear)').prop('disabled', true);
         }, 100);
     }
 }
@@ -194,8 +216,10 @@ function traerGuias() {
                         "width": "7%",
                         "orderable": false,
                         "render": function (data, type, row, meta) {
+                            const estado = row.estado ? row.estado.toUpperCase() : '';
+                            const disabled = (estado === 'ANULADA') ? 'disabled' : '';
                             return `<div class="d-flex flex-row gap-1 justify-content-center">
-                                <button class="btn btn-primary btn-sm" onclick="llenarDatosInput(this)">
+                                <button class="btn btn-primary btn-sm" onclick="llenarDatosInput(this)" ${disabled}>
                                     <i class="fas fa-check"></i>
                                 </button>
                             </div>`;
@@ -434,17 +458,19 @@ function cargarServicios(cod) {
                 "data": null,
                 "orderable": false,
                 "render": function (data, type, row) {
-                    let botones = `
-                                <div class="d-flex flex-row justify-content-center gap-1">
+                    let botones = `<div class="d-flex flex-row justify-content-center gap-1">
                                     <button class="btn btn-2 btn-warning btn-sm btn-pill" onclick="editarServicio(this, ${row.idservicio || 0})">
                                         <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm btn-nunca-bloquear" onclick="verPdf('${row.n_guia}')" title="Ver PDF">
+                                        <i class="fa-solid fa-file-pdf"></i>
                                     </button>`;
 
-                    // Agregar botón rojo si tiene venta asociada
+                    // Agregar botón azul si tiene venta asociada
                     if (row.tiene_venta && row.tiene_venta == 1) {
                         botones += `
-                                    <button class="btn btn-danger btn-sm" onclick="verPdf('${row.n_guia}')" title="Ver PDF">
-                                        <i class="fa-solid fa-file-pdf"></i>
+                                    <button class="btn btn-primary btn-sm btn-nunca-bloquear" onclick="verVenta('${row.n_guia}')" title="Ver Venta">
+                                        <i class="fa fa-file-invoice"></i>
                                     </button>`;
                     }
                     botones += `</div>`;
@@ -572,21 +598,70 @@ function verVenta(numeroGuia) {
         data: { numero_guia: numeroGuia },
         success: function (response) {
             if (response && response.length > 0) {
-                let ventaInfo = response[0];
-                Swal.fire({
-                    title: "Venta Asociada",
-                    html: `
-                        <div class="text-left">
+                if (response.length === 1) {
+                    let ventaInfo = response[0];
+                    let html = `<div class="text-left">
+                        <p><strong>Número de Guía:</strong> ${ventaInfo.numero_guia || numeroGuia}</p>
+                        <p><strong>Número de Documento:</strong> ${ventaInfo.numero_doc}</p>
+                        <p><strong>Fecha de Emisión:</strong> ${ventaInfo.fecha_emision}</p>
+                        <p><strong>Importe IGV:</strong> S/ ${parseFloat(ventaInfo.importe_igv).toFixed(2)}</p>
+                        <p><strong>Sub Total:</strong> S/ ${parseFloat(ventaInfo.subtotal).toFixed(2)}</p>
+                        <p><strong>Importe Total:</strong> S/ ${parseFloat(ventaInfo.importe_total).toFixed(2)}</p>
+                        <p><strong>Sucursal:</strong> ${ventaInfo.sucursal_nombre || 'N/A'}</p>
+                        <p><strong>Estado:</strong> <span class="badge ${ventaInfo.estado === 'ANULADA' ? 'badge-danger' : 'badge-success'}">${ventaInfo.estado}</span></p>
+                    </div>`;
+                    Swal.fire({
+                        title: "Venta Asociada",
+                        html: html,
+                        icon: "info",
+                        confirmButtonText: "Cerrar"
+                    });
+                } else {
+                    // Modal tipo carrusel para navegar entre ventas
+                    let idx = 0;
+                    function mostrarVenta(index) {
+                        let ventaInfo = response[index];
+                        let html = `<div class='text-left'>
+                            <p><strong>Número de Guía:</strong> ${ventaInfo.numero_guia || numeroGuia}</p>
                             <p><strong>Número de Documento:</strong> ${ventaInfo.numero_doc}</p>
                             <p><strong>Fecha de Emisión:</strong> ${ventaInfo.fecha_emision}</p>
+                            <p><strong>Importe IGV:</strong> S/ ${parseFloat(ventaInfo.importe_igv).toFixed(2)}</p>
+                            <p><strong>Sub Total:</strong> S/ ${parseFloat(ventaInfo.subtotal).toFixed(2)}</p>
                             <p><strong>Importe Total:</strong> S/ ${parseFloat(ventaInfo.importe_total).toFixed(2)}</p>
-                            <p><strong>Almacén:</strong> ${ventaInfo.almacen_nombre || 'N/A'} (ID: ${ventaInfo.idalmacen})</p>
-                            <p><strong>Estado:</strong> <span class="badge ${ventaInfo.estado === 'ANULADA' ? 'badge-danger' : 'badge-success'}">${ventaInfo.estado}</span></p>
-                        </div>
-                    `,
-                    icon: "info",
-                    confirmButtonText: "Cerrar"
-                });
+                            <p><strong>Sucursal:</strong> ${ventaInfo.sucursal_nombre || 'N/A'}</p>
+                            <p><strong>Estado:</strong> <span class='badge ${ventaInfo.estado === 'ANULADA' ? 'badge-danger' : 'badge-success'}'>${ventaInfo.estado}</span></p>
+                            <div class='mt-3 text-center'>
+                                <button type='button' id='btnAnteriorVenta' class='btn btn-secondary btn-sm' ${index === 0 ? 'disabled' : ''} style='margin-right:10px;'>Anterior</button>
+                                <span>Página ${index + 1} de ${response.length}</span>
+                                <button type='button' id='btnSiguienteVenta' class='btn btn-secondary btn-sm' ${index === response.length - 1 ? 'disabled' : ''} style='margin-left:10px;'>Siguiente</button>
+                            </div>
+                        </div>`;
+                        Swal.fire({
+                            title: "Ventas Asociadas",
+                            html: html,
+                            icon: "info",
+                            showConfirmButton: true,
+                            confirmButtonText: "Cerrar",
+                            didOpen: () => {
+                                document.getElementById('btnAnteriorVenta').addEventListener('click', function(e) {
+                                    if (idx > 0) {
+                                        idx--;
+                                        Swal.close();
+                                        setTimeout(() => mostrarVenta(idx), 200);
+                                    }
+                                });
+                                document.getElementById('btnSiguienteVenta').addEventListener('click', function(e) {
+                                    if (idx < response.length - 1) {
+                                        idx++;
+                                        Swal.close();
+                                        setTimeout(() => mostrarVenta(idx), 200);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    mostrarVenta(idx);
+                }
             } else {
                 Swal.fire({
                     title: "Sin ventas",
@@ -605,13 +680,41 @@ function verVenta(numeroGuia) {
     });
 }
 
-function verPdf(rutaRelativa) {
-    const visor = baseURL+'public/pdfjs/web/viewer.html?file=';
-    const pdfUrl = visor + encodeURIComponent(baseURL +rutaRelativa);
+function verPdf(numeroGuia) {
+    $.ajax({
+        type: "GET",
+        url: baseURL + "servicios/obtener_id_guia",
+        data: { numero_guia: numeroGuia },
+        success: function (response) {
+            if (response && response.idguia) {
+                const pdfUrl = baseURL + 'ventas/generarPDF/' + response.idguia;
+                const visor = baseURL + 'public/pdfjs/web/viewer.html?file=';
+                const urlCompleta = visor + encodeURIComponent(pdfUrl);
 
-    const iframe = document.getElementById('iframepdf');
-    iframe.src = pdfUrl;
+                const iframe = document.getElementById('iframepdf');
+                iframe.src = urlCompleta;
 
-    const modal = new bootstrap.Modal(document.getElementById('modalpdf'));
-    modal.show();
+                // Asegurar que el modal de servicios mantenga su estado
+                const modalServicios = $("#mdlservicios");
+                if (modalServicios.hasClass("show")) {
+                    modalServicios.data("mantener-scroll", true);
+                }
+
+                $("#modalpdf").modal("show");
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo encontrar la guía para generar el PDF.",
+                    icon: "error"
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: "Error",
+                text: "Error al obtener la información de la guía.",
+                icon: "error"
+            });
+        }
+    });
 }

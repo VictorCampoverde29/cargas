@@ -17,7 +17,7 @@ class VentasController extends Controller
 
     public function generarPDF($idguia)
     {
-        require_once(APPPATH . 'Libraries/fpdf186/fpdf.php');
+        require_once(APPPATH . 'Libraries/fpdf/fpdf.php');
         // Datos de sesión
         $rucempresa    = '20606466006';
         $nombreempresa = 'TRANSPORTES Y NEGOCIOS FOX S.A.C.';
@@ -45,9 +45,6 @@ class VentasController extends Controller
         $indipagaflete = $guia->ind_pagaflete;
         $codhash        = $guia->hash;
         $ticket         = $guia->tk_sunat;
-
-        $nombrepdf = FCPATH . 'public/files/' . $rucempresa . '/PDF/' . $numero . '.pdf';
-        $pdfbd = 'public/files/' . $rucempresa . '/PDF/' . $numero . '.pdf';
 
         // Crear instancia PDF
         $pdf = new \App\Libraries\PDFGuia($rucempresa, $nombreempresa, $dirempresa, $otros, $numero);
@@ -238,30 +235,42 @@ class VentasController extends Controller
                     mkdir($tempDir, 0777, true);
                 }
 
-                // Generar QR con clase personalizada
-                \App\Libraries\QrGenerator::generarQR($qrData, $qrImagePath);
-                $pdf->Image($qrImagePath, 20, $currenty, $size, $size, 'PNG');
+                // Insertar código QR
+                $currenty = $pdf->GetY();
+                $qrData = $codhash;
+                $size = 50;
+                $tempDir = FCPATH . 'public/files/' . $rucempresa . '/qr/';
+                $qrImagePath = $tempDir . "qrcode_" . $numero . ".png";
+
+                if (!is_dir($tempDir)) {
+                    mkdir($tempDir, 0777, true);
+                }
+
+                // Generar QR
+                try {
+                    \App\Libraries\QrGenerator::generarQR($qrData, $qrImagePath);
+                    
+                    if (file_exists($qrImagePath) && filesize($qrImagePath) > 100) {
+                        $pdf->Image($qrImagePath, 20, $currenty, $size, $size, 'PNG');
+                    } else {
+                        $pdf->Cell(0, 4, utf8_decode('QR: ' . $codhash), 0, 1, 'L');
+                    }
+                } catch (\Exception $e) {
+                    $pdf->Cell(0, 4, utf8_decode('QR: ' . $codhash), 0, 1, 'L');
+                }
+                
                 $pdf->SetY($currenty + $size);
                 $pdf->Cell(0, 4, utf8_decode('Ticket : ' . $ticket), 0, 1, 'C');
 
-                // ❌ Eliminar QR temporal
                 if (file_exists($qrImagePath)) {
                     unlink($qrImagePath);
                 }
 
-                log_message('error', 'Ruta del PDF generado: ' . $nombrepdf);
-                // Guardar PDF
-                if (!is_dir(dirname($nombrepdf))) {
-                    mkdir(dirname($nombrepdf), 0777, true);
-                }
-                $pdf->Output($nombrepdf, 'F');
-
-                // Actualizar ruta en DB
-                $db->query("UPDATE guia_transportista SET pdf = ? WHERE idguia_transportista = ?", [$pdfbd, $idguia]);
-
-                // Descargar PDF generado
-
-                // return $this->response->download($nombrepdf, null);
+                // Generar PDF directamente en memoria y enviarlo al navegador
+                return $this->response
+                    ->setHeader('Content-Type', 'application/pdf')
+                    ->setHeader('Content-Disposition', 'inline; filename="' . $numero . '.pdf"')
+                    ->setBody($pdf->Output('', 'S'));
 
     }
 }

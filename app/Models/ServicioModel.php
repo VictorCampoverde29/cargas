@@ -24,11 +24,26 @@ class ServicioModel extends Model
             servicio.glosa,
             servicio.estado,
             carga.descripcion AS nombre_carga,
-            (CASE WHEN ventas_filtradas.numero_doc IS NOT NULL THEN 1 ELSE 0 END) AS tiene_venta
+            (CASE WHEN ventas_filtradas.idventas IS NOT NULL THEN 1 ELSE 0 END) AS tiene_venta
         ')
             ->join('carga', 'carga.idcarga = servicio.idcarga')
-            ->join('ventas', 'ventas.numero_doc = servicio.n_guia', 'left')
-            ->join('ventas ventas_filtradas', 'ventas_filtradas.numero_doc = servicio.n_guia AND ventas_filtradas.idalmacen IN (20, 39, 40)', 'left')
+            ->join('(SELECT idventas, guia_remision FROM ventas WHERE idalmacen IN (20, 39, 40)) ventas_filtradas',
+                '(
+                    FIND_IN_SET(servicio.n_guia, REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", LPAD(CAST(RIGHT(servicio.n_guia, 8) AS UNSIGNED), 8, "0")), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", LPAD(CAST(RIGHT(servicio.n_guia, 7) AS UNSIGNED), 7, "0")), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", LPAD(CAST(RIGHT(servicio.n_guia, 6) AS UNSIGNED), 6, "0")), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", LPAD(CAST(RIGHT(servicio.n_guia, 5) AS UNSIGNED), 5, "0")), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", LPAD(CAST(RIGHT(servicio.n_guia, 4) AS UNSIGNED), 4, "0")), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", LPAD(CAST(RIGHT(servicio.n_guia, 3) AS UNSIGNED), 3, "0")), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", CAST(RIGHT(servicio.n_guia, 8) AS UNSIGNED)), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", CAST(RIGHT(servicio.n_guia, 7) AS UNSIGNED)), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", CAST(RIGHT(servicio.n_guia, 6) AS UNSIGNED)), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", CAST(RIGHT(servicio.n_guia, 5) AS UNSIGNED)), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", CAST(RIGHT(servicio.n_guia, 4) AS UNSIGNED)), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                    OR FIND_IN_SET(CONCAT("V", SUBSTRING(servicio.n_guia, 2, 3), "-", CAST(RIGHT(servicio.n_guia, 3) AS UNSIGNED)), REPLACE(REPLACE(ventas_filtradas.guia_remision, "/", ","), " ", "")) > 0
+                )',
+                'left')
             ->where('servicio.idviaje', $cod)
             ->groupBy('servicio.idservicio')
             ->findAll();

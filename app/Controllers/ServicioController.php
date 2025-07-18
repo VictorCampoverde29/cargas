@@ -142,4 +142,28 @@ class ServicioController extends Controller
             ]);
         }
     }
+
+    public function obtenerIdGuia()
+    {
+        $numeroGuia = $this->request->getGet('numero_guia');
+        
+        if (empty($numeroGuia)) {
+            return $this->response->setJSON(['error' => 'Número de guía requerido']);
+        }
+
+        $db = \Config\Database::connect();
+        
+        try {
+            $query = $db->query("SELECT idguia_transportista as idguia FROM guia_transportista WHERE numero = ?", [$numeroGuia]);
+            $result = $query->getRow();
+            
+            if ($result) {
+                return $this->response->setJSON(['idguia' => $result->idguia]);
+            } else {
+                return $this->response->setJSON(['error' => 'Guía no encontrada']);
+            }
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['error' => 'Error al buscar la guía: ' . $e->getMessage()]);
+        }
+    }
 }

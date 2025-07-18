@@ -2,7 +2,7 @@
 
 namespace App\Libraries;
 
-require_once(APPPATH . 'Libraries/fpdf186/fpdf.php');
+require_once(APPPATH . 'Libraries/fpdf/fpdf.php');
 
 class PDFGuia extends \FPDF
 {

@@ -5,8 +5,6 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-
-
 $routes->group('', ['filter' => 'AuthFilter'], function ($routes) {
     $routes->get('/', 'Home::index');
     $routes->get('dashboard', 'Home::index');
@@ -76,4 +74,9 @@ $routes->group('servicios', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->get('datatables', 'ServicioController::traerServiciosXCod');
     $routes->get('verificar_venta', 'VentasController::verificarVenta');
     $routes->post('editar', 'ServicioController::update');
+    $routes->get('obtener_id_guia', 'ServicioController::obtenerIdGuia');
+});
+
+$routes->group('ventas', ['filter' => 'CambioFilter'], function ($routes) {
+    $routes->get('generarPDF/(:num)', 'VentasController::generarPDF/$1');
 });

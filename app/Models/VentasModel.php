@@ -19,53 +19,32 @@ class VentasModel extends Model
         if (empty($serie) || empty($correlativo)) {
             return [];
         }
-        // 1. Buscar coincidencia exacta V001-00000019 (en lista separada por /)
-        $exacto = $this->select('ventas.idventas, ventas.numero_doc, ventas.fecha_emision, ventas.importe_total, ventas.estado, ventas.idalmacen, sucursal.descripcion as sucursal_nombre, ventas.guia_remision, servicio.n_guia as numero_guia, ventas.importe_igv, (COALESCE(ventas.importe_gravado,0)+COALESCE(ventas.importe_exonerado,0)+COALESCE(ventas.importe_gratuito,0)+COALESCE(ventas.importe_inafecto,0)) as subtotal')
-            ->join('almacen', 'almacen.idalmacen = ventas.idalmacen', 'left')
-            ->join('sucursal', 'sucursal.idsucursal = almacen.idsucursal', 'left')
-            ->join('servicio', 'servicio.n_guia = "' . $numeroGuia . '"', 'left')
-            ->where('FIND_IN_SET("' . 'V' . $serie . '-' . str_pad($correlativo, 8, '0', STR_PAD_LEFT) . '", REPLACE(REPLACE(ventas.guia_remision, "/", ","), " ", "")) >', 0)
-            ->where('sucursal.idempresa', 9)
-            ->findAll();
-        if (!empty($exacto)) {
-            return $exacto;
-        }
-        // 2. Buscar variantes V001-19, V001-019, V001-000019, etc. (sin perder ceros intermedios)
-        $correlativos = [];
-        $correlativos[] = ltrim($correlativo, '0'); // sin ceros a la izquierda
-        for ($i = 1; $i < strlen($correlativo); $i++) {
-            $correlativos[] = substr($correlativo, $i);
-        }
-        $correlativos = array_unique($correlativos);
-        $formatos = [];
-        foreach ($correlativos as $corr) {
+        // Generar todas las variantes posibles del correlativo (con y sin ceros a la izquierda)
+        $variantes = [];
+        $len = strlen($correlativo);
+        for ($i = 0; $i < $len; $i++) {
+            $corr = substr($correlativo, $i);
             if ($corr !== '') {
-                $formatos[] = 'V' . $serie . '-' . $corr;
+                $variantes[] = 'V' . $serie . '-' . $corr;
             }
         }
-        $todasVariantes = [];
-        foreach ($formatos as $formato) {
-            $res = $this->select('ventas.idventas, ventas.numero_doc, ventas.fecha_emision, ventas.importe_total, ventas.estado, ventas.idalmacen, sucursal.descripcion as sucursal_nombre, ventas.guia_remision, servicio.n_guia as numero_guia, ventas.importe_igv, (COALESCE(ventas.importe_gravado,0)+COALESCE(ventas.importe_exonerado,0)+COALESCE(ventas.importe_gratuito,0)+COALESCE(ventas.importe_inafecto,0)) as subtotal')
-                ->join('almacen', 'almacen.idalmacen = ventas.idalmacen', 'left')
-                ->join('sucursal', 'sucursal.idsucursal = almacen.idsucursal', 'left')
-                ->join('servicio', 'servicio.n_guia = "' . $numeroGuia . '"', 'left')
-                ->where('FIND_IN_SET("' . $formato . '", REPLACE(REPLACE(ventas.guia_remision, "/", ","), " ", "")) >', 0)
-                ->where('sucursal.idempresa', 9)
-                ->findAll();
-            if (!empty($res)) {
-                $todasVariantes = array_merge($todasVariantes, $res);
-            }
+        // Asegurar la variante con todos los ceros a la izquierda
+        $variantes[] = 'V' . $serie . '-' . str_pad($correlativo, 8, '0', STR_PAD_LEFT);
+        $variantes = array_unique($variantes);
+
+        // Buscar todas las variantes en una sola consulta usando WHERE IN
+        $condiciones = [];
+        foreach ($variantes as $variante) {
+            // Buscar la variante como elemento exacto en la lista separada por /
+            $condiciones[] = 'FIND_IN_SET("' . $variante . '", REPLACE(REPLACE(ventas.guia_remision, "/", ","), " ", "")) > 0';
         }
-        if (!empty($todasVariantes)) {
-            return $todasVariantes;
-        }
-        // 3. Buscar con patrón flexible (respaldo)
-        $patronBusqueda = '(^|/)V' . $serie . '-0*' . ltrim($correlativo, '0') . '($|/)';
-        return $this->select('ventas.idventas, ventas.numero_doc, ventas.fecha_emision, ventas.importe_total, ventas.estado, ventas.idalmacen, sucursal.descripcion as sucursal_nombre, ventas.guia_remision, servicio.n_guia as numero_guia, (COALESCE(ventas.importe_gravado,0)+COALESCE(ventas.importe_exonerado,0)+COALESCE(ventas.importe_gratuito,0)+COALESCE(ventas.importe_inafecto,0)) as subtotal')
+        $whereIn = '(' . implode(' OR ', $condiciones) . ')';
+
+        return $this->select('ventas.idventas, ventas.numero_doc, ventas.fecha_emision, ventas.importe_total, ventas.estado, ventas.idalmacen, sucursal.descripcion as sucursal_nombre, ventas.guia_remision, servicio.n_guia as numero_guia, ventas.importe_igv, (COALESCE(ventas.importe_gravado,0)+COALESCE(ventas.importe_exonerado,0)+COALESCE(ventas.importe_gratuito,0)+COALESCE(ventas.importe_inafecto,0)) as subtotal')
             ->join('almacen', 'almacen.idalmacen = ventas.idalmacen', 'left')
             ->join('sucursal', 'sucursal.idsucursal = almacen.idsucursal', 'left')
             ->join('servicio', 'servicio.n_guia = "' . $numeroGuia . '"', 'left')
-            ->where("ventas.guia_remision REGEXP '" . $patronBusqueda . "'")
+            ->where($whereIn)
             ->where('sucursal.idempresa', 9)
             ->findAll();
     }

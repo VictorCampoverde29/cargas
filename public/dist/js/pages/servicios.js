@@ -268,6 +268,17 @@ function llenarDatosInput(btn) {
 function registrarServicio() {
     var idviaje = $("#txtidviaje").val();
     var nguia = $("#txtviajeprin").val();
+    // Normalizar número de guía: V###-00000000
+    var normalizado = nguia.trim().toUpperCase();
+    var matchNorm = normalizado.match(/^V(\d{3})-(\d{1,8})$/);
+    if (matchNorm) {
+        var serie = matchNorm[1];
+        var correlativo = matchNorm[2].padStart(8, '0');
+        normalizado = `V${serie}-${correlativo}`;
+        // Actualizar el input para que el usuario vea el formato correcto
+        $("#txtviajeprin").val(normalizado);
+        nguia = normalizado;
+    }
     var fservicio = $("#dtfserv").val();
     var flete = $("#txtflete").val();
     var glosa = $("#txtglosaserv").val();
@@ -281,6 +292,13 @@ function registrarServicio() {
     // Validaciones
     if (nguia.trim() === "") {
         Swal.fire('REGISTRO DE SERVICIO', 'El número de guía es obligatorio', 'error');
+        $('#txtviajeprin').focus();
+        return;
+    }
+    // Validar formato de número de guía: V###-00000000 (8 dígitos correlativo, siempre con ceros a la izquierda)
+    const guiaRegex = /^V\d{3}-\d{8}$/;
+    if (!guiaRegex.test(nguia)) {
+        Swal.fire('REGISTRO DE SERVICIO', 'El formato del número de guía es incorrecto. Correlativo + (8 dígitos con ceros a la izquierda)', 'error');
         $('#txtviajeprin').focus();
         return;
     }

@@ -55,8 +55,11 @@ $(document).ready(function () {
             if (modalServicios.hasClass("show") && modalServicios.data("mantener-scroll")) {
                 modalServicios.css("overflow-y", "auto");
                 $("body").addClass("modal-open");
-                // Prevenir que el scroll se vaya al body principal
-                $("body").css("overflow", "hidden");
+                // Solo quitar el overflow:hidden si no hay otros modales abiertos
+                if ($('.modal.show').length === 1) {
+                    // Solo el modal de servicios está abierto
+                    $("body").css("overflow", "auto");
+                }
                 // Limpiar el flag
                 modalServicios.removeData("mantener-scroll");
             }

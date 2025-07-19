@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\CargaModel;
 use App\Models\ConductorModel;
 use App\Models\DestinosModel;
 use App\Models\SucursalModel;
@@ -17,12 +16,10 @@ class ViajesController extends Controller
         $Conductores = new ConductorModel();
         $Vehiculos = new VehiculosModel();
         $Sucursal = new SucursalModel();
-        $Tipo = new CargaModel();
         $data['destino'] = $Destinos->selectDestinos();
         $data['conductor'] = $Conductores->getConductoresViaje();
         $data['vehiculo'] = $Vehiculos->getUnidadesGuia();
         $data['sucursal'] = $Sucursal->traerSucursales();
-        $data['tipo']= $Tipo->traerCarga();
         return view('mant_viajes/index', $data);
     }
     public function traerViajes(){

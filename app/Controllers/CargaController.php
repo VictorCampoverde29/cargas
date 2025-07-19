@@ -13,6 +13,13 @@ class CargaController extends Controller
         return view('mant_carga/index', $data);
     }
 
+    public function selectCargas()
+    {
+        $cargas = new CargaModel();
+        $data = $cargas->traerCarga();
+        return $this->response->setJSON(['data' => $data]);
+    }
+
     public function traerCarga(){
         $model = new CargaModel();
         $data = $model->traerCarga();

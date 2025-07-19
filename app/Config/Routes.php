@@ -49,6 +49,7 @@ $routes->group('mant_viajes', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->get('ultimos_viajes_dash', 'ViajesController::ultimosViajesDash');
     $routes->get('estadisticas_viajes_dash', 'ViajesController::estadisticasViajesDash');
     $routes->post('validar_estado_servicios', 'ServicioController::validarServiciosViaje');
+    $routes->get('select_cargas', 'CargaController::selectCargas');
 });
 
 $routes->group('mant_destino', ['filter' => 'CambioFilter'], function ($routes) {
@@ -56,13 +57,6 @@ $routes->group('mant_destino', ['filter' => 'CambioFilter'], function ($routes) 
     $routes->get('destinos_xcod', 'DestinosController::getDestinosXcod');
     $routes->post('agregar_destino', 'DestinosController::agregarDestino');
     $routes->post('editar_destino', 'DestinosController::editarDestino');
-});
-
-$routes->group('reg_servicio', ['filter' => 'CambioFilter'], function ($routes) {
-    $routes->get('cmbprovincia', 'DestinosController::getProvinciaXDep');
-    $routes->get('cmbdistrito', 'DestinosController::getDistritoXProvDep');
-    $routes->get('cmbprovincia2', 'DestinosController::getProvinciaXDep');
-    $routes->get('cmbdistrito2', 'DestinosController::getDistritoXProvDep');
 });
 
 $routes->group('guias', ['filter' => 'CambioFilter'], function ($routes) {

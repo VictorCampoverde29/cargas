@@ -230,11 +230,7 @@ Mantenimiento Viajes
                             <label for="cmbtipocarga"><i class="fa fa-box"></i> T. CARGA</label>
                             <div class="input-group input-group-sm">
                                 <select class="form-control form-control-sm" id="cmbtipocarga">
-                                    <?php foreach ($tipo as $tipos): ?>
-                                        <option value="<?= esc($tipos['idcarga']); ?>">
-                                            <?= esc($tipos['descripcion']); ?>
-                                        </option>
-                                    <?php endforeach; ?>
+                    
                                     <option value="OTRO">OTRO</option>
                                 </select>
                                 <input type="text" min="1" class="form-control form-control-sm" id="txtcargaserv" name="txtcargaserv" placeholder="CARGA" style="display: none;">

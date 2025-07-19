@@ -41,16 +41,16 @@ $(document).ready(function () {
         }
         $("#tblguias tbody").empty();
     });
-    
+
     // Event listener para limpiar event listeners cuando se cierre el modal de servicios
     $("#mdlservicios").on("hidden.bs.modal", function () {
         $(window).off('resize.servicios');
     });
-    
+
     // Event listener para mantener el scroll en el modal de servicios cuando se cierre el modal PDF
     $("#modalpdf").on("hidden.bs.modal", function () {
         // Asegurar que el modal de servicios mantenga el scroll
-        setTimeout(function() {
+        setTimeout(function () {
             const modalServicios = $("#mdlservicios");
             if (modalServicios.hasClass("show") && modalServicios.data("mantener-scroll")) {
                 modalServicios.css("overflow-y", "auto");
@@ -89,9 +89,9 @@ function actualizarViajesEnPaginaPadre() {
 function abrirModalServicios(idviaje, estadoViaje = '') {
     limpiarServicios();
     $("#txtidviaje").val(idviaje);
-    $("#mdlservicios").modal("show");    
+    $("#mdlservicios").modal("show");
     cargarServicios(idviaje);
-    
+    llenarSelectCarga();
     // Si el viaje está entregado, bloquear todo el modal
     if (estadoViaje && estadoViaje.trim().toUpperCase() === 'ENTREGADO') {
         bloquearModalServicios();
@@ -131,7 +131,7 @@ function desbloquearModalServicios() {
     $('#cmbtipocarga, #cmbestadoserv, #dtfserv').closest('.row').show();
     // Marcar que el modal ya no está bloqueado
     $('#mdlservicios').data('bloqueado', false);
-    
+
     // Habilitar elementos de la tabla (incluyendo modo responsivo)
     $('#tblservicios select, #tblservicios button').prop('disabled', false);
     $('#tblservicios_wrapper .dtr-details select, #tblservicios_wrapper .dtr-details button').prop('disabled', false);
@@ -154,7 +154,7 @@ function aplicarBloqueoTabla() {
         $('#tblservicios_wrapper button:not(.btn-nunca-bloquear)').prop('disabled', true);
 
         // Usar un timeout pequeño para asegurar que se aplique después del renderizado
-        setTimeout(function() {
+        setTimeout(function () {
             $('#tblservicios select').prop('disabled', true);
             $('#tblservicios button:not(.btn-nunca-bloquear)').prop('disabled', true);
             $('#tblservicios_wrapper .dtr-details select').prop('disabled', true);
@@ -241,6 +241,19 @@ function traerGuias() {
     });
 }
 
+// Función para decodificar entidades HTML recursivamente
+function decodeHtml(html) {
+    var txt = document.createElement('textarea');
+    var last = html;
+    var current = html;
+    do {
+        last = current;
+        txt.innerHTML = last;
+        current = txt.value;
+    } while (current !== last);
+    return current;
+}
+
 function llenarDatosInput(btn) {
     const table = $("#tblguias").DataTable();
     const fila = $(btn).closest("tr");
@@ -256,8 +269,8 @@ function llenarDatosInput(btn) {
     $("#txtorigserv").val(datos.dir_partida);
     $("#txtllegserv").val(datos.dir_llegada);
     $("#txtflete").val(datos.pagaflete);
-    $("#txtemisor").val(datos.remitente_nombre);
-    $("#txtreceptor").val(datos.destinatario_nombre);
+    $("#txtemisor").val(decodeHtml(datos.remitente_nombre));
+    $("#txtreceptor").val(decodeHtml(datos.destinatario_nombre));
     $("#txtglosaserv").val(datos.glosa);
     $("#txtestado").val(datos.estado);
 
@@ -383,6 +396,7 @@ function registrarServicioFinal(data) {
                     // Recargar la tabla de servicios después del registro exitoso
                     cargarServicios(data.idviaje);
                     limpiarServicios();
+                    llenarSelectCarga();
                 });
             }
         },
@@ -411,40 +425,40 @@ function cargarServicios(cod) {
     }
 
     tableServicios = $("#tblservicios").DataTable({
-            "destroy": true,
-            "language": Español,
-            "lengthChange": true,
-            "autoWidth": false,
-            "responsive": true,
-            "ajax": {
-                'url': url,
-                'method': 'GET',
-                'data': { cod: cod },
-                'dataSrc': function (json) {
-                    return json.data || json;
-                }
-            },
-            "createdRow": function (row, data, dataIndex) {
-                const estado = data.estado ? data.estado.trim().toUpperCase() : '';
-                const selectEstado = $(row).find('select[data-field="estado"]');
-                selectEstado.removeClass('text-warning text-success text-danger');
-                $(row).find('td').not(':last').css('color', '').removeClass('font-weight-bold');
+        "destroy": true,
+        "language": Español,
+        "lengthChange": true,
+        "autoWidth": false,
+        "responsive": true,
+        "ajax": {
+            'url': url,
+            'method': 'GET',
+            'data': { cod: cod },
+            'dataSrc': function (json) {
+                return json.data || json;
+            }
+        },
+        "createdRow": function (row, data, dataIndex) {
+            const estado = data.estado ? data.estado.trim().toUpperCase() : '';
+            const selectEstado = $(row).find('select[data-field="estado"]');
+            selectEstado.removeClass('text-warning text-success text-danger');
+            $(row).find('td').not(':last').css('color', '').removeClass('font-weight-bold');
 
-                switch (estado) {
-                    case 'EN CAMINO':
-                        selectEstado.addClass('text-warning');
-                        $(row).find('td').not(':last').css('color', '#fd7e14').addClass('font-weight-bold');
-                        break;
-                    case 'ENTREGADO':
-                        selectEstado.addClass('text-success');
-                        $(row).find('td').not(':last').css('color', '#28a745').addClass('font-weight-bold');
-                        break;
-                }
-            },
-            "drawCallback": function(settings) {
-                // Aplicar bloqueo después de cada redibujado (incluye modo responsivo)
-                aplicarBloqueoTabla();
-            },
+            switch (estado) {
+                case 'EN CAMINO':
+                    selectEstado.addClass('text-warning');
+                    $(row).find('td').not(':last').css('color', '#fd7e14').addClass('font-weight-bold');
+                    break;
+                case 'ENTREGADO':
+                    selectEstado.addClass('text-success');
+                    $(row).find('td').not(':last').css('color', '#28a745').addClass('font-weight-bold');
+                    break;
+            }
+        },
+        "drawCallback": function (settings) {
+            // Aplicar bloqueo después de cada redibujado (incluye modo responsivo)
+            aplicarBloqueoTabla();
+        },
         "columns": [
             { "data": "fecha_servicio" },
             { "data": "flete" },
@@ -523,24 +537,24 @@ function cargarServicios(cod) {
                 break;
         }
     });
-    
+
     // Event listener para filas responsivas (cuando se expanden/colapsan)
-    $('#tblservicios').on('click', 'td.dtr-control', function() {
+    $('#tblservicios').on('click', 'td.dtr-control', function () {
         // Aplicar bloqueo después de que se expanda/colapse la fila responsiva
-        setTimeout(function() {
+        setTimeout(function () {
             aplicarBloqueoTabla();
         }, 150);
     });
-    
+
     // Event listener para cambios de tamaño de ventana que afecten el modo responsivo
-    $(window).on('resize.servicios', function() {
+    $(window).on('resize.servicios', function () {
         if ($('#mdlservicios').hasClass('show')) {
-            setTimeout(function() {
+            setTimeout(function () {
                 aplicarBloqueoTabla();
             }, 200);
         }
     });
-    
+
     // Aplicar bloqueo inicial después de cargar los datos
     aplicarBloqueoTabla();
 }
@@ -554,7 +568,7 @@ function editarServicio(btn, idservicio) {
         Swal.fire("Error", "No se pudo recuperar los datos del servicio", "error");
         return;
     }
-    
+
     // Obtener el estado actual del select en la fila
     const selectEstado = $(fila).find('select[data-field="estado"]');
     const estadoActual = selectEstado.val();
@@ -578,7 +592,7 @@ function editarServicio(btn, idservicio) {
             } else {
                 // Verificar si el mensaje indica que el viaje fue marcado como entregado
                 const mensajeViajeEntregado = response.message && response.message.includes("viaje marcado como entregado");
-                
+
                 Swal.fire({
                     icon: "success",
                     title: "SERVICIO ACTUALIZADO",
@@ -588,12 +602,12 @@ function editarServicio(btn, idservicio) {
                     // Recargar la tabla para reflejar los cambios
                     const idviaje = $("#txtidviaje").val();
                     cargarServicios(idviaje);
-                    
+
                     // Si el viaje fue marcado como entregado, actualizar inmediatamente
                     if (mensajeViajeEntregado) {
                         // Actualizar la tabla de viajes inmediatamente
                         actualizarViajesEnPaginaPadre();
-                        
+
                         // Cerrar el modal después de un breve delay solo para que el usuario vea el mensaje
                         setTimeout(() => {
                             $("#mdlservicios").modal("hide");
@@ -664,14 +678,14 @@ function verVenta(numeroGuia) {
                             showConfirmButton: true,
                             confirmButtonText: "Cerrar",
                             didOpen: () => {
-                                document.getElementById('btnAnteriorVenta').addEventListener('click', function(e) {
+                                document.getElementById('btnAnteriorVenta').addEventListener('click', function (e) {
                                     if (idx > 0) {
                                         idx--;
                                         Swal.close();
                                         setTimeout(() => mostrarVenta(idx), 200);
                                     }
                                 });
-                                document.getElementById('btnSiguienteVenta').addEventListener('click', function(e) {
+                                document.getElementById('btnSiguienteVenta').addEventListener('click', function (e) {
                                     if (idx < response.length - 1) {
                                         idx++;
                                         Swal.close();
@@ -739,3 +753,40 @@ function verPdf(numeroGuia) {
         }
     });
 }
+
+function llenarSelectCarga() {
+    var url = baseURL + 'mant_viajes/select_cargas';
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: function (response) {
+            const cargaSelect = $('#cmbtipocarga');
+            cargaSelect.empty(); // Limpia el select existente
+            // Llena el select con las cargas, excepto OTRO
+            if (response.data && Array.isArray(response.data)) {
+                response.data.forEach(function (carga) {
+                    if (carga.descripcion && carga.descripcion.toUpperCase() !== 'OTRO') {
+                        cargaSelect.append(
+                            $('<option>', { value: carga.idcarga, text: carga.descripcion })
+                        );
+                    }
+                });
+            }
+            // Agregar OTRO al final
+            cargaSelect.append($('<option>', { value: 'OTRO', text: 'OTRO' }));
+            // Disparar el evento change para actualizar el input si es necesario
+            cargaSelect.trigger('change');
+        },
+        error: function (jqXHR, textStatus) {
+            console.log('Error: ' + textStatus);
+        }
+    });
+}
+// Mostrar/ocultar el input de carga personalizada según selección
+$(document).on('change', '#cmbtipocarga', function () {
+    if ($(this).val() === 'OTRO') {
+        $('#txtcargaserv').show().focus();
+    } else {
+        $('#txtcargaserv').hide();
+    }
+});

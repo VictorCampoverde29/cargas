@@ -187,38 +187,44 @@ function traerGuias() {
         "&codigosucursal=" + idsucursal +
         "&idviaje=" + idviaje; // Agregar idviaje a los parámetros
     $.ajax({
-        "url": url,
-        "method": "GET",
-        "data": parametros,
+        url: url,
+        method: "GET",
+        data: parametros,
         success: function (data) {
+            // Decodificar los campos de nombre antes de pasar a DataTable
+            var decodedData = (data.data || data).map(function (item) {
+                if (item.remitente_nombre) item.remitente_nombre = decodeHtml(item.remitente_nombre);
+                if (item.destinatario_nombre) item.destinatario_nombre = decodeHtml(item.destinatario_nombre);
+                return item;
+            });
             table = $("#tblguias").DataTable({
-                "destroy": true,
-                "language": Español,
-                "autoWidth": true,
-                "responsive": true,
-                "data": data,
-                "createdRow": function (row, data, dataIndex) {
+                destroy: true,
+                language: Español,
+                autoWidth: true,
+                responsive: true,
+                data: decodedData,
+                createdRow: function (row, data, dataIndex) {
                     if (data.estado.toUpperCase() === "ANULADA") {
                         $(row).css("color", "red");
                     } else if (data.estado.toUpperCase() === "REGISTRADA") {
                         $(row).css("color", "green");
                     }
                 },
-                "columns": [
-                    { "data": "numero" },
-                    { "data": "fecha_emision" },
-                    { "data": "dir_partida" },
-                    { "data": "dir_llegada" },
-                    { "data": "pagaflete" },
-                    { "data": "remitente_nombre" },
-                    { "data": "destinatario_nombre" },
-                    { "data": "glosa" },
-                    { "data": "estado" },
+                columns: [
+                    { data: "numero" },
+                    { data: "fecha_emision" },
+                    { data: "dir_partida" },
+                    { data: "dir_llegada" },
+                    { data: "pagaflete" },
+                    { data: "remitente_nombre" },
+                    { data: "destinatario_nombre" },
+                    { data: "glosa" },
+                    { data: "estado" },
                     {
-                        "data": null,
-                        "width": "7%",
-                        "orderable": false,
-                        "render": function (data, type, row, meta) {
+                        data: null,
+                        width: "7%",
+                        orderable: false,
+                        render: function (data, type, row, meta) {
                             const estado = row.estado ? row.estado.toUpperCase() : '';
                             const disabled = (estado === 'ANULADA') ? 'disabled' : '';
                             return `<div class="d-flex flex-row gap-1 justify-content-center">
@@ -228,7 +234,7 @@ function traerGuias() {
                             </div>`;
                         }
                     }
-                ],
+                ]
             });
         },
         error: function (xhr, status, error) {
@@ -237,7 +243,7 @@ function traerGuias() {
                 text: "Error al obtener guías",
                 icon: "error"
             });
-        },
+        }
     });
 }
 
@@ -739,7 +745,7 @@ function verPdf(numeroGuia) {
             } else {
                 Swal.fire({
                     title: "Error",
-                    text: "No se pudo encontrar la guía para generar el PDF.",
+                    text: "Guia no encontrada.",
                     icon: "error"
                 });
             }

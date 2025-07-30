@@ -353,7 +353,7 @@ function registrarServicio() {
                         flete, emisor, receptor, glosa, estado
                     });
                 } else {
-                    Swal.fire("Error", "No se pudo registrar el nuevo tipo de carga.", "error");
+                    Swal.fire("REGISTRO DE SERVICIO", "Falta ingresar carga!", "error");
                 }
             },
             error: function () {

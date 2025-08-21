@@ -73,6 +73,32 @@ class DestinosController extends Controller
         $data = $destinosX->getDestinosXcod($cod);
         return $this->response->setJSON([$data]);
     }
+
+    public function buscadorDestinos()
+    {
+        $termino = $this->request->getGet('q');
+        $pagina = $this->request->getGet('page') ?? 1; // Página actual
+        $limite = 10; // Resultados por página
+        $offset = ($pagina - 1) * $limite; // Calcular desplazamiento
+
+        if (strlen($termino) >= 3) {
+            $model = new DestinosModel();
+            $productos = $model->buscarDestinos($termino, $limite, $offset);
+
+            // Contar total de coincidencias con el nombre correcto de la columna
+            $total = $model->where('estado', 'ACTIVO')
+                ->like('nombre', $termino)
+                ->countAllResults();
+
+            return $this->response->setJSON([
+                'destinos' => $productos,
+                'total' => $total,
+                'pagina' => $pagina,
+                'limite' => $limite
+            ]);
+        }
+        return $this->response->setJSON(['destinos' => [], 'total' => 0]);
+    }
 }
 
 

@@ -77,7 +77,7 @@ Mantenimiento Viajes
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="dtfinicio"><i class="fa fa-calendar-plus"></i> F. INICIO:</label>
-                            <input type="date" id="dtfinicio" name="dtfinicio" class="form-control form-control-sm" min="<?= date('Y-m-d'); ?>">
+                            <input type="date" id="dtfinicio" name="dtfinicio" class="form-control form-control-sm">
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -100,26 +100,14 @@ Mantenimiento Viajes
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="cmborigen"><i class="fa fa-map-marker-alt"></i> ORIGEN:</label>
-                            <select class="form-control form-control-sm" id="cmborigen">
-                                <?php foreach ($destino as $destinos): ?>
-                                    <option value="<?= esc($destinos['iddestino']); ?>">
-                                        <?= esc($destinos['nombre']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <label for="txtorigen"><i class="fa fa-map-marker-alt"></i> ORIGEN:</label>
+                            <input type="text" id="txtorigen" name="txtorigen" class="form-control form-control-sm" placeholder="Origen" autocomplete="off">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="cmbdestino"><i class="fa fa-map-marker"></i> DESTINO:</label>
-                            <select class="form-control form-control-sm" id="cmbdestino">
-                                <?php foreach ($destino as $destinos): ?>
-                                    <option value="<?= esc($destinos['iddestino']); ?>">
-                                        <?= esc($destinos['nombre']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <label for="txtdestino"><i class="fa fa-map-marker"></i> DESTINO:</label>
+                            <input type="text" id="txtdestino" name="txtdestino" class="form-control form-control-sm" placeholder="Destino" autocomplete="off">
                         </div>
                     </div>
                     <div class="col-md-4">

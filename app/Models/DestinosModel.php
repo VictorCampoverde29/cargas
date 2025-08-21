@@ -6,7 +6,7 @@ class DestinosModel extends Model
 {
     protected $table      = 'destinos';
     protected $primaryKey = 'iddestino';
-    protected $allowedFields = ['nombre', 'estado'];
+    protected $allowedFields = ['iddestino', 'nombre', 'estado'];
 
     public function getDestinos()
     {
@@ -37,5 +37,15 @@ class DestinosModel extends Model
             $query->where('iddestino !=', $id);
         }
         return $query->first() !== null;
+    }
+
+    public function buscarDestinos($searchTerm, $limite, $offset)
+    {
+        return $this->select("iddestino,nombre,estado")
+            ->where('estado', 'ACTIVO')
+            ->like('nombre', $searchTerm)
+            ->orderBy('nombre', 'ASC')
+            ->limit($limite, $offset) // Asegurar que se usa limit y offset correctamente
+            ->findAll();
     }
 }

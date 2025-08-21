@@ -50,6 +50,7 @@ $routes->group('mant_viajes', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->get('estadisticas_viajes_dash', 'ViajesController::estadisticasViajesDash');
     $routes->post('validar_estado_servicios', 'ServicioController::validarServiciosViaje');
     $routes->get('select_cargas', 'CargaController::selectCargas');
+    $routes->get('buscar_destinos', 'DestinosController::buscadorDestinos');
 });
 
 $routes->group('mant_destino', ['filter' => 'CambioFilter'], function ($routes) {

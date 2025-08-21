@@ -43,7 +43,7 @@ class VentasController extends Controller
         $indtrasbprog = $guia->ind_transbordoprog;
         $indtraspsubcontratado = $guia->ind_transpsubcontratado;
         $indipagaflete = $guia->ind_pagaflete;
-        $codhash        = $guia->hash;
+        $codhash        = $guia->hash??'system';
         $ticket         = $guia->tk_sunat;
 
         // Crear instancia PDF

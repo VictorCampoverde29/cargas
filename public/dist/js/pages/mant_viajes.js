@@ -126,15 +126,92 @@ function cargarViajes() {
                 width: "5%",
                 render: function (data, type, row) {
                     return `
-                        <div class="d-flex flex-row justify-content-center">
-                            <button class="btn btn-info" onclick="abrirModalServicios(${row.idviaje}, '${row.estado}')">
+                        <div class="d-flex flex-row justify-content-center gap-2">
+                            <button class="btn btn-info btn-gestionar-servicios" title="Gestionar Servicios" onclick="abrirModalServicios(${row.idviaje}, '${row.estado}', '${row.fecha_inicio}', '${row.fecha_fin}')">
                                 <i class="fa fa-file-alt"></i>
+                            </button>&nbsp;
+                            <button class="btn btn-danger" onclick="eliminarViaje(${row.idviaje}, '${row.estado}')">
+                                <i class="fa fa-trash"></i>
                             </button>
                         </div>
                     `;
                 }
             }
         ]
+    });
+}
+
+// Evento para el botón "Cargar más"
+$(document).on("click", ".btn-gestionar-servicios", function (e) {
+    $("#cmbsucursalguia").prop('selectedIndex', 0);
+});
+
+function eliminarViaje(idviaje) {
+    Swal.fire({
+        title: '¿Está seguro?',
+        text: "Esta acción eliminará el viaje y sus servicios relacionados. ¡No podrá revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#3085d6',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Mostrar loading
+            Swal.fire({
+                title: 'Eliminando...',
+                text: 'Por favor espere',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            // Enviar petición AJAX
+            $.ajax({
+                url: baseURL + 'mant_viajes/eliminar_viaje',
+                type: 'POST',
+                data: {
+                    idviaje: idviaje
+                },
+                dataType: 'json',
+                success: function(response) {
+                    Swal.close();
+                    
+                    if (response.error) {
+                        // Mostrar error
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.error,
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    } else {
+                        // Mostrar éxito
+                        Swal.fire({
+                            title: '¡Eliminado!',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                cargarViajes();
+                            }
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.close();
+                    Swal.fire({
+                        title: 'Error de conexión',
+                        text: 'No se pudo conectar con el servidor',
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
+            });
+        }
     });
 }
 
@@ -296,13 +373,22 @@ function registrarViaje() {
                     }).then(function () {
                         $('#tblviajes').DataTable().ajax.reload(null, false);
                         $('#mdlviaje').modal('hide');
-                        limpiar();
+                        
                         // Esperar a que el modal se cierre completamente antes de abrir el de servicios
                         if (response.idviaje) {
+                            // Guardar las fechas antes de limpiar el formulario
+                            const fechaInicio = fecha_inicio;
+                            const fechaFin = fecha_fin;
+                            
+                            limpiar();
+                            
                             $('#mdlviaje').on('hidden.bs.modal', function() {
                                 $(this).off('hidden.bs.modal');
-                                abrirModalServicios(response.idviaje, 'EN CAMINO');
+                                // Pasar también las fechas al abrir el modal de servicios
+                                abrirModalServicios(response.idviaje, 'EN CAMINO', fechaInicio, fechaFin);
                             });
+                        } else {
+                            limpiar();
                         }
                     });
                 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\ConductorModel;
 use App\Models\DestinosModel;
 use App\Models\SucursalModel;
@@ -22,7 +23,8 @@ class ViajesController extends Controller
         $data['sucursal'] = $Sucursal->traerSucursales();
         return view('mant_viajes/index', $data);
     }
-    public function traerViajes(){
+    public function traerViajes()
+    {
         $model = new ViajesModel();
         $data = $model->traerViajeReg();
         return $this->response->setJSON($data);
@@ -56,7 +58,7 @@ class ViajesController extends Controller
         try {
             $idViaje = $model->insert($data);
             return $this->response->setJSON([
-                'success' => true, 
+                'success' => true,
                 'message' => 'Viaje registrado correctamente.',
                 'idviaje' => $idViaje
             ]);
@@ -65,7 +67,8 @@ class ViajesController extends Controller
         }
     }
 
-    public function editarViaje(){
+    public function editarViaje()
+    {
         $model = new ViajesModel();
         $idviaje = $this->request->getPost('cod');
         $estado = $this->request->getPost('estado');
@@ -96,5 +99,33 @@ class ViajesController extends Controller
         $model = new ViajesModel();
         $data = $model->getEstadisticasViajes();
         return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function delete()
+    {
+        $idviaje = $this->request->getPost('idviaje');
+
+        try {
+            // Generar XML mínimo
+            $xml = new \XMLWriter();
+            $xml->openMemory();
+            $xml->startDocument('1.0', 'UTF-8');
+            $xml->startElement('eliminacion');
+            $xml->writeElement('idviaje', $idviaje);
+            $xml->endElement();
+            $xml->endDocument();
+            $xmlString = $xml->outputMemory();
+
+            $viajeModel = new ViajesModel();
+            $resultado = $viajeModel->eliminarViaje($idviaje, $xmlString);
+
+            return $this->response->setJSON([
+                'message' => $resultado
+            ]);
+        } catch (\Exception $e) {
+            return $this->response->setJSON([
+                'error' => 'ERROR: ' . $e->getMessage()
+            ]);
+        }
     }
 }

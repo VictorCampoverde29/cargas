@@ -16,19 +16,14 @@ Mantenimiento Viajes
         <div class="col-md-12">
             <div class="card card-default color-palette-box">
                 <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fa fa-road"></i>
-                        Viajes Registrados
-                    </h3>
-                    <div class="card-tools">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-wrench"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right" role="menu">
-                                <a href="#" class="dropdown-item" onclick="abrirModalViaje()">+ AGREGAR NUEVO VIAJE</a>
-                            </div>
-                        </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="card-title m-0">
+                            <i class="fa fa-road"></i>
+                            Viajes Registrados
+                        </h3>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="abrirModalViaje()">
+                            + REGISTRAR NUEVO VIAJE
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -83,7 +78,7 @@ Mantenimiento Viajes
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="dtffin"><i class="fa fa-calendar-check"></i> F. FIN:</label>
-                            <input type="date" id="dtffin" name="dtffin" class="form-control form-control-sm" min="<?= date('Y-m-d'); ?>">
+                            <input type="date" id="dtffin" name="dtffin" class="form-control form-control-sm">
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -148,106 +143,118 @@ Mantenimiento Viajes
             <div class="modal-body">
                 <input type="hidden" id="txtidviaje" name="txtidviaje">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-6 mr-5">
                         <div class="form-group">
                             <label for="txtviajeprin"><i class="fa fa-file-alt"></i> NUMERO DE GUIA</label>
                             <div class="input-group input-group-sm">
                                 <input type="text" class="form-control" id="txtviajeprin" name="txtviajeprin" placeholder="Guia" autocomplete="off">
                                 <div class="input-group-append">
-                                    <button class="btn btn-info" type="button" id="btneleremi" name="btneleremi" onclick="abrirModalGuia()"><i class="fas fa-search"></i></button>
+                                    <button class="btn btn-info" type="button" id="btneleremi" name="btneleremi" onclick="abrirModalGuia()"><i class="fas fa-search"></i> BUSCAR GUIA</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="txtflete"><i class="fa fa-money-bill-wave"></i> FLETE</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="txtflete" name="txtflete" placeholder="Flete" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label for="txtglosaserv"><i class="fa fa-sticky-note"></i> GLOSA</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="txtglosaserv" name="txtglosaserv" placeholder="Glosa" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="txtemisor"><i class="fa fa-paper-plane"></i> EMISOR</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="txtemisor" name="txtemisor" placeholder="Emisor" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="txtreceptor"><i class="fa fa-inbox"></i> RECEPTOR</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="txtreceptor" name="txtreceptor" placeholder="Receptor" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="txtorigserv"><i class="fa fa-map-marker-alt"></i> ORIGEN</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="txtorigserv" name="txtorigserv" placeholder="Origen" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="txtllegserv"><i class="fa fa-map-marker"></i> LLEGADA</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="txtllegserv" name="txtllegserv" placeholder="Llegada" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="cmbtipocarga"><i class="fa fa-box"></i> T. CARGA</label>
-                            <div class="input-group input-group-sm">
-                                <select class="form-control form-control-sm" id="cmbtipocarga">
-                    
-                                    <option value="OTRO">OTRO</option>
-                                </select>
-                                <input type="text" min="1" class="form-control form-control-sm" id="txtcargaserv" name="txtcargaserv" placeholder="CARGA" style="display: none;">
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="cmbestadoserv"><i class="fa fa-info-circle"></i> ESTADO</label>
-                            <select class="form-control form-control-sm" id="cmbestadoserv" name="cmbestadoserv">
-                                <option value="EN CAMINO">EN CAMINO</option>
-                                <option value="ENTREGADO">ENTREGADO</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="dtfserv"><i class="fa fa-calendar-day"></i> F. SERVICIO</label>
-                            <div class="input-group">
-                                <input type="date" class="form-control form-control-sm" id="dtfserv" name="dtfserv">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-sm btn-info btn-block" onclick="registrarServicio()">
-                                + AGREGAR SERVICIO
+                            <label style="visibility:hidden;">Boton</label>
+                            <button type="button" class="btn btn-default btn-sm w-100" onclick="ocultar()">
+                                <i class="fa-regular fa-eye"></i> MOSTRAR/OCULTAR
                             </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden-form" id="serviciosContenedor" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtflete"><i class="fa fa-money-bill-wave"></i> FLETE</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="txtflete" name="txtflete" placeholder="Flete" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtglosaserv"><i class="fa fa-sticky-note"></i> GLOSA</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="txtglosaserv" name="txtglosaserv" placeholder="Glosa" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtemisor"><i class="fa fa-paper-plane"></i> EMISOR</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="txtemisor" name="txtemisor" placeholder="Emisor" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtreceptor"><i class="fa fa-inbox"></i> RECEPTOR</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="txtreceptor" name="txtreceptor" placeholder="Receptor" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtorigserv"><i class="fa fa-map-marker-alt"></i> ORIGEN</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="txtorigserv" name="txtorigserv" placeholder="Origen" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="txtllegserv"><i class="fa fa-map-marker"></i> LLEGADA</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control form-control-sm" id="txtllegserv" name="txtllegserv" placeholder="Llegada" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="cmbtipocarga"><i class="fa fa-box"></i> T. CARGA</label>
+                                <div class="input-group input-group-sm">
+                                    <select class="form-control form-control-sm" id="cmbtipocarga">
+
+                                        <option value="OTRO">OTRO</option>
+                                    </select>
+                                    <input type="text" min="1" class="form-control form-control-sm" id="txtcargaserv" name="txtcargaserv" placeholder="CARGA" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="cmbestadoserv"><i class="fa fa-info-circle"></i> ESTADO</label>
+                                <select class="form-control form-control-sm" id="cmbestadoserv" name="cmbestadoserv">
+                                    <option value="EN CAMINO">EN CAMINO</option>
+                                    <option value="ENTREGADO">ENTREGADO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="dtfserv"><i class="fa fa-calendar-day"></i> F. SERVICIO</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control form-control-sm" id="dtfserv" name="dtfserv">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button class="btn btn-sm btn-info btn-block" onclick="registrarServicio()">
+                                    + AGREGAR SERVICIO
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -399,7 +406,7 @@ Mantenimiento Viajes
                     <iframe id="iframepdf" src="" style="width: 100%; height: 100%; border: none;"></iframe>
                 </div>
             </div>
-           <div class="modal-footer">
+            <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     <i class="fa-solid fa-circle-xmark"></i> CERRAR
                 </button>

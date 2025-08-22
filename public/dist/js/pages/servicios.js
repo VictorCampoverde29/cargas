@@ -27,14 +27,10 @@ $(document).ready(function () {
             }
         }, 300);
     });
-    // Event listener para limpiar el modal de buscar guía al abrirlo
+    // Event listener para preparar el modal de buscar guía al abrirlo
     $("#mdlbuscarguia").on("show.bs.modal", function () {
-        const fechaActual = new Date();
-        const primerDiaMes = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
-        const fechaInicio = primerDiaMes.toISOString().split('T')[0];
-        const fechaFin = fechaActual.toISOString().split('T')[0];
-        $("#dtfiniguia").val(fechaInicio);
-        $("#dtffinguia").val(fechaFin);
+        // No establecemos las fechas aquí, ya que las manejamos en abrirModalGuia
+        // Solo limpiamos los demás elementos
         $("#cmbsucursalguia option:first").prop('selected', true);
         if ($.fn.DataTable.isDataTable("#tblguias")) {
             $("#tblguias").DataTable().clear().destroy();
@@ -86,12 +82,20 @@ function actualizarViajesEnPaginaPadre() {
     }
 }
 
-function abrirModalServicios(idviaje, estadoViaje = '') {
+function abrirModalServicios(idviaje, estadoViaje = '', fechaInicio = null, fechaFin = null) {
     limpiarServicios();
     $("#txtidviaje").val(idviaje);
     $("#mdlservicios").modal("show");
     cargarServicios(idviaje);
     llenarSelectCarga();
+    
+    // Guardar las fechas del viaje para usarlas al abrir el modal de guías
+    if (fechaInicio && fechaFin) {
+        // Almacenar las fechas en data attributes para usarlas después
+        $("#mdlservicios").data("fechaInicio", fechaInicio);
+        $("#mdlservicios").data("fechaFin", fechaFin);
+    }
+    
     // Si el viaje está entregado, bloquear todo el modal
     if (estadoViaje && estadoViaje.trim().toUpperCase() === 'ENTREGADO') {
         bloquearModalServicios();
@@ -138,6 +142,14 @@ function desbloquearModalServicios() {
     $('#tblservicios_wrapper select[data-field="estado"], #tblservicios_wrapper button').prop('disabled', false);
 }
 
+function ocultar(){
+    // Alterna la visibilidad del contenedor de servicios
+    if ($('#serviciosContenedor').css('display') === 'none') {
+        $('#serviciosContenedor').css('display', 'block'); // Muestra el contenedor
+    } else {
+        $('#serviciosContenedor').css('display', 'none'); // Oculta el contenedor
+    }
+}
 // Función auxiliar para aplicar el bloqueo a la tabla
 function aplicarBloqueoTabla() {
     if ($('#mdlservicios').data('bloqueado') === true) {
@@ -166,11 +178,33 @@ function aplicarBloqueoTabla() {
 }
 
 function abrirModalGuia() {
+    // Obtener las fechas almacenadas si existen
+    const fechaInicio = $("#mdlservicios").data("fechaInicio");
+    const fechaFin = $("#mdlservicios").data("fechaFin");
+    
     $("#mdlservicios").modal("hide");
     // Esperar a que el primer modal se cierre completamente antes de abrir el segundo
     $("#mdlservicios").on("hidden.bs.modal", function () {
         $(this).off("hidden.bs.modal"); // Remover el event listener después de usarlo
+        
+        // Al abrir el modal de guías, establecer las fechas si están disponibles
+        $("#mdlbuscarguia").on("show.bs.modal", function() {
+            $(this).off("show.bs.modal"); // Remover el listener después de usarlo
+            
+            // Si tenemos fechas del viaje, las usamos
+            if (fechaInicio && fechaFin) {
+                $("#dtfiniguia").val(fechaInicio);
+                $("#dtffinguia").val(fechaFin);
+            } else {
+                // Si no tenemos fechas del viaje, usar el comportamiento predeterminado
+                const fechaActual = new Date();
+                const primerDiaMes = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1);
+                $("#dtfiniguia").val(primerDiaMes.toISOString().split('T')[0]);
+                $("#dtffinguia").val(fechaActual.toISOString().split('T')[0]);
+            }
+        });
         $("#mdlbuscarguia").modal("show");
+        traerGuias();
     });
 }
 
@@ -200,7 +234,7 @@ function traerGuias() {
             table = $("#tblguias").DataTable({
                 destroy: true,
                 language: Español,
-                autoWidth: true,
+                autoWidth: false,
                 responsive: true,
                 data: decodedData,
                 createdRow: function (row, data, dataIndex) {

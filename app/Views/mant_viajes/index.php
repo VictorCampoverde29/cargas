@@ -14,7 +14,7 @@ Mantenimiento Viajes
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-default color-palette-box">
+            <div class="card card-primary card-outline">
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h3 class="card-title m-0">
@@ -28,7 +28,7 @@ Mantenimiento Viajes
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="filtroestado"> ESTADO</label>
                                 <select class="form-control form-control-sm" id="filtroestado" name="filtroestado">

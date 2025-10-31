@@ -26,7 +26,10 @@ class ViajesController extends Controller
     public function traerViajes()
     {
         $model = new ViajesModel();
-        $data = $model->traerViajeReg();
+        $estado = $this->request->getGet('estado');
+        $fecha_inicio = $this->request->getGet('fecha_inicio');
+        $fecha_fin = $this->request->getGet('fecha_fin');
+        $data = $model->traerViajeReg($estado, $fecha_inicio, $fecha_fin);
         return $this->response->setJSON($data);
     }
 

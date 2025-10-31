@@ -13,6 +13,15 @@ $(document).ready(function () {
         paginaPorInput[inputId] = 1; // Reiniciar página para este input específico
         buscarDestinos(inputId, termino, true);
     });
+
+     $("#filtroestado").on("change", function() {
+        cargarViajes();
+    });
+
+    // Evento para el cambio de fechas
+    $("#filtroini, #filtrofin").on("change", function() {
+        cargarViajes();
+    });
 });
 
 function abrirModalViaje() {
@@ -28,12 +37,18 @@ function abrirModalViaje() {
 }
 
 function cargarViajes() {
+    parametros = {
+        estado: $("#filtroestado").val(),
+        fecha_inicio: $("#filtroini").val(),
+        fecha_fin: $("#filtrofin").val()
+    };
     const url = baseURL + "mant_viajes/datatables";
     table = $("#tblviajes").DataTable({
         destroy: true,
         language: Español,
         autoWidth: false,
         responsive: true,
+        processing: true,
         createdRow: function (row, data, dataIndex) {
             setTimeout(function () {
                 const estado = data.estado ? data.estado.trim().toUpperCase() : '';
@@ -75,13 +90,14 @@ function cargarViajes() {
                             break;
                     }
                 });
-            }, 50);
+            }, 50)
+            ;
         },
         ajax: {
             method: "GET",
             url: url,
+            data: parametros,
             dataSrc: function (json) {
-                //console.log(json);
                 return json;
             }
         },

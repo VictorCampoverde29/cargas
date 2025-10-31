@@ -10,9 +10,9 @@ class ViajesModel extends Model
     protected $primaryKey = 'idviaje';
     protected $allowedFields = ['idviaje', 'idconductor', 'idunidades', 'fecha_inicio', 'fecha_fin', 'observaciones', 'destinos_origen', 'destinos_destino', 'estado'];
 
-    public function traerViajeReg()
+    public function traerViajeReg($estado = null, $fecha_inicio = null, $fecha_fin = null)
     {
-        return $this->select("
+        $query = $this->select("
             viaje.idviaje,
             viaje.fecha_inicio,
             viaje.fecha_fin,
@@ -26,9 +26,21 @@ class ViajesModel extends Model
             ->join('conductor', 'conductor.idconductor = viaje.idconductor')
             ->join('unidades', 'unidades.idunidades = viaje.idunidades')
             ->join('destinos AS destino_origen', 'destino_origen.iddestino = viaje.destinos_origen')
-            ->join('destinos AS destino_destino', 'destino_destino.iddestino = viaje.destinos_destino')
-            ->orderBy('viaje.fecha_inicio', 'DESC')
-            ->findAll();
+            ->join('destinos AS destino_destino', 'destino_destino.iddestino = viaje.destinos_destino');
+
+        // Filtro por estado
+        if ($estado !== null) {
+            $query->where('viaje.estado', $estado);
+        }
+
+        // Filtro por rango de fechas
+        if ($fecha_inicio !== null && $fecha_fin !== null) {
+            $query->where('viaje.fecha_inicio >=', $fecha_inicio)
+                  ->where('viaje.fecha_fin <=', $fecha_fin);
+        }
+
+        return $query->orderBy('viaje.fecha_inicio', 'DESC')
+                    ->findAll();
     }
 
     public function getUltimosViajes($limit = 5)

@@ -27,6 +27,29 @@ Mantenimiento Viajes
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="filtroestado"> ESTADO</label>
+                                <select class="form-control form-control-sm" id="filtroestado" name="filtroestado">
+                                    <option value="EN CAMINO">EN CAMINO</option>
+                                    <option value="ENTREGADO">ENTREGADO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="filtroini"> FECHA INICIO:</label>
+                                <input type="date" id="filtroini" name="filtroini" class="form-control form-control-sm" value="<?= date('Y-m-01'); ?>">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="filtrofin"> FECHA FIN:</label>
+                                <input type="date" id="filtrofin" name="filtrofin" class="form-control form-control-sm" value="<?= date('Y-m-d'); ?>">
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table id="tblviajes" class="table table-bordered table-striped">
                             <thead class="thead-dark text-center">
@@ -72,13 +95,13 @@ Mantenimiento Viajes
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="dtfinicio"><i class="fa fa-calendar-plus"></i> F. INICIO:</label>
-                            <input type="date" id="dtfinicio" name="dtfinicio" class="form-control form-control-sm">
+                            <input type="date" id="dtfinicio" name="dtfinicio" class="form-control form-control-sm" value="<?= date('Y-m-d'); ?>">
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="dtffin"><i class="fa fa-calendar-check"></i> F. FIN:</label>
-                            <input type="date" id="dtffin" name="dtffin" class="form-control form-control-sm">
+                            <input type="date" id="dtffin" name="dtffin" class="form-control form-control-sm" value="<?= date('Y-m-d'); ?>">
                         </div>
                     </div>
                     <div class="col-md-4">

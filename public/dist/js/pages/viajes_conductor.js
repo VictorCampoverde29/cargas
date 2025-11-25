@@ -15,11 +15,23 @@ $(document).ready(function () {
         if (idviajeActual) {
             setTimeout(function() {
                 if (!$("#mdlparadasgastos").hasClass("show")) {
-                    abrirModalViajesConductor(idviajeActual);
+                    $("#mdlviajesconductor").modal("show");
+                    setTimeout(function() {
+                        recargarTablasViajesConductor(idviajeActual);
+                    }, 100);
                 }
             }, 350);
         } else {
             limpiarModalParadasGastos();
+        }
+    });
+
+    $("#mdlviajesconductor").on("shown.bs.modal", function () {
+        if (tableViajesConductorVinculados && $.fn.DataTable.isDataTable("#tblviajesconductorvinculados")) {
+            tableViajesConductorVinculados.columns.adjust().responsive.recalc();
+        }
+        if (tableViajesConductorDisponibles && $.fn.DataTable.isDataTable("#tblviajesconductordisponibles")) {
+            tableViajesConductorDisponibles.columns.adjust().responsive.recalc();
         }
     });
 
@@ -385,6 +397,24 @@ function limpiarModalParadasGastos() {
     $("#contenidoGastos").html("");
     $("#totalGastosGeneral").text("S/ 0.00");
     $('#tab-paradas').tab('show');
+}
+
+function recargarTablasViajesConductor(idviaje) {
+    if ($.fn.DataTable.isDataTable("#tblviajesconductorvinculados")) {
+        tableViajesConductorVinculados.ajax.reload(function() {
+            tableViajesConductorVinculados.columns.adjust().responsive.recalc();
+        }, false);
+    } else {
+        cargarViajesConductorVinculados(idviaje);
+    }
+    
+    if ($.fn.DataTable.isDataTable("#tblviajesconductordisponibles")) {
+        tableViajesConductorDisponibles.ajax.reload(function() {
+            tableViajesConductorDisponibles.columns.adjust().responsive.recalc();
+        }, false);
+    } else {
+        cargarViajesConductorDisponibles(idviaje);
+    }
 }
 
 function limpiarViajesConductor() {

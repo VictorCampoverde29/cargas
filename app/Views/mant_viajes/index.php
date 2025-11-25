@@ -437,6 +437,190 @@ Mantenimiento Viajes
         </form>
     </div>
 </div>
+<!----------------------------------------- MODAL VIAJES CONDUCTOR ----------------------------------------------------->
+<div class="modal fade" id="mdlviajesconductor" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="mdlviajesconductorLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title">
+                    <i class="fa fa-truck"></i> Viajes Conductor
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtidviajeconductor" name="txtidviajeconductor">
+                
+                <!-- SECCIÓN SUPERIOR: Viajes Conductor Vinculados -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="card card-success card-outline">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fa fa-check-circle"></i> Viajes Conductor Vinculados
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tblviajesconductorvinculados" class="table table-bordered table-striped table-sm">
+                                        <thead class="thead-dark text-center">
+                                            <tr>
+                                                <th>CONDUCTOR</th>
+                                                <th>UNIDAD</th>
+                                                <th>FECHA REGISTRO</th>
+                                                <th>KM INICIAL</th>
+                                                <th>KM FINAL</th>
+                                                <th>PARTIDA</th>
+                                                <th>LLEGADA</th>
+                                                <th>ESTADO</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN INFERIOR: Viajes Conductor Disponibles -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="card card-info card-outline">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <i class="fa fa-list"></i> Viajes Conductor Disponibles
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="filtrofechaini_vc"><i class="fa fa-calendar-plus"></i> FECHA INICIO:</label>
+                                            <input type="date" id="filtrofechaini_vc" name="filtrofechaini_vc" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="filtrofechafin_vc"><i class="fa fa-calendar-check"></i> FECHA FIN:</label>
+                                            <input type="date" id="filtrofechafin_vc" name="filtrofechafin_vc" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table id="tblviajesconductordisponibles" class="table table-bordered table-striped table-sm">
+                                        <thead class="thead-dark text-center">
+                                            <tr>
+                                                <th width="30px">
+                                                    <input type="checkbox" id="checkAllDisponibles" onclick="seleccionarTodosDisponibles()">
+                                                </th>
+                                                <th>CONDUCTOR</th>
+                                                <th>UNIDAD</th>
+                                                <th>FECHA REGISTRO</th>
+                                                <th>KM INICIAL</th>
+                                                <th>KM FINAL</th>
+                                                <th>PARTIDA</th>
+                                                <th>LLEGADA</th>
+                                                <th>ESTADO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="vincularViajesConductor()">
+                    <i class="fa fa-link"></i> VINCULAR SELECCIONADOS
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa-solid fa-circle-xmark"></i> CERRAR
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!----------------------------------------- MODAL PARADAS Y GASTOS ----------------------------------------------------->
+<div class="modal fade" id="mdlparadasgastos" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="mdlparadasgastosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #28a745; color: #fff; border-color: #28a745;">
+                <h5 class="modal-title">
+                    <i class="fas fa-dollar-sign"></i> Paradas y Gastos
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <input type="hidden" id="txtidviajesconductor_paradas" name="txtidviajesconductor_paradas">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" id="tabsParadasGastos" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tab-paradas" data-toggle="tab" href="#content-paradas" role="tab" aria-controls="content-paradas" aria-selected="true">
+                            <i class="fas fa-map-marker-alt"></i> Paradas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-gastos" data-toggle="tab" href="#content-gastos" role="tab" aria-controls="content-gastos" aria-selected="false">
+                            <i class="fas fa-receipt"></i> Gastos
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content" id="tabsParadasGastosContent">
+                    <!-- Tab Paradas -->
+                    <div class="tab-pane fade show active" id="content-paradas" role="tabpanel" aria-labelledby="tab-paradas">
+                        <div id="contenidoParadas" style="max-height: 500px; overflow-y: auto; padding: 15px 10px 0 0;">
+                            <div class="text-center py-5">
+                                <div class="spinner-border text-success" role="status" style="width: 3rem; height: 3rem;">
+                                    <span class="sr-only">Cargando...</span>
+                                </div>
+                                <p class="mt-3 text-muted">Cargando información...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Gastos -->
+                    <div class="tab-pane fade" id="content-gastos" role="tabpanel" aria-labelledby="tab-gastos">
+                        <div id="contenidoGastos" style="max-height: 500px; overflow-y: auto; padding: 15px 10px 0 0;">
+                            <div class="text-center py-5">
+                                <div class="spinner-border text-success" role="status" style="width: 3rem; height: 3rem;">
+                                    <span class="sr-only">Cargando...</span>
+                                </div>
+                                <p class="mt-3 text-muted">Cargando información...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 15px 20px; border-top: 1px solid #dee2e6;">
+                <div class="mr-auto">
+                    <div class="d-flex align-items-center">
+                        <span class="text-muted mr-2" style="font-size: 14px;">
+                            <i class="fas fa-receipt"></i> Total:
+                        </span>
+                        <span class="text-success font-weight-bold" id="totalGastosGeneral" style="font-size: 18px;">
+                            S/ 0.00
+                        </span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa-solid fa-circle-xmark"></i> CERRAR
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <?= $this->endsection(); ?>
 
 <?= $this->section('scripts'); ?>
@@ -454,4 +638,5 @@ Mantenimiento Viajes
 <script src="<?= base_url('public/plugins/datatables-buttons/js/buttons.colVis.min.js') ?>"></script>
 <script src="<?= base_url('public/dist/js/pages/mant_viajes.js?v=' . env('VERSION')) ?>"></script>
 <script src="<?= base_url('public/dist/js/pages/servicios.js?v=' . env('VERSION')) ?>"></script>
+<script src="<?= base_url('public/dist/js/pages/viajes_conductor.js?v=' . env('VERSION')) ?>"></script>
 <?= $this->endsection('scripts'); ?>

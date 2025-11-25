@@ -76,3 +76,10 @@ $routes->group('servicios', ['filter' => 'CambioFilter'], function ($routes) {
 $routes->group('ventas', ['filter' => 'CambioFilter'], function ($routes) {
     $routes->get('generarPDF/(:num)', 'VentasController::generarPDF/$1');
 });
+
+$routes->group('viajes_conductor', ['filter' => 'CambioFilter'], function ($routes) {
+    $routes->get('traer_vinculados', 'ViajesConductorController::traerViajesConductorVinculados');
+    $routes->get('traer_disponibles', 'ViajesConductorController::traerViajesConductorDisponibles');
+    $routes->post('vincular', 'ViajesConductorController::vincularConViaje');
+    $routes->get('traer_paradas_gastos', 'ViajesConductorController::traerParadasYGastos');
+});

@@ -8,7 +8,7 @@ function abrirModalCarga() {
     limpiarCarga();
     $('#btnregistrarc').removeClass('d-none');
     $('#btneditarc').addClass('d-none');
-    $('#lbltituloc').html('REGISTRAR NUEVA FORMA DE PAGO');
+    $('#lbltituloc').html('REGISTRAR NUEVA CARGA');
     $('#mdlcarga .modal-header').removeClass('bg-warning').addClass('bg-success');
     $('#mdlcarga').modal('show');
 }

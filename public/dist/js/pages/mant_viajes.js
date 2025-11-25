@@ -146,6 +146,9 @@ function cargarViajes() {
                             <button class="btn btn-info btn-gestionar-servicios" title="Gestionar Servicios" onclick="abrirModalServicios(${row.idviaje}, '${row.estado}', '${row.fecha_inicio}', '${row.fecha_fin}')">
                                 <i class="fa fa-file-alt"></i>
                             </button>&nbsp;
+                            <button class="btn btn-warning" title="Ver Viajes Conductor" onclick="abrirModalViajesConductor(${row.idviaje})">
+                                <i class="fa fa-truck"></i>
+                            </button>&nbsp;
                             <button class="btn btn-danger" onclick="eliminarViaje(${row.idviaje}, '${row.estado}')">
                                 <i class="fa fa-trash"></i>
                             </button>

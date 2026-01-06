@@ -13,8 +13,8 @@ class GuiaTransController extends Controller
         $fechaInicio = $this->request->getGet("fechaInicio");
         $fechaFin = $this->request->getGet("fechaFin");
         $idSucursal = $this->request->getGet("codigosucursal");
-
-        $data = $model->traerGuiasXRangoFechaYSucursal($fechaInicio, $fechaFin, $idSucursal);
+        $idViaje = $this->request->getGet("idviaje");
+        $data = $model->traerGuiasXRangoFechaYSucursal($fechaInicio, $fechaFin, $idSucursal, $idViaje);
         return $this->response->setJSON($data);
     }
 }

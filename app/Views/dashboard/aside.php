@@ -6,7 +6,7 @@ $menu = simplexml_load_file($xmlPath);
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
   <a href="<?= base_url() ?>" class="brand-link text-center">
-    <img src="<?= base_url('public/dist/img/logofoxblanco.png') ?>" alt="Asiu Logo" width="120" >
+    <img src="<?= base_url('public/dist/img/logogasiub.png') ?>" alt="Asiu Logo" width="120" >
   </a>
 
   <!-- Sidebar -->

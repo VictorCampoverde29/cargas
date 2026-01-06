@@ -24,3 +24,19 @@ var Español={
       "colvis": "👁️ Visibilidad"
   }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Agregar un evento de escucha a todo el documento
+  document.addEventListener('input', function (event) {
+      // Verificar si el elemento que disparó el evento es un input o textarea
+      if ((event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') &&
+          event.target.id !== 'txtpassword') { // Ignorar los campos de contraseña
+          // Convertir el valor del input/textarea a mayúsculas
+          event.target.value = event.target.value.toUpperCase();
+      }
+  });
+});
+
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});

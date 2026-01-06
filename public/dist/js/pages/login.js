@@ -30,7 +30,7 @@ $('#txtpassword').keyup(function(e){
 
 function loguear() {
     var clave = $('#txtpassword').val().trim();
-    var usuario = $('#txtusuario').val();
+    var usuario = $('#cmbusuario').val();
     var recordar = $('#recordarPass').is(':checked');
 
     // Validaciones antes de enviar la petición

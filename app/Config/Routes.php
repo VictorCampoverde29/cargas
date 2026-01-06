@@ -24,6 +24,7 @@ $routes->group('index', ['filter' => 'CambioFilter'], function ($routes) {
 
 $routes->group('dashboard', ['filter' => 'AuthFilter'], function ($routes) {
     $routes->get('mant_viajes', 'ViajesController::index');
+    $routes->get('gastos_viajes', 'GastosViajesController::index');
     $routes->get('reg_servicio', 'RegistrarServicioController::index');
     $routes->get('mant_carga', 'CargaController::index');
     $routes->get('mant_destino', 'DestinosController::index');
@@ -82,4 +83,10 @@ $routes->group('viajes_conductor', ['filter' => 'CambioFilter'], function ($rout
     $routes->get('traer_disponibles', 'ViajesConductorController::traerViajesConductorDisponibles');
     $routes->post('vincular', 'ViajesConductorController::vincularConViaje');
     $routes->get('traer_paradas_gastos', 'ViajesConductorController::traerParadasYGastos');
+});
+
+$routes->group('gastos_viajes', ['filter' => 'CambioFilter'], function ($routes){
+    $routes->get('obtener_gastos_viaje', 'GastosViajesController::obtenerGastosViaje');
+    $routes->get('detalle_gastos_viaje', 'GastosViajesController::obtenerDetalleGastosViaje');
+    $routes->get('buscar_destinos', 'DestinosController::buscadorDestinos');
 });

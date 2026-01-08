@@ -294,7 +294,6 @@ function registrarNuevoDestino(inputId, nombreDestino) {
 function registrarRuta() {
     var parametros = {
         unidad: $('#cmbunidad').val(),
-        conductor: $('#cmbconductor').val(),
         distancia: $('#txtdistancia').val(),
         origen: $('#hdnIdDesti1').val(),
         destino: $('#hdnIdDesti2').val(),
@@ -355,7 +354,6 @@ function get_Gastos_Viaje() {
         columns: [
             { data: "idgastos_viaje", visible: false },
             { data: "viaje" },
-            { data: "conductor" },
             { data: "unidad" },
             { data: "tramo_km", width: "15%", className: "text-center" },
             {

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use App\Models\CategoriaViajeModel;
 use App\Models\GastosViajeModel;
 use App\Models\VehiculosModel;
@@ -22,18 +23,41 @@ class GastosViajesController extends Controller
         return view('gastos_viajes/index', $data);
     }
 
-    public function obtenerGastosViaje(){
+    public function obtenerGastosViaje()
+    {
         $gastosviaje = new GastosViajeModel();
         $data = $gastosviaje->obtenerGastosViaje();
         return $this->response->setJSON(['data' => $data]);
     }
 
-    public function obtenerDetalleGastosViaje(){
+    public function obtenerDetalleGastosViaje()
+    {
         $cod = $this->request->getGet('cod');
         $gastosviaje = new DetalleGastosViajeModel();
         $data = $gastosviaje->obtenerDetalleGastosViaje($cod);
         return $this->response->setJSON(['data' => $data]);
     }
+    public function insert()
+    {
+        $unidad = $this->request->getPost('unidad');
+        $conductor = $this->request->getPost('conductor');
+        $distancia = $this->request->getPost('distancia');
+        $origen = $this->request->getPost('origen');
+        $destino = $this->request->getPost('destino');
 
-
+        $data = [
+            'idunidades' => $unidad,
+            'idconductor' => $conductor,
+            'tramo_km' => $distancia,
+            'destino_origen' => $origen,
+            'destino_destino' => $destino
+        ];
+        try {
+            $gastosviaje = new GastosViajeModel();
+            $gastosviaje->insert($data);
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Gasto de viaje registrado correctamente']);
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Error al registrar el gasto de viaje: ' . $e->getMessage()]);
+        }
+    }
 }

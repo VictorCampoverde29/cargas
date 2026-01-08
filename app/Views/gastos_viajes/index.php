@@ -36,7 +36,6 @@ Gastos Viajes
                                 <tr>
                                     <th class="d-none">ID</th>
                                     <th>VIAJE</th>
-                                    <th>CONDUCTOR</th>
                                     <th>UNIDAD</th>
                                     <th>DISTANCIA (KM)</th>
                                     <th>ACCION</th>
@@ -64,36 +63,6 @@ Gastos Viajes
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="cmbunidad"><i class="fas fa-truck"></i> UNIDAD:</label>
-                            <select class="form-control form-control-sm" id="cmbunidad">
-                                <?php foreach ($unidad as $unidades): ?>
-                                    <option value="<?= esc($unidades['idunidades']); ?>">
-                                        <?= esc($unidades['descripcion']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="cmbconductor"><i class="fas fa-user-tie"></i> CONDUCTOR:</label>
-                            <select class="form-control form-control-sm" id="cmbconductor">
-                                <<?php foreach ($conductor as $conductores): ?>
-                                    <option value="<?= esc($conductores['idconductor']); ?>">
-                                    <?= esc($conductores['nombrecompleto']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="txtdistancia"><i class="fas fa-truck"></i> DISTANCIA (KM):</label>
-                            <input type="text" class="form-control form-control-sm" id="txtdistancia" name="txtdistancia" placeholder="0.00" autocomplete="off">
-                        </div>
-                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="txtdest1"><i class="fas fa-map-marker-alt"></i> ORIGEN:</label>
@@ -108,6 +77,25 @@ Gastos Viajes
                             <input type="hidden" id="hdnIdDesti2" name="hdnIdDesti2">
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="cmbunidad"><i class="fas fa-truck"></i> UNIDAD:</label>
+                            <select class="form-control form-control-sm" id="cmbunidad">
+                                <?php foreach ($unidad as $unidades): ?>
+                                    <option value="<?= esc($unidades['idunidades']); ?>">
+                                        <?= esc($unidades['descripcion']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="txtdistancia"><i class="fas fa-truck"></i> DISTANCIA (KM):</label>
+                            <input type="text" class="form-control form-control-sm" id="txtdistancia" name="txtdistancia" placeholder="0.00" autocomplete="off">
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
             <div class="modal-footer">

@@ -5,21 +5,17 @@ namespace App\Controllers;
 use App\Models\CategoriaViajeModel;
 use App\Models\GastosViajeModel;
 use App\Models\VehiculosModel;
-use App\Models\ConductorModel;
 use App\Models\DetalleGastosViajeModel;
 use CodeIgniter\Controller;
-
 
 class GastosViajesController extends Controller
 {
     public function index()
     {
         $Unidades = new VehiculosModel();
-        $Conductores = new ConductorModel();
         $CategoriaViaje = new CategoriaViajeModel();
         $data['categoria'] = $CategoriaViaje->getCategoriasActivas();
         $data['unidad'] = $Unidades->getUnidadesGuia();
-        $data['conductor'] = $Conductores->getConductoresViaje();
         return view('gastos_viajes/index', $data);
     }
 
@@ -40,14 +36,12 @@ class GastosViajesController extends Controller
     public function insert()
     {
         $unidad = $this->request->getPost('unidad');
-        $conductor = $this->request->getPost('conductor');
         $distancia = $this->request->getPost('distancia');
         $origen = $this->request->getPost('origen');
         $destino = $this->request->getPost('destino');
 
         $data = [
             'idunidades' => $unidad,
-            'idconductor' => $conductor,
             'tramo_km' => $distancia,
             'destino_origen' => $origen,
             'destino_destino' => $destino

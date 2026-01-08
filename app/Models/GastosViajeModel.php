@@ -26,9 +26,9 @@ class GastosViajeModel extends Model
             ->join('destinos des2', 'des2.iddestino = gastos_viaje.destino_destino')
             ->join('conductor conduc', 'conduc.idconductor = gastos_viaje.idconductor')
             ->join('unidades uni', 'uni.idunidades = gastos_viaje.idunidades')
-            ->where('destino_origen', $orig)
-            ->where('destino_destino', $dest)
-            ->where('idunidades', $uni)
+            ->where('gastos_viaje.destino_origen', $orig)
+            ->where('gastos_viaje.destino_destino', $dest)
+            ->where('gastos_viaje.idunidades', $uni)
             ->first();
     }
 }

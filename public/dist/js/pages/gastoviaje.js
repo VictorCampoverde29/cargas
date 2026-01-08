@@ -24,15 +24,21 @@ $(document).ready(function () {
 });
 
 function bloquearEspaciosPorId(id) {
-    document.getElementById(id).addEventListener('input', function () {
-        this.value = this.value.replace(/\s+/g, '');
-    });
+    const element = document.getElementById(id);
+    if (element) {
+        element.addEventListener('input', function () {
+            this.value = this.value.replace(/\s+/g, '');
+        });
+    }
 }
 
 function bloquearLetrasPorId(id) {
-    document.getElementById(id).addEventListener("input", function () {
-        this.value = this.value.replace(/[^0-9]/g, '');
-    });
+    const element = document.getElementById(id);
+    if (element) {
+        element.addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
 }
 
 function limpiar() {
@@ -405,15 +411,15 @@ function cargarGastosEnAcordeon(gastos) {
         gastosPorCategoria[catNombre].push(gasto);
     });
     Object.keys(gastosPorCategoria).forEach(function (catNombre) {
-            const items = gastosPorCategoria[catNombre];
-            const acuerdoId = "accordion-cat-" + catNombre.replace(/[^a-zA-Z0-9_-]/g, "_");
-            const estaAbierto = "";
-            const ariaExpanded = "false";
-            // Calcular el total de la categoría
-            const totalCategoria = items.reduce(function(sum, item) {
-                return sum + (parseFloat(item.total) || 0);
-            }, 0);
-            let html = `
+        const items = gastosPorCategoria[catNombre];
+        const acuerdoId = "accordion-cat-" + catNombre.replace(/[^a-zA-Z0-9_-]/g, "_");
+        const estaAbierto = "";
+        const ariaExpanded = "false";
+        // Calcular el total de la categoría
+        const totalCategoria = items.reduce(function (sum, item) {
+            return sum + (parseFloat(item.total) || 0);
+        }, 0);
+        let html = `
                 <style>
                 .acordeon-header-outline {
                     background: #fff !important;
@@ -467,30 +473,35 @@ function cargarGastosEnAcordeon(gastos) {
                     </div>
                 </div>
             `;
-            $("#accordion").append(html);
-            $("#" + acuerdoId).DataTable({
-                data: items,
-                columns: [
-                    { data: "descripcion" },
-                    { data: "monto" },
-                    { data: "cantidad" },
-                    { data: "total" },
-                    {
-                        data: null,
-                        orderable: false,
-                        width: "10%",
-                        className: "text-center",
-                        render: function(data, type, row) {
-                            return `<button class=\"btn btn-sm btn-danger\" onclick="eliminarGasto(${row.iddet_gastos_viaje})"><i class='fas fa-trash'></i></button>`;
-                        }
+        $("#accordion").append(html);
+        $("#" + acuerdoId).closest('.table-responsive').remove();
+        $("#" + acuerdoId).wrap('<div class="table-responsive"></div>');
+
+        $("#" + acuerdoId).DataTable({
+            data: items,
+            columns: [
+                { data: "descripcion" },
+                { data: "monto" },
+                { data: "cantidad" },
+                { data: "total" },
+                {
+                    data: null,
+                    orderable: false,
+                    width: "10%",
+                    className: "text-center",
+                    render: function (data, type, row) {
+                        return `<button class=\"btn btn-sm btn-danger\" onclick="eliminarGasto(${row.iddet_gastos_viaje})"><i class='fas fa-trash'></i></button>`;
                     }
-                ],
-                language:Español,
-                lengthChange: true,
-                autoWidth: false,
-                responsive: true
-            });
+                }
+            ],
+            language: Español,
+            lengthChange: false,
+            autoWidth: false,
+            responsive: true,
+            scrollX: true,
+            paging: false
         });
+    });
 }
 
 function eliminarGasto(idDetGasto) {
@@ -585,4 +596,155 @@ function agregarGasto() {
             }
         }
     });
+}
+
+function cargarGastosEnAcordeonConsulta(gastos) {
+    $("#accordion").empty();
+    const gastosPorCategoria = {};
+    gastos.forEach(function (gasto) {
+        const catNombre = gasto.categoria;
+        if (!gastosPorCategoria[catNombre]) {
+            gastosPorCategoria[catNombre] = [];
+        }
+        gastosPorCategoria[catNombre].push(gasto);
+    });
+    Object.keys(gastosPorCategoria).forEach(function (catNombre) {
+        const items = gastosPorCategoria[catNombre];
+        const acuerdoId = "accordion-cat-" + catNombre.replace(/[^a-zA-Z0-9_-]/g, "_");
+        const estaAbierto = "";
+        const ariaExpanded = "false";
+        // Calcular el total de la categoría
+        const totalCategoria = items.reduce(function (sum, item) {
+            return sum + (parseFloat(item.total) || 0);
+        }, 0);
+        let html = `
+                <style>
+                .acordeon-header-outline {
+                    background: #fff !important;
+                    border: 2px solid #17a2b8 !important;
+                    transition: background 0.2s, color 0.2s;
+                }
+                .acordeon-header-outline a {
+                    color: #17a2b8 !important;
+                    text-decoration: none;
+                    font-weight: 600;
+                    transition: background 0.2s, color 0.2s;
+                }
+                .acordeon-header-outline:hover, .acordeon-header-outline:focus-within {
+                    background: #17a2b8 !important;
+                }
+                .acordeon-header-outline:hover a, .acordeon-header-outline:focus-within a {
+                    color: #fff !important;
+                }
+                .acordeon-header-outline .total-categoria {
+                    float: right;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    color: #17a2b8 !important;
+                }
+                </style>
+                <div class="card card-info">
+                    <div class="card-header acordeon-header-outline">
+                        <h4 class="card-title w-100 mb-0 d-flex justify-content-between align-items-center">
+                            <a class="d-block py-2 px-3 flex-grow-1" data-toggle="collapse" href="#collapse${acuerdoId}" aria-expanded="${ariaExpanded}">
+                                ${catNombre}
+                            </a>
+                            <span class="total-categoria pr-3">Total: S/ ${totalCategoria.toFixed(2)}</span>
+                        </h4>
+                    </div>
+                    <div id="collapse${acuerdoId}" class="collapse ${estaAbierto}" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="${acuerdoId}">
+                                    <thead>
+                                        <tr>
+                                            <th>DESCRIPCIÓN</th>
+                                            <th>MONTO</th>
+                                            <th>CANTIDAD</th>
+                                            <th>TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        $("#accordion").append(html);
+        $("#" + acuerdoId).DataTable({
+            data: items,
+            columns: [
+                { data: "descripcion" },
+                { data: "monto" },
+                { data: "cantidad" },
+                { data: "total" },
+            ],
+            language: Español,
+            lengthChange: true,
+            autoWidth: false,
+            responsive: true
+        });
+    });
+}
+
+function obtenerGastosViajes() {
+    var parametros = {
+        orig: $('#cmbfiltrorigen').val(),
+        dest: $('#cmbfiltrodestino').val(),
+        uni: $('#cmbfiltrounidad').val(),
+    }
+    const url = baseURL + "consultar_gv";
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: parametros,
+        success: function (response) {
+            $("#accordion").empty();
+            if (!response.data || !response.data.idgastos_viaje) {
+                $('#txtidviajes').val('');
+                $('#txtviaje').val('');
+                $('#txtuni').val('');
+                $('#txtdist').val('');
+                Swal.fire({
+                    icon: "info",
+                    title: "NO EXISTE VIAJE",
+                    text: "El viaje no existe en la base de datos",
+                    timerProgressBar: true
+                });
+                return;
+            } else {
+                $('#txtidviajes').val(response.data.idgastos_viaje);
+                $('#txtviaje').val(response.data.viaje);
+                $('#txtuni').val(response.data.unidad);
+                $('#txtdist').val(response.data.tramo_km);
+                if (!response.data || !response.data.idgastos_viaje) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "GASTOS NO EXISTEN",
+                        text: "No se encontraron gastos para el viaje",
+                        timerProgressBar: true
+                    });
+                    return;
+                } else {
+                    var cod = $("#txtidviajes").val();
+                    const url = baseURL + "det_gasto_consul";
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        data: { cod: cod },
+                        success: function (response) {
+                            if (response.data) {
+                                cargarGastosEnAcordeonConsulta(response.data);
+                            }
+                        },
+                    });
+                }
+            }
+
+        },
+    });
+
+
 }

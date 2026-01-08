@@ -55,6 +55,7 @@ class GastosViajesController extends Controller
         $data = $gastosviaje->obtenerDetalleGastosViaje($cod);
         return $this->response->setJSON(['data' => $data]);
     }
+
     public function insert()
     {
         $unidad = $this->request->getPost('unidad');

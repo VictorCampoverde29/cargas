@@ -3,7 +3,6 @@
   <modulo nombre="VIAJES" icono="fas fa-route">
     <item nombre="Mant. Viajes" ruta="dashboard/mant_viajes" icono="fas fa-search"/>
     <item nombre="Gastos Viajes" ruta="dashboard/gastos_viajes" icono="fas fa-receipt"/>
-    <item nombre="Consultar Gastos Viajes" ruta="dashboard/consultar_gastos_viajes" icono="fas fa-search-dollar"/>
   </modulo>
   <modulo nombre="MANTENIMIENTO" icono="fas fa-wrench">
     <item nombre="Mant. Carga" ruta="dashboard/mant_carga" icono="fas fa-boxes-stacked"/>

@@ -56,8 +56,8 @@ Gastos Viajes
 <div class="modal fade" id="mdlgastoviaje" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="mdlgastoviajeLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title"><i class="fas fa-file-invoice-dollar"></i>REGISTRO GASTO VIAJE</h5>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="fas fa-file-invoice-dollar"></i> Registro Gasto Viaje</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -111,7 +111,7 @@ Gastos Viajes
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnregistrarv" name="btnregistrarv" class="btn btn-info mr-2" onclick="reg_Ruta_Viajes()">
+                <button type="button" id="btnregistrarv" name="btnregistrarv" class="btn btn-primary mr-2" onclick="registrarRuta()">
                     <i class="fa-solid fa-floppy-disk"></i> REGISTRAR
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -173,27 +173,37 @@ Gastos Viajes
                         </div>
                     </div>
                     <div class="col-md-1">
-                        <label style="visibility:hidden;">Botón</label>
-                        <button type="button" id="btndetgastoviaje" name="btndetgastoviaje" class="btn btn-block btn-sm btn-info" onclick="AgregarCatGasto()"><i class="bi bi-plus"></i> +</button>
+                        <div class="form-group">
+                            <label style="visibility:hidden;">Botón</label>
+                            <button type="button" id="btndetgastoviaje" name="btndetgastoviaje" class="btn btn-block btn-sm btn-info" onclick="agregarGasto()"><i class="fa fa-plus"></i></button>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="card card-primary">
+                        <div class="card card-info card-outline">
                             <div class="card-header">
                                 <h3 class="card-title">Gasto Combustible</h3>
                             </div>
-                            <!-- /.card-header -->
-                            <!-- form start -->
                             <form>
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="txtunidad"><i class="fas fa-truck"></i> UNIDAD:</label>
                                         <input type="text" class="form-control form-control-sm" id="txtunidad" name="txtunidad" autocomplete="off" disabled>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="txttramo"><i class="fas fa-road"></i> DISTANCIA (KM)</label>
-                                        <input type="text" class="form-control form-control-sm" id="txttramo" name="txttramo" autocomplete="off" disabled>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="txttramo"><i class="fas fa-road"></i> DISTANCIA (KM)</label>
+                                                <input type="text" class="form-control form-control-sm" id="txttramo" name="txttramo" autocomplete="off" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="txtgalones"><i class="fas fa-tint"></i> GALONES</label>
+                                                <input type="text" class="form-control form-control-sm" id="txtgalones" name="txtgalones" autocomplete="off" disabled>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="txttotalcombustible"><i class="fas fa-road"></i> TOTAL</label>
@@ -205,6 +215,8 @@ Gastos Viajes
                         </div>
                     </div>
                     <div class="col-md-8">
+                        <h6 class="mt-2 text-center">GASTOS DEL VIAJE</h6>
+                        <hr>
                         <div id="accordion"></div>
                     </div>
                 </div>

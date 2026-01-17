@@ -5,6 +5,12 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
+$routes->get('consultar_gastos_viajes', 'GastosViajesController::indexConsultarGastos');
+$routes->get('consultar_gv', 'GastosViajesController::obtenerGastosViajePorCodigo');
+$routes->get('det_gasto_consul', 'GastosViajesController::obtenerDetalleGastosViaje');
+
+
 $routes->group('', ['filter' => 'AuthFilter'], function ($routes) {
     $routes->get('/', 'Home::index');
     $routes->get('dashboard', 'Home::index');
@@ -88,6 +94,7 @@ $routes->group('viajes_conductor', ['filter' => 'CambioFilter'], function ($rout
 $routes->group('gastos_viajes', ['filter' => 'CambioFilter'], function ($routes){
     $routes->get('obtener_gastos_viaje', 'GastosViajesController::obtenerGastosViaje');
     $routes->get('detalle_gastos_viaje', 'GastosViajesController::obtenerDetalleGastosViaje');
+    $routes->get('precio_combustible', 'GastosViajesController::obtenerPrecioCombustiblePorId');
     $routes->get('buscar_destinos', 'DestinosController::buscadorDestinos');
     $routes->post('registrar_dt', 'DetGastoViajeController::registrarGastoViaje');
     $routes->post('registrar', 'GastosViajesController::insert');

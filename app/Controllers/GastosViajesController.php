@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\CategoriaViajeModel;
+use App\Models\ConsumoCombustibleModel;
+use App\Models\DestinosModel;
 use App\Models\GastosViajeModel;
 use App\Models\VehiculosModel;
 use App\Models\DetalleGastosViajeModel;
@@ -14,15 +16,34 @@ class GastosViajesController extends Controller
     {
         $Unidades = new VehiculosModel();
         $CategoriaViaje = new CategoriaViajeModel();
+        $ConsumoCombustible = new ConsumoCombustibleModel();
+        $data['consumo_combustible'] = $ConsumoCombustible->getDesPrecioKm();
         $data['categoria'] = $CategoriaViaje->getCategoriasActivas();
         $data['unidad'] = $Unidades->getUnidadesGuia();
         return view('gastos_viajes/index', $data);
+    }
+
+    public function indexConsultarGastos(){
+        $Unidades = new VehiculosModel();
+        $Destino = new DestinosModel();
+        $data['destino'] = $Destino->selectDestinos();
+        $data['unidad'] = $Unidades->getUnidadesGuia();
+        return view('consultar_gastos/index', $data);
     }
 
     public function obtenerGastosViaje()
     {
         $gastosviaje = new GastosViajeModel();
         $data = $gastosviaje->obtenerGastosViaje();
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function obtenerGastosViajePorCodigo(){
+        $orig = $this->request->getGet('orig');
+        $dest = $this->request->getGet('dest');
+        $uni = $this->request->getGet('uni');
+        $gastosviaje = new GastosViajeModel();
+        $data = $gastosviaje->obtenerGastosViajePorCodigo($orig, $dest, $uni);
         return $this->response->setJSON(['data' => $data]);
     }
 
@@ -33,6 +54,14 @@ class GastosViajesController extends Controller
         $data = $gastosviaje->obtenerDetalleGastosViaje($cod);
         return $this->response->setJSON(['data' => $data]);
     }
+
+    public function obtenerPrecioCombustiblePorId(){
+        $cod = $this->request->getGet('cod');
+        $consumocombustible = new ConsumoCombustibleModel();
+        $data = $consumocombustible->getPreciosPorId($cod);
+        return $this->response->setJSON(['data' => $data]);
+    }
+
     public function insert()
     {
         $unidad = $this->request->getPost('unidad');

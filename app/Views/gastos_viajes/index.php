@@ -37,6 +37,7 @@ Gastos Viajes
                                     <th class="d-none">ID</th>
                                     <th>VIAJE</th>
                                     <th>UNIDAD</th>
+                                    <th>CARRETA</th>
                                     <th>DISTANCIA (KM)</th>
                                     <th>ACCION</th>
                                 </tr>

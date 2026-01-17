@@ -398,6 +398,16 @@ function get_Gastos_Viaje() {
             { data: "idgastos_viaje", visible: false },
             { data: "viaje" },
             { data: "unidad" },
+            { data: "carreta",width: "15%", className: "text-center",
+                render: function (data) {
+                    if (data === 'NO') {
+                        return '<span class="text-success font-weight-bold">NO</span>';
+                    } else if (data === 'SI') {
+                        return '<span class="text-warning font-weight-bold">SI</span>';
+                    }
+                    return data;
+                }
+            },
             { data: "tramo_km", width: "15%", className: "text-center" },
             {
                 data: null,
@@ -411,6 +421,11 @@ function get_Gastos_Viaje() {
                 },
             },
         ],
+        createdRow: function (row, data, dataIndex) {
+            if (data.carreta === 'SI') {
+                $(row).find('td:not(:last-child)').addClass('text-warning');
+            }
+        }
     });
 }
 

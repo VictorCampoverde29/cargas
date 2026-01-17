@@ -63,21 +63,21 @@ Gastos Viajes
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="txtdest1"><i class="fas fa-map-marker-alt"></i> ORIGEN:</label>
                             <input type="text" class="form-control form-control-sm" id="txtdest1" name="txtdest1" placeholder="Partida" autocomplete="off">
                             <input type="hidden" id="hdnIdDesti1" name="hdnIdDesti1">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="txtdest2"><i class="fas fa-flag-checkered"></i> DESTINO:</label>
                             <input type="text" class="form-control form-control-sm" id="txtdest2" name="txtdest2" placeholder="Llegada" autocomplete="off">
                             <input type="hidden" id="hdnIdDesti2" name="hdnIdDesti2">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="cmbunidad"><i class="fas fa-truck"></i> UNIDAD:</label>
                             <select class="form-control form-control-sm" id="cmbunidad">
@@ -95,9 +95,18 @@ Gastos Viajes
                             <input type="number" class="form-control form-control-sm" id="txtdistancia" name="txtdistancia" step="0.01" autocomplete="off">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <label for="cmbprecio"><i class="fas fa-tag"></i> PRECIO REF.:</label>
+                            <label for="cmbcarreta"><i class="fas fa-truck"></i> CON CARRETA:</label>
+                            <select class="form-control form-control-sm" id="cmbcarreta">
+                                <option value="NO">NO</option>
+                                <option value="SI">SI</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="cmbprecio"><i class="fas fa-tag"></i> PRECIO GALON REF.:</label>
                             <div class="input-group input-group-sm">
                                 <select class="form-control form-control-sm" id="cmbprecio" style="max-width: 150px;">
                                     <?php foreach ($consumo_combustible as $consumo_combustibles): ?>
@@ -112,20 +121,15 @@ Gastos Viajes
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="txtgalonesref"><i class="fas fa-truck"></i> GALONES REF:</label>
+                            <label for="txtgalonesref"><i class="fas fa-truck"></i> TOTAL GALONES:</label>
                             <input type="text" class="form-control form-control-sm" id="txtgalonesref" name="txtgalonesref" autocomplete="off">
                         </div>
                     </div>
+                    
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label for="txtpreciogalon"><i class="fas fa-truck"></i> PRECIO GALON:</label>
-                            <input type="text" class="form-control form-control-sm" id="txtpreciogalon" name="txtpreciogalon" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="txttotalcomb"><i class="fas fa-truck"></i> TOTAL COMBUSTIBLE:</label>
-                            <input type="text" class="form-control form-control-sm" id="txttotalcomb" name="txttotalcomb" autocomplete="off">
+                            
+                            <input type="hidden" class="form-control form-control-sm" id="txttotalcomb" name="txttotalcomb" autocomplete="off">
                         </div>
                     </div>
                 </div>

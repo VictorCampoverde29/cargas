@@ -11,18 +11,6 @@ $(document).ready(function () {
         paginaPorInput[inputId] = 1;
         buscarDestinos(inputId, termino, true);
     });
-<<<<<<< HEAD
-    bloquearLetrasPorId('txtdistancia')
-    bloquearLetrasPorId('txtmonto');
-    // bloquearLetrasPorId('numcantidad');
-    bloquearEspaciosPorId('txtdistancia');
-    bloquearEspaciosPorId('txtdest1');
-    bloquearEspaciosPorId('txtdest2');
-    bloquearEspaciosPorId('txtmonto');
-    bloquearEspaciosPorId('numcantidad');
-    bloquearEspaciosPorId('txttotal');
-    $('#txtmonto, #numcantidad').on('input', calcularTotal);
-=======
 
     $('#cmbfiltrorigen').on('change', function () {
 
@@ -45,6 +33,8 @@ $(document).ready(function () {
     $('#cmbprecio').on('change', function () {
         preciosCombustiblePorId();
     });
+
+    $('#txtgalonesref, #txtprecioref').on('input', calcularTotalViaje);
     // bloquearLetrasPorId('txtdistancia')
     // bloquearLetrasPorId('txtmonto');
     // bloquearLetrasPorId('numcantidad');
@@ -54,8 +44,7 @@ $(document).ready(function () {
     // bloquearEspaciosPorId('txtmonto');
     // bloquearEspaciosPorId('numcantidad');
     // bloquearEspaciosPorId('txttotal');
-    // $('#txtmonto, #numcantidad').on('input', calcularTotal);
->>>>>>> 5612e23dd7d2d15d991ac01b36dd8c3bdbe4fdbe
+    $('#txtmonto, #numcantidad').on('input', calcularTotal);
 });
 
 function bloquearEspaciosPorId(id) {
@@ -334,17 +323,19 @@ function preciosCombustiblePorId() {
         url: url,
         data: { cod: cod },
         success: function (response) {
-            $('#txtprecioref').val(response.data.precio_km);
-            $('#txtpreciogalon').val(response.data.precio_combustible)
-            let distancia = parseFloat($('#txtdistancia').val()) || 0;
-            let precioref = parseFloat($('#txtprecioref').val()) || 0;
-            let totalgalones = distancia * precioref
-            let preciocomb = parseFloat($('#txtpreciogalon').val()) || 0;
-            let totalcomb = totalgalones * preciocomb
-            $('#txtgalonesref').val(totalgalones);
-            $('#txttotalcomb').val(totalcomb);
+            console.log(response);
+            $('#txtprecioref').val(response.data.precio_combustible);
+            calcularTotalViaje();
         },
     });
+}
+
+function calcularTotalViaje(){
+    var precioGalon = parseFloat($('#txtprecioref').val()) || 0;
+    var galones = parseFloat($('#txtgalonesref').val()) || 0;
+    var totalViaje = precioGalon * galones;
+    $('#txttotalcomb').val(totalViaje.toFixed(2));
+
 }
 
 function registrarRuta() {

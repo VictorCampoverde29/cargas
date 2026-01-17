@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\CategoriaViajeModel;
+use App\Models\CondicionesParametrosGastosViajeModel;
 use App\Models\ConsumoCombustibleModel;
 use App\Models\DestinosModel;
 use App\Models\GastosViajeModel;
@@ -17,6 +18,8 @@ class GastosViajesController extends Controller
         $Unidades = new VehiculosModel();
         $CategoriaViaje = new CategoriaViajeModel();
         $ConsumoCombustible = new ConsumoCombustibleModel();
+        $CondicionesParametros = new CondicionesParametrosGastosViajeModel();
+        $data['condicion'] = $CondicionesParametros->getCondiciones();
         $data['consumo_combustible'] = $ConsumoCombustible->getDesPrecioKm();
         $data['categoria'] = $CategoriaViaje->getCategoriasActivas();
         $data['unidad'] = $Unidades->getUnidadesGuia();

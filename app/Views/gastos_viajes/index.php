@@ -78,7 +78,7 @@ Gastos Viajes
                             <input type="hidden" id="hdnIdDesti2" name="hdnIdDesti2">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label for="cmbunidad"><i class="fas fa-truck"></i> UNIDAD:</label>
                             <select class="form-control form-control-sm" id="cmbunidad">
@@ -89,11 +89,16 @@ Gastos Viajes
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="col-md-3">
+                    </div><div class="col-md-2">
                         <div class="form-group">
-                            <label for="txtdistancia"><i class="fas fa-truck"></i> DISTANCIA (KM):</label>
-                            <input type="number" class="form-control form-control-sm" id="txtdistancia" name="txtdistancia" step="0.01" autocomplete="off">
+                            <label for="cmbcondicion"><i class="fas fa-truck"></i> CONDICION:</label>
+                            <select class="form-control form-control-sm" id="cmbcondicion">
+                                <?php foreach ($condicion as $condiciones): ?>
+                                    <option value="<?= esc($condiciones['idcondiciones_parametros_gastoviaje']); ?>">
+                                        <?= esc($condiciones['descripcion']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -103,6 +108,12 @@ Gastos Viajes
                                 <option value="NO">NO</option>
                                 <option value="SI">SI</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="txtdistancia"><i class="fas fa-truck"></i> DISTANCIA (KM):</label>
+                            <input type="number" class="form-control form-control-sm" id="txtdistancia" name="txtdistancia" step="0.01" autocomplete="off">
                         </div>
                     </div>
                     <div class="col-md-4">

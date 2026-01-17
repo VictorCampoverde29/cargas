@@ -812,3 +812,7 @@ function obtenerGastosViajes() {
 
 
 }
+
+function traerParametros(){
+    
+}

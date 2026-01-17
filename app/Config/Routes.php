@@ -99,4 +99,5 @@ $routes->group('gastos_viajes', ['filter' => 'CambioFilter'], function ($routes)
     $routes->post('registrar_dt', 'DetGastoViajeController::registrarGastoViaje');
     $routes->post('registrar', 'GastosViajesController::insert');
     $routes->post('eliminar_dt', 'DetGastoViajeController::deleteGastoViaje');
+    $routes->post('get_parametros', 'ParametrosViajeController::obtenerParametrosViaje');
 });

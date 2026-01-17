@@ -54,7 +54,7 @@ Gastos Viajes
 
 <!------------------------------------------- MODAL PARA REGISTRAR GASTO VIAJE --------------------------------------------->
 <div class="modal fade" id="mdlgastoviaje" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="mdlgastoviajeLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title"><i class="fas fa-file-invoice-dollar"></i> Registro Gasto Viaje</h5>
@@ -63,85 +63,117 @@ Gastos Viajes
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="txtdest1"><i class="fas fa-map-marker-alt"></i> ORIGEN:</label>
-                            <input type="text" class="form-control form-control-sm" id="txtdest1" name="txtdest1" placeholder="Partida" autocomplete="off">
-                            <input type="hidden" id="hdnIdDesti1" name="hdnIdDesti1">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="txtdest2"><i class="fas fa-flag-checkered"></i> DESTINO:</label>
-                            <input type="text" class="form-control form-control-sm" id="txtdest2" name="txtdest2" placeholder="Llegada" autocomplete="off">
-                            <input type="hidden" id="hdnIdDesti2" name="hdnIdDesti2">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="cmbunidad"><i class="fas fa-truck"></i> UNIDAD:</label>
-                            <select class="form-control form-control-sm" id="cmbunidad">
-                                <?php foreach ($unidad as $unidades): ?>
-                                    <option value="<?= esc($unidades['idunidades']); ?>">
-                                        <?= esc($unidades['descripcion']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div><div class="col-md-2">
-                        <div class="form-group">
-                            <label for="cmbcondicion"><i class="fas fa-truck"></i> CONDICION:</label>
-                            <select class="form-control form-control-sm" id="cmbcondicion">
-                                <?php foreach ($condicion as $condiciones): ?>
-                                    <option value="<?= esc($condiciones['idcondiciones_parametros_gastoviaje']); ?>">
-                                        <?= esc($condiciones['descripcion']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label for="cmbcarreta"><i class="fas fa-truck"></i> CON CARRETA:</label>
-                            <select class="form-control form-control-sm" id="cmbcarreta">
-                                <option value="NO">NO</option>
-                                <option value="SI">SI</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="txtdistancia"><i class="fas fa-truck"></i> DISTANCIA (KM):</label>
-                            <input type="number" class="form-control form-control-sm" id="txtdistancia" name="txtdistancia" step="0.01" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="cmbprecio"><i class="fas fa-tag"></i> PRECIO GALON REF.:</label>
-                            <div class="input-group input-group-sm">
-                                <select class="form-control form-control-sm" id="cmbprecio" style="max-width: 150px;">
-                                    <?php foreach ($consumo_combustible as $consumo_combustibles): ?>
-                                        <option value="<?= esc($consumo_combustibles['idconsumo_combustible']); ?>">
-                                            <?= esc($consumo_combustibles['descripcion']); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <input type="text" class="form-control form-control-sm" id="txtprecioref" name="txtprecioref" autocomplete="off" placeholder="0.00" required="">
+                <div class="card card-primary card-outline">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="txtdest1"><i class="fas fa-map-marker-alt"></i> ORIGEN:</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtdest1" name="txtdest1" placeholder="Partida" autocomplete="off">
+                                    <input type="hidden" id="hdnIdDesti1" name="hdnIdDesti1">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="txtdest2"><i class="fas fa-flag-checkered"></i> DESTINO:</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtdest2" name="txtdest2" placeholder="Llegada" autocomplete="off">
+                                    <input type="hidden" id="hdnIdDesti2" name="hdnIdDesti2">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="cmbunidad"><i class="fas fa-truck"></i> UNIDAD:</label>
+                                    <select class="form-control form-control-sm" id="cmbunidad">
+                                        <?php foreach ($unidad as $unidades): ?>
+                                            <option value="<?= esc($unidades['idunidades']); ?>">
+                                                <?= esc($unidades['descripcion']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="cmbcondicion"><i class="fas fa-truck"></i> CONDICION:</label>
+                                    <select class="form-control form-control-sm" id="cmbcondicion">
+                                        <?php foreach ($condicion as $condiciones): ?>
+                                            <option value="<?= esc($condiciones['idcondiciones_parametros_gastoviaje']); ?>">
+                                                <?= esc($condiciones['descripcion']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="cmbcarreta"><i class="fas fa-truck"></i> CARRETA:</label>
+                                    <select class="form-control form-control-sm" id="cmbcarreta">
+                                        <option value="NO">NO</option>
+                                        <option value="SI">SI</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="txtdistancia"><i class="fas fa-truck"></i> DISTANCIA (KM):</label>
+                                    <input type="number" class="form-control form-control-sm" id="txtdistancia" name="txtdistancia" step="0.01" autocomplete="off">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="txtgalonesref"><i class="fas fa-truck"></i> TOTAL GALONES:</label>
-                            <input type="text" class="form-control form-control-sm" id="txtgalonesref" name="txtgalonesref" autocomplete="off">
+                </div>
+                <div class="card card-warning card-outline">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="cmbprecio"><i class="fas fa-tag"></i> PRECIO GALON REF.:</label>
+                                    <div class="input-group input-group-sm">
+                                        <select class="form-control form-control-sm" id="cmbprecio" style="max-width: 150px;">
+                                            <?php foreach ($consumo_combustible as $consumo_combustibles): ?>
+                                                <option value="<?= esc($consumo_combustibles['idconsumo_combustible']); ?>">
+                                                    <?= esc($consumo_combustibles['descripcion']); ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <input type="text" class="form-control form-control-sm" id="txtprecioref" name="txtprecioref" autocomplete="off" placeholder="0.00" required="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="txtgalonesref"><i class="fas fa-truck"></i> TOTAL GALONES:</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtgalonesref" name="txtgalonesref" autocomplete="off">
+                                </div>
+                            </div>
+                        
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtpeajes"><i class="fas fa-truck"></i> TOTAL PEAJES:</label>
+                                <input type="text" class="form-control form-control-sm" id="txtpeajes" name="txtpeajes" autocomplete="off">
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            
-                            <input type="hidden" class="form-control form-control-sm" id="txttotalcomb" name="txttotalcomb" autocomplete="off">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtviatico"><i class="fas fa-truck"></i> VIATICOS:</label>
+                                <input type="text" class="form-control form-control-sm" id="txtviatico" name="txtviatico" value=35 autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtdias"><i class="fas fa-truck"></i> N° DIAS:</label>
+                                <input type="text" class="form-control form-control-sm" id="txtdias" name="txtdias" value=1 autocomplete="off">
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+
+                                <input type="hidden" class="form-control form-control-sm" id="txttotalcomb" name="txttotalcomb" autocomplete="off">
+                            </div>
+
                         </div>
                     </div>
                 </div>

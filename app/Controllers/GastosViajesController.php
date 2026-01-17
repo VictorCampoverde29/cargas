@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\CategoriaViajeModel;
+use App\Models\ConsumoCombustibleModel;
 use App\Models\DestinosModel;
 use App\Models\GastosViajeModel;
 use App\Models\VehiculosModel;
@@ -15,6 +16,8 @@ class GastosViajesController extends Controller
     {
         $Unidades = new VehiculosModel();
         $CategoriaViaje = new CategoriaViajeModel();
+        $ConsumoCombustible = new ConsumoCombustibleModel();
+        $data['consumo_combustible'] = $ConsumoCombustible->getDesPrecioKm();
         $data['categoria'] = $CategoriaViaje->getCategoriasActivas();
         $data['unidad'] = $Unidades->getUnidadesGuia();
         return view('gastos_viajes/index', $data);
@@ -49,6 +52,13 @@ class GastosViajesController extends Controller
         $cod = $this->request->getGet('cod');
         $gastosviaje = new DetalleGastosViajeModel();
         $data = $gastosviaje->obtenerDetalleGastosViaje($cod);
+        return $this->response->setJSON(['data' => $data]);
+    }
+
+    public function obtenerPrecioCombustiblePorId(){
+        $cod = $this->request->getGet('cod');
+        $consumocombustible = new ConsumoCombustibleModel();
+        $data = $consumocombustible->getPreciosPorId($cod);
         return $this->response->setJSON(['data' => $data]);
     }
 

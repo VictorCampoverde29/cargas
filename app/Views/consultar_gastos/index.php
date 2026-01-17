@@ -22,6 +22,11 @@
     <link rel="stylesheet" href="<?= base_url('public/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') ?>">
+    <style>
+        body {
+            background-color: #E9ECEF;
+        }
+    </style>
 </head>
 
 <body>
@@ -33,12 +38,12 @@
                         <div class="d-flex justify-content-center align-items-center">
                             <h3 class="card-title m-0">
                                 <i class="fas fa-search-dollar"></i>
-                                GASTOS REGISTRADOS
+                                CONSULTAR GASTOS VIAJES
                             </h3>
                         </div>
                     </div>
                     <div class="card-body">
-                        <input type="text" id="txtidviajes" name="txtidviajes">
+                        <input type="hidden" id="txtidviajes" name="txtidviajes">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -84,7 +89,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card card-info card-outline d-none">
+                <div class="card card-info card-outline d-none" id="carddetalle">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h3 class="card-title m-0">
@@ -109,17 +114,14 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="txtdist"> DISTANCIA</label>
-                                    <input type="text" class="form-control form-control-sm" id="txtdist" name="txtdist" disabled>
+                                    <label for="txtgalones"> GALONES</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtgalones" name="txtgalones" disabled>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div id="accordion"></div>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <input type="text" class="form-control form-control-sm" id="txtdist" name="txtdist" disabled>
                     </div>
                 </div>
             </div>
@@ -135,7 +137,7 @@
     <script src="<?= base_url('public/plugins/sweetalert2/sweetalert2.all.min.js'); ?>"></script>
     <script src="<?= base_url('public/dist/js/adminlte.js') ?>"></script>
     <script src="<?= base_url('public/dist/js/pages/generales.js?v=' . env('VERSION')) ?>"></script>
-    <script src="<?= base_url('public/plugins/datatables/jquery.dataTables.min.js') ?>"></script>
+    <script src="<?= base_url(relativePath: 'public/plugins/datatables/jquery.dataTables.min.js') ?>"></script>
     <script src="<?= base_url('public/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
     <script src="<?= base_url('public/plugins/datatables-responsive/js/dataTables.responsive.min.js') ?>"></script>
     <script src="<?= base_url('public/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') ?>"></script>

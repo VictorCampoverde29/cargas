@@ -11,16 +11,38 @@ $(document).ready(function () {
         paginaPorInput[inputId] = 1;
         buscarDestinos(inputId, termino, true);
     });
-    bloquearLetrasPorId('txtdistancia')
-    bloquearLetrasPorId('txtmonto');
-    bloquearLetrasPorId('numcantidad');
-    bloquearEspaciosPorId('txtdistancia');
-    bloquearEspaciosPorId('txtdest1');
-    bloquearEspaciosPorId('txtdest2');
-    bloquearEspaciosPorId('txtmonto');
-    bloquearEspaciosPorId('numcantidad');
-    bloquearEspaciosPorId('txttotal');
-    $('#txtmonto, #numcantidad').on('input', calcularTotal);
+
+    $('#cmbfiltrorigen').on('change', function () {
+
+        const origenSeleccionado = $(this).val();
+
+        $('#cmbfiltrodestino option').each(function () {
+            $(this).prop('hidden', false);
+
+            if ($(this).val() === origenSeleccionado) {
+                $(this).prop('hidden', true);
+            }
+        });
+
+        if ($('#cmbfiltrodestino').val() === origenSeleccionado) {
+            $('#cmbfiltrodestino').val('');
+        }
+    });
+
+    preciosCombustiblePorId();
+    $('#cmbprecio').on('change', function () {
+        preciosCombustiblePorId();
+    });
+    // bloquearLetrasPorId('txtdistancia')
+    // bloquearLetrasPorId('txtmonto');
+    // bloquearLetrasPorId('numcantidad');
+    // bloquearEspaciosPorId('txtdistancia');
+    // bloquearEspaciosPorId('txtdest1');
+    // bloquearEspaciosPorId('txtdest2');
+    // bloquearEspaciosPorId('txtmonto');
+    // bloquearEspaciosPorId('numcantidad');
+    // bloquearEspaciosPorId('txttotal');
+    // $('#txtmonto, #numcantidad').on('input', calcularTotal);
 });
 
 function bloquearEspaciosPorId(id) {
@@ -288,6 +310,27 @@ function registrarNuevoDestino(inputId, nombreDestino) {
                 text: "No se pudo registrar el destino"
             });
         }
+    });
+}
+
+function preciosCombustiblePorId() {
+    var cod = $('#cmbprecio').val();
+    const url = baseURL + "gastos_viajes/precio_combustible";
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: { cod: cod },
+        success: function (response) {
+            $('#txtprecioref').val(response.data.precio_km);
+            $('#txtpreciogalon').val(response.data.precio_combustible)
+            let distancia = parseFloat($('#txtdistancia').val()) || 0;
+            let precioref = parseFloat($('#txtprecioref').val()) || 0;
+            let totalgalones = distancia * precioref
+            let preciocomb = parseFloat($('#txtpreciogalon').val()) || 0;
+            let totalcomb = totalgalones * preciocomb
+            $('#txtgalonesref').val(totalgalones);
+            $('#txttotalcomb').val(totalcomb);
+        },
     });
 }
 
@@ -598,6 +641,10 @@ function agregarGasto() {
 
 function cargarGastosEnAcordeonConsulta(gastos) {
     $("#accordion").empty();
+    let totalGeneral = gastos.reduce(function (sum, item) {
+        return sum + (parseFloat(item.total) || 0);
+    }, 0);
+    $("#txttotalgasto").val(totalGeneral.toFixed(2));
     const gastosPorCategoria = {};
     gastos.forEach(function (gasto) {
         const catNombre = gasto.categoria;
@@ -641,7 +688,7 @@ function cargarGastosEnAcordeonConsulta(gastos) {
                     color: #17a2b8 !important;
                 }
                 </style>
-                <div class="card card-info">
+                <div class="card card-sm card-info">
                     <div class="card-header acordeon-header-outline">
                         <h4 class="card-title w-100 mb-0 d-flex justify-content-between align-items-center">
                             <a class="d-block py-2 px-3 flex-grow-1" data-toggle="collapse" href="#collapse${acuerdoId}" aria-expanded="${ariaExpanded}">
@@ -704,19 +751,18 @@ function obtenerGastosViajes() {
                 $('#txtidviajes').val('');
                 $('#txtviaje').val('');
                 $('#txtuni').val('');
-                $('#txtdist').val('');
                 Swal.fire({
                     icon: "info",
                     title: "NO EXISTE VIAJE",
                     text: "El viaje no existe en la base de datos",
                     timerProgressBar: true
                 });
+                $('#carddetalle').addClass('d-none');
                 return;
             } else {
                 $('#txtidviajes').val(response.data.idgastos_viaje);
                 $('#txtviaje').val(response.data.viaje);
                 $('#txtuni').val(response.data.unidad);
-                $('#txtdist').val(response.data.tramo_km);
                 if (!response.data || !response.data.idgastos_viaje) {
                     Swal.fire({
                         icon: "error",
@@ -735,6 +781,7 @@ function obtenerGastosViajes() {
                         success: function (response) {
                             if (response.data) {
                                 cargarGastosEnAcordeonConsulta(response.data);
+                                $('#carddetalle').removeClass('d-none');
                             }
                         },
                     });

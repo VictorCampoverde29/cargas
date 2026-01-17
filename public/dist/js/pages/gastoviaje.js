@@ -13,7 +13,7 @@ $(document).ready(function () {
     });
     bloquearLetrasPorId('txtdistancia')
     bloquearLetrasPorId('txtmonto');
-    bloquearLetrasPorId('numcantidad');
+    // bloquearLetrasPorId('numcantidad');
     bloquearEspaciosPorId('txtdistancia');
     bloquearEspaciosPorId('txtdest1');
     bloquearEspaciosPorId('txtdest2');
@@ -434,7 +434,7 @@ function cargarGastosEnAcordeon(gastos) {
                     float: right;
                     font-size: 1rem;
                     font-weight: 600;
-                    color: #17a2b8 !important;
+                    color: #0c0c0cff !important;
                 }
                 </style>
                 <div class="card card-info">

@@ -151,7 +151,7 @@ Gastos Viajes
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="numcantidad"><i class="fas fa-hashtag"></i> CANTIDAD:</label>
-                            <input type="text" class="form-control form-control-sm" id="numcantidad" name="numcantidad" placeholder="0.00" autocomplete="off">
+                            <input type="number" class="form-control form-control-sm" id="numcantidad" name="numcantidad" step="0.01" autocomplete="off">
                         </div>
                     </div>
                     <div class="col-md-2">

@@ -34,6 +34,7 @@ $routes->group('dashboard', ['filter' => 'AuthFilter'], function ($routes) {
     $routes->get('reg_servicio', 'RegistrarServicioController::index');
     $routes->get('mant_carga', 'CargaController::index');
     $routes->get('mant_destino', 'DestinosController::index');
+    $routes->get('mant_condiciones', 'CondicionGastosViajeController::index');
 });
 
 $routes->group('mant_carga', ['filter' => 'CambioFilter'], function ($routes) {
@@ -99,4 +100,8 @@ $routes->group('gastos_viajes', ['filter' => 'CambioFilter'], function ($routes)
     $routes->post('registrar_dt', 'DetGastoViajeController::registrarGastoViaje');
     $routes->post('registrar', 'GastosViajesController::insert');
     $routes->post('eliminar_dt', 'DetGastoViajeController::deleteGastoViaje');
+});
+
+$routes->group('mant_condiciones', ['filter' => 'CambioFilter'], function ($routes){
+
 });

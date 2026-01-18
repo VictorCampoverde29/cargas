@@ -35,6 +35,7 @@ $(document).ready(function () {
     });
 
     $('#txtgalonesref, #txtprecioref').on('input', calcularTotalViaje);
+    $('#cmbunidad, #cmbcondicion, #cmbcarreta, #hdnIdDesti1, #hdnIdDesti2').on('change', traerParametros);
     // bloquearLetrasPorId('txtdistancia')
     // bloquearLetrasPorId('txtmonto');
     // bloquearLetrasPorId('numcantidad');
@@ -98,7 +99,6 @@ function buscarDestinos(inputId, termino, limpiar) {
             data: { q: termino, page: paginaPorInput[inputId] },
             dataType: "json",
             success: function (data) {
-                console.log(data);
                 let lista;
                 let idLista = "resultados-articulos-" + inputId;
                 if (limpiar) {
@@ -222,6 +222,8 @@ function seleccionarDestino(inputId, idDestino, nombreDestino) {
 
     setTimeout(function () {
         $("#resultados-articulos-" + inputId).parent().remove();
+        // Llamar traerParametros después de seleccionar un destino
+        traerParametros();
     }, 300);
 }
 
@@ -323,7 +325,6 @@ function preciosCombustiblePorId() {
         url: url,
         data: { cod: cod },
         success: function (response) {
-            console.log(response);
             $('#txtprecioref').val(response.data.precio_combustible);
             calcularTotalViaje();
         },
@@ -565,7 +566,6 @@ function cargarGastosEnAcordeon(gastos) {
 }
 
 function eliminarGasto(idDetGasto) {
-    console.log(idDetGasto);
     Swal.fire({
         title: 'Eliminar Gasto',
         text: "¿Está seguro de eliminar este gasto?",
@@ -631,13 +631,11 @@ function agregarGasto() {
         Swal.fire({ icon: 'warning', title: 'Agregar Gasto', text: 'Ingrese una cantidad para el gasto', });
         return;
     }
-    console.log(parametros);
     $.ajax({
         type: "POST",
         url: baseURL + "gastos_viajes/registrar_dt",
         data: parametros,
         success: function (response) {
-            console.log(response);
             if (response.status === 'success') {
                 Swal.fire({
                     icon: 'success',
@@ -814,5 +812,30 @@ function obtenerGastosViajes() {
 }
 
 function traerParametros(){
-    
+    var parametros = {
+        origen: $('#hdnIdDesti1').val(),
+        destino: $('#hdnIdDesti2').val(),
+        unidad: $('#cmbunidad').val(),
+        condicion: $('#cmbcondicion').val(),
+        carreta: $('#cmbcarreta').val()
+    };
+    console.log(parametros)
+    $.ajax({
+        type: "POST",
+        url: baseURL + "gastos_viajes/get_parametros",
+        data: parametros,
+        success: function (response) {
+            console.log(response);
+            if (response && typeof response.galones !== 'undefined' && response.galones !== null) {
+                $('#txtgalonesref').val(response.galones);
+            } else {
+                $('#txtgalonesref').val('');
+            }
+            if (response && typeof response.peajes !== 'undefined' && response.peajes !== null) {
+                $('#txtpeajes').val(response.peajes);
+            } else {
+                $('#txtpeajes').val('');
+            }
+        },
+    });
 }

@@ -104,4 +104,5 @@ $routes->group('gastos_viajes', ['filter' => 'CambioFilter'], function ($routes)
 
 $routes->group('mant_condiciones', ['filter' => 'CambioFilter'], function ($routes){
 
+    $routes->post('get_parametros', 'ParametrosViajeController::obtenerParametrosViaje');
 });

@@ -13,9 +13,7 @@ $(document).ready(function () {
     });
 
     $('#cmbfiltrorigen').on('change', function () {
-
         const origenSeleccionado = $(this).val();
-
         $('#cmbfiltrodestino option').each(function () {
             $(this).prop('hidden', false);
 
@@ -23,7 +21,6 @@ $(document).ready(function () {
                 $(this).prop('hidden', true);
             }
         });
-
         if ($('#cmbfiltrodestino').val() === origenSeleccionado) {
             $('#cmbfiltrodestino').val('');
         }

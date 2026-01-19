@@ -16,4 +16,9 @@ class CategoriaViajeModel extends Model
                     ->where('estado', 'ACTIVO')
                     ->findAll();
     }
+
+    public function getCategorias()
+    {
+        return $this->findAll();
+    }
 }

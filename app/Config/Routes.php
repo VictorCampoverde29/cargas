@@ -97,12 +97,12 @@ $routes->group('gastos_viajes', ['filter' => 'CambioFilter'], function ($routes)
     $routes->get('detalle_gastos_viaje', 'GastosViajesController::obtenerDetalleGastosViaje');
     $routes->get('precio_combustible', 'GastosViajesController::obtenerPrecioCombustiblePorId');
     $routes->get('buscar_destinos', 'DestinosController::buscadorDestinos');
+    $routes->post('registrargastos', 'GastosViajesController::insert');
     $routes->post('registrar_dt', 'DetGastoViajeController::registrarGastoViaje');
-    $routes->post('registrar', 'GastosViajesController::insert');
     $routes->post('eliminar_dt', 'DetGastoViajeController::deleteGastoViaje');
+    $routes->post('get_parametros', 'ParametrosViajeController::obtenerParametrosViaje');
 });
 
 $routes->group('mant_condiciones', ['filter' => 'CambioFilter'], function ($routes){
 
-    $routes->post('get_parametros', 'ParametrosViajeController::obtenerParametrosViaje');
 });

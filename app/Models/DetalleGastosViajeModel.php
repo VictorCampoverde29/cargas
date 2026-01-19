@@ -17,4 +17,6 @@ class DetalleGastosViajeModel extends Model
                     ->where('idgastos_viaje', $cod)
                     ->findAll();
     }
+
+    
 }

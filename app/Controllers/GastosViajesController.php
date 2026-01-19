@@ -26,7 +26,8 @@ class GastosViajesController extends Controller
         return view('gastos_viajes/index', $data);
     }
 
-    public function indexConsultarGastos(){
+    public function indexConsultarGastos()
+    {
         $Unidades = new VehiculosModel();
         $Destino = new DestinosModel();
         $data['destino'] = $Destino->selectDestinos();
@@ -41,7 +42,8 @@ class GastosViajesController extends Controller
         return $this->response->setJSON(['data' => $data]);
     }
 
-    public function obtenerGastosViajePorCodigo(){
+    public function obtenerGastosViajePorCodigo()
+    {
         $orig = $this->request->getGet('orig');
         $dest = $this->request->getGet('dest');
         $uni = $this->request->getGet('uni');
@@ -58,7 +60,8 @@ class GastosViajesController extends Controller
         return $this->response->setJSON(['data' => $data]);
     }
 
-    public function obtenerPrecioCombustiblePorId(){
+    public function obtenerPrecioCombustiblePorId()
+    {
         $cod = $this->request->getGet('cod');
         $consumocombustible = new ConsumoCombustibleModel();
         $data = $consumocombustible->getPreciosPorId($cod);
@@ -67,23 +70,47 @@ class GastosViajesController extends Controller
 
     public function insert()
     {
-        $unidad = $this->request->getPost('unidad');
-        $distancia = $this->request->getPost('distancia');
-        $origen = $this->request->getPost('origen');
-        $destino = $this->request->getPost('destino');
-
-        $data = [
-            'idunidades' => $unidad,
-            'tramo_km' => $distancia,
-            'destino_origen' => $origen,
-            'destino_destino' => $destino
-        ];
         try {
-            $gastosviaje = new GastosViajeModel();
-            $gastosviaje->insert($data);
-            return $this->response->setJSON(['status' => 'success', 'message' => 'Gasto de viaje registrado correctamente']);
+            $data = [
+                'origen'        => $this->request->getPost('origen'),
+                'destino'       => $this->request->getPost('destino'),
+                'unidad'        => $this->request->getPost('unidad'),
+                'condicion'     => $this->request->getPost('condicion'),
+                'tramo_km'      => $this->request->getPost('tramo_km'),
+                'carreta'       => $this->request->getPost('carreta'),
+                'precio_galon'  => $this->request->getPost('precio_galon'),
+                'cant_galones'  => $this->request->getPost('cant_galones'),
+                'viaticos'      => $this->request->getPost('viaticos'),
+                'dias'          => $this->request->getPost('dias'),
+                'peajes'        => $this->request->getPost('peajes'),
+            ];
+
+            $xml = new \XMLWriter();
+            $xml->openMemory();
+            $xml->setIndent(true);
+            $xml->startDocument('1.0', 'UTF-8');
+            $xml->startElement('GastosViaje');
+            foreach ($data as $key => $value) {
+                $xml->writeElement($key, (string)$value);
+            }
+            $xml->endElement();
+            $xml->endDocument();
+
+            $gastosModel = new GastosViajeModel();
+            $mensaje = $gastosModel->registrarGastosViaje($xml->outputMemory());
+
+            return $this->response->setJSON([
+                'success' => strpos($mensaje, 'ERROR') === false,
+                'message' => $mensaje
+            ]);
         } catch (\Exception $e) {
-            return $this->response->setJSON(['status' => 'error', 'message' => 'Error al registrar el gasto de viaje: ' . $e->getMessage()]);
+
+            log_message('error', 'Error al registrar gastos de viaje: ' . $e->getMessage());
+
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ]);
         }
     }
 }

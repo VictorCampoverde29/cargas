@@ -37,6 +37,7 @@ Gastos Viajes
                                     <th class="d-none">ID</th>
                                     <th>VIAJE</th>
                                     <th>UNIDAD</th>
+                                    <th>CONDICION</th>
                                     <th>CARRETA</th>
                                     <th>DISTANCIA (KM)</th>
                                     <th>ACCION</th>
@@ -146,49 +147,47 @@ Gastos Viajes
                                     <input type="text" class="form-control form-control-sm" id="txtgalonesref" name="txtgalonesref" autocomplete="off">
                                 </div>
                             </div>
-                        
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="txtpeajes"><i class="fas fa-truck"></i> TOTAL PEAJES:</label>
-                                <input type="text" class="form-control form-control-sm" id="txtpeajes" name="txtpeajes" autocomplete="off">
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="txtpeajes"><i class="fas fa-truck"></i> TOTAL PEAJES:</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtpeajes" name="txtpeajes" autocomplete="off">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="txtviatico"><i class="fas fa-truck"></i> VIATICOS:</label>
-                                <input type="text" class="form-control form-control-sm" id="txtviatico" name="txtviatico" value=35 autocomplete="off">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="txtviatico"><i class="fas fa-truck"></i> VIATICOS:</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtviatico" name="txtviatico" value=35 autocomplete="off">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="txtdias"><i class="fas fa-truck"></i> N° DIAS:</label>
-                                <input type="text" class="form-control form-control-sm" id="txtdias" name="txtdias" value=1 autocomplete="off">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="txtdias"><i class="fas fa-truck"></i> N° DIAS:</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtdias" name="txtdias" value=1 autocomplete="off">
+                                </div>
                             </div>
-                        </div>
-
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-
-                                <input type="hidden" class="form-control form-control-sm" id="txttotalcomb" name="txttotalcomb" autocomplete="off">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="hidden" class="form-control form-control-sm" id="txttotalcomb" name="txttotalcomb" autocomplete="off">
+                                </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btnregistrarv" name="btnregistrarv" class="btn btn-primary mr-2" onclick="registrarRuta()">
-                    <i class="fa-solid fa-floppy-disk"></i> REGISTRAR
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                    <i class="fa-solid fa-circle-xmark"></i> CERRAR
-                </button>
+                <div class="modal-footer">
+                    <button type="button" id="btnregistrarv" name="btnregistrarv" class="btn btn-primary mr-2" onclick="registrarGastosViajes()">
+                        <i class="fa-solid fa-floppy-disk"></i> REGISTRAR
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        <i class="fa-solid fa-circle-xmark"></i> CERRAR
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 <!------------------------------------------------- MODAL DETALLE GASTOS VIAJES --------------------------------------------->
 <div class="modal fade" id="mdldetgastviaje" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="mdldetgastviajeLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">

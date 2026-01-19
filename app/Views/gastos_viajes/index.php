@@ -126,7 +126,7 @@ Gastos Viajes
                 <div class="card card-warning card-outline">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="cmbprecio"><i class="fas fa-tag"></i> PRECIO GALON REF.:</label>
                                     <div class="input-group input-group-sm">
@@ -141,27 +141,25 @@ Gastos Viajes
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="txtgalonesref"><i class="fas fa-truck"></i> TOTAL GALONES:</label>
                                     <input type="text" class="form-control form-control-sm" id="txtgalonesref" name="txtgalonesref" autocomplete="off">
                                 </div>
                             </div>
-
-
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="txtpeajes"><i class="fas fa-truck"></i> TOTAL PEAJES:</label>
                                     <input type="text" class="form-control form-control-sm" id="txtpeajes" name="txtpeajes" autocomplete="off">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="txtviatico"><i class="fas fa-truck"></i> VIATICOS:</label>
                                     <input type="text" class="form-control form-control-sm" id="txtviatico" name="txtviatico" value=35 autocomplete="off">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="txtdias"><i class="fas fa-truck"></i> N° DIAS:</label>
                                     <input type="text" class="form-control form-control-sm" id="txtdias" name="txtdias" value=1 autocomplete="off">

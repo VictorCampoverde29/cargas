@@ -352,6 +352,7 @@ function get_Gastos_Viaje() {
             url: url,
             method: "GET",
             dataSrc: function (json) {
+                console.log('Datos recibidos para la tabla de gastos de viaje:', json);
                 return json.data;
             },
         },
@@ -359,7 +360,7 @@ function get_Gastos_Viaje() {
             { data: "idgastos_viaje", visible: false },
             { data: "viaje" },
             { data: "unidad" },
-            { data: "condicion"},
+            { data: "condicion" },
             {
                 data: "carreta", width: "15%", className: "text-center",
                 render: function (data) {
@@ -379,7 +380,7 @@ function get_Gastos_Viaje() {
                 className: "text-center",
                 render: function (data, type, row) {
                     return `
-                        <button class="btn btn-sm btn-info" onclick="mostrarDetalleViajeGasto('${row.idgastos_viaje}', '${row.unidad}', '${row.viaje}', '${row.tramo_km}')" title="GASTOS"><i class="fas fa-info-circle"></i> GASTOS</button>
+                        <button class="btn btn-sm btn-info" onclick="mostrarDetalleViajeGasto('${row.idgastos_viaje}', '${row.unidad}', '${row.viaje}', '${row.tramo_km}', '${row.total_galones}')" title="GASTOS"><i class="fas fa-info-circle"></i> GASTOS</button>
                     `;
                 },
             },
@@ -392,10 +393,11 @@ function get_Gastos_Viaje() {
     });
 }
 
-function mostrarDetalleViajeGasto(cod, unidad, viaje, tramo_km) {
+function mostrarDetalleViajeGasto(cod, unidad, viaje, tramo_km, total_galones) {
     $("#txtunidad").val(unidad);
     $("#txtidviaje").val(cod);
     $("#txttramo").val(tramo_km);
+    $("#txtgalones").val(total_galones);
     $("#tituloDetalleGasto").text("Detalle de gastos : " + viaje);
     $("#accordion").html("");
     limpiarmodalGastoViaje();
@@ -429,6 +431,7 @@ function cargarGastosEnAcordeon(gastos) {
         }
         gastosPorCategoria[catNombre].push(gasto);
     });
+    let totalGeneral = 0;
     Object.keys(gastosPorCategoria).forEach(function (catNombre) {
         const items = gastosPorCategoria[catNombre];
         const acuerdoId = "accordion-cat-" + catNombre.replace(/[^a-zA-Z0-9_-]/g, "_");
@@ -438,6 +441,7 @@ function cargarGastosEnAcordeon(gastos) {
         const totalCategoria = items.reduce(function (sum, item) {
             return sum + (parseFloat(item.total) || 0);
         }, 0);
+        totalGeneral += totalCategoria;
         if (typeof catNombre === 'string' && catNombre.trim().toUpperCase() === 'COMBUSTIBLE') {
             $('#txttotalcombustible').val(totalCategoria.toFixed(2));
         }
@@ -478,29 +482,35 @@ function cargarGastosEnAcordeon(gastos) {
                     </div>
                     <div id="collapse${acuerdoId}" class="collapse ${estaAbierto}" data-parent="#accordion">
                         <div class="card-body">
-                            <table class="table table-sm table-bordered" id="${acuerdoId}">
-                                <thead>
-                                    <tr>
-                                        <th>DESCRIPCIÓN</th>
-                                        <th>MONTO</th>
-                                        <th>CANTIDAD</th>
-                                        <th>TOTAL</th>
-                                        <th>ACCIÓN</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                            </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered" style="width:100%" id="${acuerdoId}">
+                                    <thead>
+                                        <tr>
+                                            <th>DESCRIPCIÓN</th>
+                                            <th>MONTO</th>
+                                            <th>CANTIDAD</th>
+                                            <th>TOTAL</th>
+                                            <th>ACCIÓN</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
         $("#accordion").append(html);
-        $("#" + acuerdoId).closest('.table-responsive').remove();
-        $("#" + acuerdoId).wrap('<div class="table-responsive"></div>');
 
         $("#" + acuerdoId).DataTable({
             data: items,
+            language: Español,
+            lengthChange: false,
+            autoWidth: false,
+            responsive: true,
+            scrollX: false,
+            paging: false,
             columns: [
                 { data: "descripcion" },
                 { data: "monto" },
@@ -512,18 +522,19 @@ function cargarGastosEnAcordeon(gastos) {
                     width: "10%",
                     className: "text-center",
                     render: function (data, type, row) {
-                        return `<button class=\"btn btn-sm btn-danger\" onclick="eliminarGasto(${row.iddet_gastos_viaje})"><i class='fas fa-trash'></i></button>`;
+                        return `<button class=\"btn btn-sm btn-danger\" onclick=\"eliminarGasto(${row.iddet_gastos_viaje})\"><i class='fas fa-trash'></i></button>`;
                     }
                 }
             ],
-            language: Español,
-            lengthChange: false,
-            autoWidth: false,
-            responsive: true,
-            scrollX: true,
-            paging: false
         });
     });
+    $("#total-general-gastos").remove();
+    let totalGeneralHtml = `
+        <div id="total-general-gastos" class="mt-3 text-right pr-4">
+            <h5><strong>Total General: S/ ${totalGeneral.toFixed(2)}</strong></h5>
+        </div>
+    `;
+    $("#accordion").after(totalGeneralHtml);
 }
 
 function eliminarGasto(idDetGasto) {

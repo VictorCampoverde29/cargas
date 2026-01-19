@@ -12,7 +12,12 @@ class GastosViajeModel extends Model
     protected $allowedFields = ['destino_origen', 'destino_destino', 'idunidades', 'tramo_km', 'carreta', 'idcondicion'];
 
     public function obtenerGastosViaje(){
-        return $this->select('gastos_viaje.idgastos_viaje, gastos_viaje.tramo_km, gastos_viaje.carreta, CONCAT(des.nombre, " - ", des2.nombre) as viaje, uni.descripcion as unidad, condi.descripcion as condicion')
+        return $this->select("gastos_viaje.idgastos_viaje, gastos_viaje.tramo_km, gastos_viaje.carreta, CONCAT(des.nombre, ' - ', des2.nombre) as viaje, uni.descripcion as unidad, condi.descripcion as condicion, (
+                SELECT cantidad FROM det_gastos_viaje d
+                WHERE d.idgastos_viaje = gastos_viaje.idgastos_viaje
+                ORDER BY d.iddet_gastos_viaje ASC
+                LIMIT 1
+            ) as total_galones")
             ->join('destinos des', 'des.iddestino = gastos_viaje.destino_origen')
             ->join('destinos des2', 'des2.iddestino = gastos_viaje.destino_destino')
             ->join('unidades uni', 'uni.idunidades = gastos_viaje.idunidades')

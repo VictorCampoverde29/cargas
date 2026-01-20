@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Models\CategoriaViajeModel;
 use App\Models\CondicionGastoViajeModel;
 use App\Models\ConsumoCombustibleModel;
-use App\Models\DestinosModel;
 use App\Models\GastosViajeModel;
 use App\Models\VehiculosModel;
 use App\Models\DetalleGastosViajeModel;
@@ -28,10 +27,11 @@ class GastosViajesController extends Controller
 
     public function indexConsultarGastos()
     {
-        $Unidades = new VehiculosModel();
-        $Destino = new DestinosModel();
-        $data['destino'] = $Destino->selectDestinos();
-        $data['unidad'] = $Unidades->getUnidadesGuia();
+        $Consulta = new GastosViajeModel();
+        $data['origen']    = $Consulta->obtenerOrigenes();
+        $data['destino']    = $Consulta->obtenerDestinos();
+        $data['unidad']    = $Consulta->obtenerUnidades();
+        $data['condicion'] = $Consulta->obtenerCondiciones();
         return view('consultar_gastos/index', $data);
     }
 

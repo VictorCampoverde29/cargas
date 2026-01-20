@@ -25,7 +25,8 @@ class GastosViajeModel extends Model
             ->findAll();
     }
 
-    public function obtenerGastosViajePorCodigo($orig, $dest, $uni){
+    public function obtenerGastosViajePorCodigo($orig, $dest, $uni)
+    {
         return $this->select('gastos_viaje.idgastos_viaje, gastos_viaje.tramo_km, CONCAT(des.nombre, " - ", des2.nombre) as viaje, uni.descripcion as unidad, condi.descripcion as condicion')
             ->join('destinos des', 'des.iddestino = gastos_viaje.destino_origen')
             ->join('destinos des2', 'des2.iddestino = gastos_viaje.destino_destino')
@@ -35,6 +36,38 @@ class GastosViajeModel extends Model
             ->where('gastos_viaje.destino_destino', $dest)
             ->where('gastos_viaje.idunidades', $uni)
             ->first();
+    }
+
+    public function obtenerOrigenes()
+    {
+        return $this->distinct()
+            ->select('destino_origen, des.nombre AS origen')
+            ->join('destinos des', 'des.iddestino = gastos_viaje.destino_origen')
+            ->findAll();
+    }
+
+    public function obtenerDestinos()
+    {
+        return $this->distinct()
+            ->select('destino_destino, des2.nombre AS destino')
+            ->join('destinos des2', 'des2.iddestino = gastos_viaje.destino_destino')
+            ->findAll();
+    }
+
+    public function obtenerUnidades()
+    {
+        return $this->distinct()
+            ->select('gastos_viaje.idunidades, uni.descripcion AS unidad')
+            ->join('unidades uni', 'uni.idunidades = gastos_viaje.idunidades')
+            ->findAll();
+    }
+
+    public function obtenerCondiciones()
+    {
+        return $this->distinct()
+            ->select('gastos_viaje.idcondicion, condi.descripcion AS condicion')
+            ->join('condiciones_gastoviaje condi', 'condi.idcondiciones_gastoviaje = gastos_viaje.idcondicion')
+            ->findAll();
     }
 
     public function registrarGastosViaje(string $xmlContent): string
@@ -59,5 +92,4 @@ class GastosViajeModel extends Model
             return 'ERROR: ' . $e->getMessage();
         }
     }
-
 }

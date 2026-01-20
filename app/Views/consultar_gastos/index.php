@@ -47,11 +47,11 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="filtrorigen"> ORIGEN</label>
+                                    <label for="filtrorigen"><i class="fas fa-map-marker-alt"></i> ORIGEN</label>
                                     <select class="form-control form-control-sm" id="cmbfiltrorigen" name="cmbfiltrorigen">
-                                        <<?php foreach ($destino as $destinos): ?>
-                                            <option value="<?= esc($destinos['iddestino']); ?>">
-                                            <?= esc($destinos['nombre']); ?>
+                                        <<?php foreach ($origen as $origenes): ?>
+                                            <option value="<?= esc($origenes['destino_origen']); ?>">
+                                            <?= esc($origenes['origen']); ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -59,11 +59,11 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="filtrodestino"> DESTINO</label>
+                                    <label for="filtrodestino"><i class="fas fa-flag-checkered"></i> DESTINO</label>
                                     <select class="form-control form-control-sm" id="cmbfiltrodestino" name="cmbfiltrodestino">
                                         <<?php foreach ($destino as $destinos): ?>
-                                            <option value="<?= esc($destinos['iddestino']); ?>">
-                                            <?= esc($destinos['nombre']); ?>
+                                            <option value="<?= esc($destinos['destino_destino']); ?>">
+                                            <?= esc($destinos['destino']); ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -71,11 +71,23 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="filtrounidad"> UNIDAD</label>
+                                    <label for="filtrounidad"><i class="fas fa-truck"></i> UNIDAD</label>
                                     <select class="form-control form-control-sm" id="cmbfiltrounidad" name="cmbfiltrounidad">
                                         <<?php foreach ($unidad as $unidades): ?>
                                             <option value="<?= esc($unidades['idunidades']); ?>">
-                                            <?= esc($unidades['descripcion']); ?>
+                                            <?= esc($unidades['unidad']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="filtrocondicion"><i class="fas fa-clipboard-check"></i> CONDICION</label>
+                                    <select class="form-control form-control-sm" id="cmbfiltrocondicion" name="cmbfiltrocondicion">
+                                        <<?php foreach ($condicion as $condiciones): ?>
+                                            <option value="<?= esc($condiciones['idcondicion']); ?>">
+                                            <?= esc($condiciones['condicion']); ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>

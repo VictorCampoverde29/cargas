@@ -26,10 +26,11 @@ class GastosViajeModel extends Model
     }
 
     public function obtenerGastosViajePorCodigo($orig, $dest, $uni){
-        return $this->select('gastos_viaje.idgastos_viaje, gastos_viaje.tramo_km, CONCAT(des.nombre, " - ", des2.nombre) as viaje, uni.descripcion as unidad')
+        return $this->select('gastos_viaje.idgastos_viaje, gastos_viaje.tramo_km, CONCAT(des.nombre, " - ", des2.nombre) as viaje, uni.descripcion as unidad, condi.descripcion as condicion')
             ->join('destinos des', 'des.iddestino = gastos_viaje.destino_origen')
             ->join('destinos des2', 'des2.iddestino = gastos_viaje.destino_destino')
             ->join('unidades uni', 'uni.idunidades = gastos_viaje.idunidades')
+            ->join('condiciones_parametros_gastoviaje condi', 'condi.idcondiciones_parametros_gastoviaje = gastos_viaje.idcondicion')
             ->where('gastos_viaje.destino_origen', $orig)
             ->where('gastos_viaje.destino_destino', $dest)
             ->where('gastos_viaje.idunidades', $uni)

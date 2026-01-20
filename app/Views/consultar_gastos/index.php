@@ -114,8 +114,8 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="txtgalones"> GALONES</label>
-                                    <input type="text" class="form-control form-control-sm" id="txtgalones" name="txtgalones" disabled>
+                                    <label for="txtuni"> CONDICION</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtcondi" name="txtcondi" disabled>
                                 </div>
                             </div>
                         </div>

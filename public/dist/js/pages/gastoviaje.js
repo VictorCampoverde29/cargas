@@ -756,6 +756,7 @@ function obtenerGastosViajes() {
                 $('#txtidviajes').val(response.data.idgastos_viaje);
                 $('#txtviaje').val(response.data.viaje);
                 $('#txtuni').val(response.data.unidad);
+                $('#txtcondi').val(response.data.condicion);
                 if (!response.data || !response.data.idgastos_viaje) {
                     Swal.fire({
                         icon: "error",

@@ -98,7 +98,7 @@ Gastos Viajes
                                     <label for="cmbcondicion"><i class="fas fa-truck"></i> CONDICION:</label>
                                     <select class="form-control form-control-sm" id="cmbcondicion">
                                         <?php foreach ($condicion as $condiciones): ?>
-                                            <option value="<?= esc($condiciones['idcondiciones_parametros_gastoviaje']); ?>">
+                                            <option value="<?= esc($condiciones['idcondiciones_gastoviaje']); ?>">
                                                 <?= esc($condiciones['descripcion']); ?>
                                             </option>
                                         <?php endforeach; ?>

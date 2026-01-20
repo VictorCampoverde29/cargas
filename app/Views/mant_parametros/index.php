@@ -168,10 +168,10 @@ Mantenimiento Parametros
                 </div>
             </div>
             <div class="modal-footer justify-content-end">
-                <button type="button" id="btnregistrarcondi" name="btnregistrarcondi" class="btn btn-success mr-2" onclick="agregarDestino()">
+                <button type="button" id="btnregistrarcondi" name="btnregistrarcondi" class="btn btn-success mr-2" onclick="agregarCondicion()">
                     <i class="fa-solid fa-floppy-disk"></i> REGISTRAR
                 </button>
-                <button type="button" id="btneditarcondi" name="btneditarcondi" class="btn btn-warning mr-2" onclick="editarDestino()">
+                <button type="button" id="btneditarcondi" name="btneditarcondi" class="btn btn-warning mr-2" onclick="editarCondicion()">
                     <i class="fas fa-pencil-alt"></i> EDITAR
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -181,7 +181,7 @@ Mantenimiento Parametros
         </div>
     </div>
 </div>
-<!----------------------------------------------- MODAL CONDICIONES VIAJE ------------------------------------------------->
+<!----------------------------------------------- MODAL PARAMETROS VIAJE ------------------------------------------------->
 <div class="modal fade" id="mdlparametros" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -219,7 +219,7 @@ Mantenimiento Parametros
                             <label for="cmbcondicionesparametros"><i class="fas fa-align-left"></i> Condicion</label>
                             <select class="form-control form-control-sm" id="cmbcondicionesparametros">
                                 <?php foreach ($condiciones as $condicion) : ?>
-                                    <option value="<?= $condicion['idcondiciones_parametros_gastoviaje'] ?>"><?= $condicion['descripcion'] ?></option>
+                                    <option value="<?= $condicion['idcondicion_gastoviaje'] ?>"><?= $condicion['descripcion'] ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>

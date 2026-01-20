@@ -32,16 +32,6 @@ $(document).ready(function () {
     });
 
     $('#txtgalonesref, #txtprecioref').on('input', calcularTotalViaje);
-    $('#cmbunidad, #cmbcondicion, #cmbcarreta, #hdnIdDesti1, #hdnIdDesti2').on('change', traerParametros);
-    // bloquearLetrasPorId('txtdistancia')
-    // bloquearLetrasPorId('txtmonto');
-    // bloquearLetrasPorId('numcantidad');
-    // bloquearEspaciosPorId('txtdistancia');
-    // bloquearEspaciosPorId('txtdest1');
-    // bloquearEspaciosPorId('txtdest2');
-    // bloquearEspaciosPorId('txtmonto');
-    // bloquearEspaciosPorId('numcantidad');
-    // bloquearEspaciosPorId('txttotal');
     $('#txtmonto, #numcantidad').on('input', calcularTotal);
 });
 
@@ -64,10 +54,17 @@ function bloquearLetrasPorId(id) {
 }
 
 function limpiar() {
-    $("#txtdescripcion").val("");
+    $("#txtglosa").val("");
     $("#cmbunidad").prop('selectedIndex', 0);
-    $("#cmbconductor").prop('selectedIndex', 0);
+    $("#cmbcondicion").prop('selectedIndex', 0);
+    $("#cmbcarreta").val("NO");
     $("#txtdistancia").val("");
+    $("#cmbprecio").val("1");
+    preciosCombustiblePorId();
+    $('#txtgalonesref').val("");
+    $("#txtpeajes").val("");
+    $("#txtviatico").val("35");
+    $("#txtdias").val("1");
     $("#txtdest1").val("");
     $("#txtdest2").val("");
     $("#hdnIdDesti1").val("");
@@ -219,8 +216,6 @@ function seleccionarDestino(inputId, idDestino, nombreDestino) {
 
     setTimeout(function () {
         $("#resultados-articulos-" + inputId).parent().remove();
-        // Llamar traerParametros después de seleccionar un destino
-        traerParametros();
     }, 300);
 }
 
@@ -434,7 +429,6 @@ function cargarGastosEnAcordeon(gastos) {
         const acuerdoId = "accordion-cat-" + catNombre.replace(/[^a-zA-Z0-9_-]/g, "_");
         const estaAbierto = "";
         const ariaExpanded = "false";
-        // Calcular el total de la categoría
         const totalCategoria = items.reduce(function (sum, item) {
             return sum + (parseFloat(item.total) || 0);
         }, 0);
@@ -487,7 +481,7 @@ function cargarGastosEnAcordeon(gastos) {
                                             <th>MONTO</th>
                                             <th>CANTIDAD</th>
                                             <th>TOTAL</th>
-                                            <th>ACCIÓN</th>
+                                            <th>ACCIONES</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -510,16 +504,19 @@ function cargarGastosEnAcordeon(gastos) {
             paging: false,
             columns: [
                 { data: "descripcion" },
-                { data: "monto" },
-                { data: "cantidad" },
-                { data: "total" },
+                { data: "monto", width: "14%" },
+                { data: "cantidad" , width: "14%" },
+                { data: "total" , width: "14%"},
                 {
                     data: null,
                     orderable: false,
-                    width: "10%",
+                    width: "12%",
                     className: "text-center",
                     render: function (data, type, row) {
-                        return `<button class=\"btn btn-sm btn-danger\" onclick=\"eliminarGasto(${row.iddet_gastos_viaje})\"><i class='fas fa-trash'></i></button>`;
+                        return `
+                            <button class="btn btn-sm btn-warning mr-1" onclick="editarGastos(${row.iddet_gastos_viaje}, this)"><i class='fas fa-pencil-alt'></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="eliminarGasto(${row.iddet_gastos_viaje})"><i class='fas fa-trash'></i></button>
+                        `;
                     }
                 }
             ],
@@ -645,7 +642,6 @@ function cargarGastosEnAcordeonConsulta(gastos) {
         const acuerdoId = "accordion-cat-" + catNombre.replace(/[^a-zA-Z0-9_-]/g, "_");
         const estaAbierto = "";
         const ariaExpanded = "false";
-        // Calcular el total de la categoría
         const totalCategoria = items.reduce(function (sum, item) {
             return sum + (parseFloat(item.total) || 0);
         }, 0);
@@ -787,35 +783,6 @@ function obtenerGastosViajes() {
 
 }
 
-function traerParametros() {
-    var parametros = {
-        origen: $('#hdnIdDesti1').val(),
-        destino: $('#hdnIdDesti2').val(),
-        unidad: $('#cmbunidad').val(),
-        condicion: $('#cmbcondicion').val(),
-        carreta: $('#cmbcarreta').val()
-    };
-    //console.log(parametros)
-    $.ajax({
-        type: "POST",
-        url: baseURL + "gastos_viajes/get_parametros",
-        data: parametros,
-        success: function (response) {
-            // console.log(response);
-            if (response && typeof response.galones !== 'undefined' && response.galones !== null) {
-                $('#txtgalonesref').val(response.galones);
-            } else {
-                $('#txtgalonesref').val('');
-            }
-            if (response && typeof response.peajes !== 'undefined' && response.peajes !== null) {
-                $('#txtpeajes').val(response.peajes);
-            } else {
-                $('#txtpeajes').val('');
-            }
-        },
-    });
-}
-
 function registrarGastosViajes() {
     var datosGasto = {
         origen: $('#hdnIdDesti1').val(),
@@ -824,13 +791,41 @@ function registrarGastosViajes() {
         condicion: $('#cmbcondicion').val(),
         carreta: $('#cmbcarreta').val(),
         tramo_km: $('#txtdistancia').val(),
+        glosa: $('#txtglosa').val(),
         precio_galon: $('#txtprecioref').val(),
         cant_galones: $('#txtgalonesref').val(),
         peajes: $('#txtpeajes').val(),
         viaticos: $('#txtviatico').val(),
         dias: $('#txtdias').val(),
     }
-
+    if (datosGasto.origen === "") {
+        Swal.fire({ icon: 'warning', title: 'REGISTRO GASTO VIAJE', text: 'Seleccione un origen válido', });
+        return;
+    }
+    if (datosGasto.destino === "") {
+        Swal.fire({ icon: 'warning', title: 'REGISTRO GASTO VIAJE', text: 'Seleccione un destino válido', });
+        return;
+    }
+    if (datosGasto.origen === datosGasto.destino) {
+        Swal.fire({ icon: 'warning', title: 'REGISTRO GASTO VIAJE', text: 'El origen y destino no pueden ser iguales', });
+        return;
+    }
+    if (datosGasto.precio_galon === "" || datosGasto.precio_galon <= 0) {
+        Swal.fire({ icon: 'warning', title: 'REGISTRO GASTO VIAJE', text: 'Seleccione un precio válido', });
+        return;
+    }
+    if (datosGasto.cant_galones === "" || datosGasto.cant_galones <= 0) {
+        Swal.fire({ icon: 'warning', title: 'REGISTRO GASTO VIAJE', text: 'Ingrese una cantidad de galones válida', });
+        return;
+    }
+    if (datosGasto.viaticos === "" || datosGasto.viaticos < 0) {
+        Swal.fire({ icon: 'warning', title: 'REGISTRO GASTO VIAJE', text: 'Ingrese un valor válido para viáticos', });
+        return;
+    }
+    if (datosGasto.dias === "" || datosGasto.dias <= 0) {
+        Swal.fire({ icon: 'warning', title: 'REGISTRO GASTO VIAJE', text: 'Ingrese una cantidad válida de días', });
+        return;
+    }
     $.ajax({
         type: "POST",
         url: baseURL + "gastos_viajes/registrargastos",
@@ -853,9 +848,96 @@ function registrarGastosViajes() {
                     setTimeout(function () {
                         table.page(paginaActual).draw("page");
                     }, 800);
+                    $('#mdlgastoviaje').modal('hide');
                 });
             }
-            $('#mdlgastoviaje').modal('hide');
+        }
+    });
+}
+
+function editarGastos(id, btn) {
+    if ($('tr.editando').length > 0) {
+        Swal.fire({
+            icon: 'info',
+            title: 'Edición en curso',
+            text: 'Termina o cancela la edición actual antes de editar otra fila.'
+        });
+        return;
+    }
+    var $btn = $(btn);
+    var $tr = $btn.closest('tr');
+    $tr.addClass('editando');
+
+    var descripcion = $tr.find('td:eq(0)').text().trim();
+    var monto = $tr.find('td:eq(1)').text().trim();
+    var cantidad = $tr.find('td:eq(2)').text().trim();
+    var total = $tr.find('td:eq(3)').text().trim();
+
+    $tr.find('td:eq(0)').html(`<input type="text" class="form-control form-control-sm" value="${descripcion}">`);
+    $tr.find('td:eq(1)').html(`<input type="number" class="form-control form-control-sm" value="${monto}" min="0" step="0.01" onchange="actualizarTotalEnEdicion(this)">`);
+    $tr.find('td:eq(2)').html(`<input type="number" class="form-control form-control-sm" value="${cantidad}" min="0" step="0.01" onchange="actualizarTotalEnEdicion(this)">`);
+    $tr.find('td:eq(3)').html(`<input type="number" class="form-control form-control-sm" value="${total}" min="0" step="0.01" readonly>`);
+
+    $tr.find('td:last-child').html(`
+        <button class="btn btn-sm btn-success mr-1" onclick="guardarEdicionGasto(${id}, this)"><i class='fas fa-save'></i></button>
+        <button class="btn btn-sm btn-secondary" onclick="cancelarEdicionGasto(this)"><i class='fas fa-times'></i></button>
+    `);
+}
+
+function actualizarTotalEnEdicion(input) {
+    var $tr = $(input).closest('tr');
+    var monto = parseFloat($tr.find('td:eq(1) input').val()) || 0;
+    var cantidad = parseFloat($tr.find('td:eq(2) input').val()) || 0;
+    $tr.find('td:eq(3) input').val((monto * cantidad).toFixed(2));
+}
+
+function cancelarEdicionGasto(btn) {
+    cargarDetalle();
+}
+
+function guardarEdicionGasto(id, btn) {
+    var $tr = $(btn).closest('tr');
+    var descripcion = $tr.find('td:eq(0) input').val();
+    var monto = $tr.find('td:eq(1) input').val();
+    var cantidad = $tr.find('td:eq(2) input').val();
+    var total = $tr.find('td:eq(3) input').val();
+    var parametros = {
+        iddet_gastos_viaje: id,
+        descripcion: descripcion,
+        monto: monto,
+        cantidad: cantidad,
+        total: total
+    };
+    for (const key in parametros) {
+        if (parametros[key] === undefined || parametros[key] === null || parametros[key].toString().trim() === "") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campos requeridos',
+                text: 'Ningún campo puede estar vacío.'
+            });
+            return;
+        }
+    }
+    $.ajax({
+        type: "POST",
+        url: baseURL + "gastos_viajes/editar_dt",
+        data: parametros,
+        success: function (response) {
+            if (response.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Editar Gasto',
+                    text: response.message,
+                }).then(() => {
+                    cargarDetalle();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Editar Gasto',
+                    text: response.message
+                });
+            }
         }
     });
 }

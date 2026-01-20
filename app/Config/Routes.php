@@ -34,7 +34,7 @@ $routes->group('dashboard', ['filter' => 'AuthFilter'], function ($routes) {
     $routes->get('reg_servicio', 'RegistrarServicioController::index');
     $routes->get('mant_carga', 'CargaController::index');
     $routes->get('mant_destino', 'DestinosController::index');
-    $routes->get('mant_parametros', 'ParametrosViajeController::index');
+    $routes->get('mant_condiciones', 'CondicionGastoViajeController::index');
 });
 
 $routes->group('mant_carga', ['filter' => 'CambioFilter'], function ($routes) {
@@ -104,13 +104,6 @@ $routes->group('gastos_viajes', ['filter' => 'CambioFilter'], function ($routes)
     $routes->post('editar_dt', 'DetGastoViajeController::update');
 });
 
-$routes->group('mant_parametros', ['filter' => 'CambioFilter'], function ($routes){
-    $routes->get('datatables', 'ParametrosViajeController::getParametros');
-    $routes->post('registrar', 'ParametrosViajeController::insert');
-    $routes->post('parametros_xcod', 'ParametrosViajeController::getParametrosXcod');
-    $routes->post('editar', 'ParametrosViajeController::update');
-});
-
 $routes->group('mant_condiciones', ['filter' => 'CambioFilter'], function ($routes){
     $routes->get('datatables', 'CondicionGastoViajeController::getCondiciones');
     $routes->post('registrar', 'CondicionGastoViajeController::insert');
@@ -120,4 +113,7 @@ $routes->group('mant_condiciones', ['filter' => 'CambioFilter'], function ($rout
 
 $routes->group('mant_categoria', ['filter' => 'CambioFilter'], function ($routes){
     $routes->get('datatables', 'CategoriaViajeController::getCategorias');
+    $routes->post('registrar', 'CategoriaViajeController::insert');
+    $routes->post('categoria_xcod', 'CategoriaViajeController::getCategoriasXcod');
+    $routes->post('editar', 'CategoriaViajeController::update');
 });

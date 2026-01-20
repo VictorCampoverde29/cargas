@@ -7,6 +7,6 @@
   <modulo nombre="MANTENIMIENTO" icono="fas fa-wrench">
     <item nombre="Mant. Carga" ruta="dashboard/mant_carga" icono="fas fa-boxes-stacked"/>
     <item nombre="Mant. Destino" ruta="dashboard/mant_destino" icono="fas fa-map-marker-alt"/>
-    <item nombre="Mant. Parametros" ruta="dashboard/mant_parametros" icono="fas fa-clipboard-check"/>
+    <item nombre="Mant. Parametros" ruta="dashboard/mant_condiciones" icono="fas fa-clipboard-check"/>
   </modulo>
 </menu>

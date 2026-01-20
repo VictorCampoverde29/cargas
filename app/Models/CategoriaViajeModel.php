@@ -21,4 +21,10 @@ class CategoriaViajeModel extends Model
     {
         return $this->findAll();
     }
+
+    public function getCategoriasXcod($idcategoria_viajes)
+    {
+        return $this->where('idcategoria_viajes', $idcategoria_viajes)
+                    ->first();
+    }
 }

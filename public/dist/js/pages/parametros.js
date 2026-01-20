@@ -1,9 +1,19 @@
 table = '';
 $(document).ready(function () {
-    cargarParametros();
-    cargarCondiciones();
-    cargarCategorias();
-    $('#cmborigenparametros, #cmbdestinosparametros').on('change', function() {
+    if ($('#tab-parametros').hasClass('active')) {
+        cargarParametros();
+    }
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr("href");
+        if (target === '#panel-parametros') {
+            cargarParametros();
+        } else if (target === '#panel-condiciones') {
+            cargarCondiciones();
+        } else if (target === '#panel-categorias') {
+            cargarCategorias();
+        }
+    });
+    $('#cmborigenparametros, #cmbdestinosparametros').on('change', function () {
         let origen = $('#cmborigenparametros').val();
         let destino = $('#cmbdestinosparametros').val();
         $('#cmborigenparametros option, #cmbdestinosparametros option').show();
@@ -18,15 +28,15 @@ $(document).ready(function () {
 });
 
 function abrirModalCondicion() {
-    limpiarCondciones();
+    limpiarCondiciones();
     $('#btnregistrarcondi').removeClass('d-none');
     $('#btneditarcondi').addClass('d-none');
-    $('#lbltitulocondicion').html('REGISTRAR NUEVA CONDICION');
+    $('#lbltitulocondicion').html('Registrar Nueva Condición');
     $('#mdlcondiciones .modal-header').removeClass('bg-warning').addClass('bg-success');
     $('#mdlcondiciones').modal('show');
 }
 
-function limpiarCondciones() {
+function limpiarCondiciones() {
     $('#txtdescripcioncondi').val('');
     $('#cmbestadocondi').val('ACTIVO');
 }
@@ -83,7 +93,7 @@ function abrirModalParametros() {
 
 function cargarCondiciones() {
     const url = baseURL + "mant_condiciones/datatables"; // Asegúrate que esta ruta coincide con la definida en Routes.php
-    table = $("#tblcondicionesviaje").DataTable({
+    tableCondiciones = $("#tblcondicionesviaje").DataTable({
         "destroy": true,
         "language": Español,
         "autoWidth": false,
@@ -124,7 +134,7 @@ function cargarCondiciones() {
                 "orderable": false,
                 "render": function (data, type, row) {
                     return `
-                    <button class="btn btn-sm btn-warning" onclick="mostrarDatosX('${row.idcondiciones_parametros_gastoviaje}')" title="EDITAR"><i class="fas fa-pencil-alt"></i></button>
+                    <button class="btn btn-sm btn-warning" onclick="mostrarDatosCondi('${row.idcondicion_gastoviaje}')" title="EDITAR"><i class="fas fa-pencil-alt"></i></button>
                     `;
                 }
             }
@@ -144,15 +154,15 @@ function agregarParametros() {
         estado: $('#cmbestadoparametros').val()
     };
     if (parametros.origen === parametros.destino) {
-        Swal.fire('¡Atención!','El origen y destino no pueden ser iguales.','warning');
+        Swal.fire('¡Atención!', 'El origen y destino no pueden ser iguales.', 'warning');
         return;
     }
     if (parametros.galones === '') {
-        Swal.fire('¡Atención!','El campo de galones no puede estar vacío.','warning');
+        Swal.fire('¡Atención!', 'El campo de galones no puede estar vacío.', 'warning');
         return;
     }
     if (parametros.peajes === '') {
-        Swal.fire('¡Atención!','El campo de peajes no puede estar vacío.','warning');
+        Swal.fire('¡Atención!', 'El campo de peajes no puede estar vacío.', 'warning');
         return;
     }
 
@@ -164,7 +174,10 @@ function agregarParametros() {
         success: function (response) {
             console.log(response);
             $('#mdlparametros').modal('hide');
-            table.ajax.reload();
+            var paginaActual = table.page();
+            table.ajax.reload(function () {
+                table.page(paginaActual).draw(false);
+            });
             Swal.fire(
                 '¡Registrado!',
                 'El parametro de viaje ha sido registrado exitosamente.',
@@ -221,15 +234,15 @@ function editarParametros() {
         estado: $('#cmbestadoparametros').val()
     };
     if (parametros.origen === parametros.destino) {
-        Swal.fire('¡Atención!','El origen y destino no pueden ser iguales.','warning');
+        Swal.fire('¡Atención!', 'El origen y destino no pueden ser iguales.', 'warning');
         return;
     }
     if (parametros.galones === '') {
-        Swal.fire('¡Atención!','El campo de galones no puede estar vacío.','warning');
+        Swal.fire('¡Atención!', 'El campo de galones no puede estar vacío.', 'warning');
         return;
     }
     if (parametros.peajes === '') {
-        Swal.fire('¡Atención!','El campo de peajes no puede estar vacío.','warning');
+        Swal.fire('¡Atención!', 'El campo de peajes no puede estar vacío.', 'warning');
         return;
     }
     console.log(parametros);
@@ -240,7 +253,10 @@ function editarParametros() {
         success: function (response) {
             console.log(response);
             $('#mdlparametros').modal('hide');
-            table.ajax.reload();
+            var paginaActual = table.page();
+            table.ajax.reload(function () {
+                table.page(paginaActual).draw(false);
+            });
             Swal.fire(
                 '¡Actualizado!',
                 'El parametro de viaje ha sido actualizado exitosamente.',
@@ -251,7 +267,7 @@ function editarParametros() {
             console.error("Error en la solicitud AJAX:", error);
             Swal.fire(
                 '¡Error!',
-                'Hubo un problema al actualizar el parametro de viaje.',    
+                'Hubo un problema al actualizar el parametro de viaje.',
                 'error'
             );
         }
@@ -259,7 +275,7 @@ function editarParametros() {
 }
 
 function cargarCategorias() {
-     const url = baseURL + "mant_categoria/datatables"; // Asegúrate que esta ruta coincide con la definida en Routes.php
+    const url = baseURL + "mant_categoria/datatables";
     table = $("#tblcategoriasviaje").DataTable({
         "destroy": true,
         "language": Español,
@@ -306,5 +322,94 @@ function cargarCategorias() {
                 }
             }
         ],
+    });
+}
+
+function agregarCondicion() {
+    var condicion = {
+        descripcion: $('#txtdescripcioncondi').val(),
+        estado: $('#cmbestadocondi').val()
+    };
+    console.log(condicion);
+    $.ajax({
+        type: "POST",
+        url: baseURL + "mant_condiciones/registrar",
+        data: condicion,
+        success: function (response) {
+            console.log(response);
+            $('#mdlcondiciones').modal('hide');
+            var paginaActual = tableCondiciones.page();
+            tableCondiciones.ajax.reload(function () {
+                tableCondiciones.page(paginaActual).draw(false);
+            });
+            Swal.fire(
+                '¡Registrado!',
+                'La condición ha sido registrada exitosamente.',
+                'success'
+            );
+        },
+        error: function (xhr, status, error) {
+            console.error("Error en la solicitud AJAX:", error);
+            Swal.fire(
+                '¡Error!',
+                'Hubo un problema al registrar la condición.',
+                'error'
+            );
+        }
+    });
+}
+
+function mostrarDatosCondi(idcondicion) {
+    console.log("ID de la condición a editar:", idcondicion);
+    $.ajax({
+        type: "POST",
+        url: baseURL + "mant_condiciones/condiciones_xcod",
+        data: { idcondicion_gastoviaje: idcondicion },
+        success: function (response) {
+            console.log(response);
+            $('#txtidcondicion').val(response.idcondicion_gastoviaje);
+            $('#txtdescripcioncondi').val(response.descripcion);
+            $('#cmbestadocondi').val(response.estado);
+            $('#btnregistrarcondi').addClass('d-none');
+            $('#btneditarcondi').removeClass('d-none');
+            $('#lbltitulocondicion').html('Editar Condición de Viaje');
+            $('#mdlcondiciones .modal-header').removeClass('bg-success').addClass('bg-warning');
+            $('#mdlcondiciones').modal('show');
+        }
+    });
+}
+
+function editarCondicion() {
+    var condicion = {
+        idcondicion_gastoviaje: $('#txtidcondicion').val(),
+        descripcion: $('#txtdescripcioncondi').val(),
+        estado: $('#cmbestadocondi').val()
+    };
+    console.log(condicion);
+    $.ajax({
+        type: "POST",
+        url: baseURL + "mant_condiciones/editar",
+        data: condicion,
+        success: function (response) {
+            console.log(response);
+            $('#mdlcondiciones').modal('hide');
+            var paginaActual = tableCondiciones.page();
+            tableCondiciones.ajax.reload(function () {
+                tableCondiciones.page(paginaActual).draw(false);
+            });
+            Swal.fire(
+                '¡Actualizado!',
+                'La condición ha sido actualizada exitosamente.',
+                'success'
+            );
+        },
+        error: function (xhr, status, error) {
+            console.error("Error en la solicitud AJAX:", error);
+            Swal.fire(
+                '¡Error!',
+                'Hubo un problema al actualizar la condición.',
+                'error'
+            );
+        }
     });
 }

@@ -101,6 +101,7 @@ $routes->group('gastos_viajes', ['filter' => 'CambioFilter'], function ($routes)
     $routes->post('registrar_dt', 'DetGastoViajeController::registrarGastoViaje');
     $routes->post('eliminar_dt', 'DetGastoViajeController::deleteGastoViaje');
     $routes->post('get_parametros', 'ParametrosViajeController::obtenerParametrosViaje');
+    $routes->post('editar_dt', 'DetGastoViajeController::update');
 });
 
 $routes->group('mant_parametros', ['filter' => 'CambioFilter'], function ($routes){
@@ -111,10 +112,10 @@ $routes->group('mant_parametros', ['filter' => 'CambioFilter'], function ($route
 });
 
 $routes->group('mant_condiciones', ['filter' => 'CambioFilter'], function ($routes){
-    $routes->get('datatables', 'CondicionGastosViajeController::getCondiciones');
-    $routes->post('registrar', 'ParametrosViajeController::insert');
-    $routes->post('parametros_xcod', 'ParametrosViajeController::getParametrosXcod');
-    $routes->post('editar', 'ParametrosViajeController::update');
+    $routes->get('datatables', 'CondicionGastoViajeController::getCondiciones');
+    $routes->post('registrar', 'CondicionGastoViajeController::insert');
+    $routes->post('condiciones_xcod', 'CondicionGastoViajeController::getCondicionesXcod');
+    $routes->post('editar', 'CondicionGastoViajeController::update');
 });
 
 $routes->group('mant_categoria', ['filter' => 'CambioFilter'], function ($routes){

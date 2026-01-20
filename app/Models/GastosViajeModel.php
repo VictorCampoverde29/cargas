@@ -11,9 +11,8 @@ class GastosViajeModel extends Model
 
     protected $allowedFields = ['destino_origen', 'destino_destino', 'idunidades', 'tramo_km', 'carreta', 'idcondicion'];
 
-    public function obtenerGastosViaje()
-    {
-        return $this->select("gastos_viaje.idgastos_viaje, gastos_viaje.tramo_km, gastos_viaje.carreta, CONCAT(des.nombre, ' - ', des2.nombre) as viaje, uni.descripcion as unidad, condi.descripcion as condicion, (
+    public function obtenerGastosViaje(){
+        return $this->select("gastos_viaje.idgastos_viaje, IFNULL(NULLIF(gastos_viaje.tramo_km, ''), '-') as tramo_km, gastos_viaje.carreta, CONCAT(des.nombre, ' - ', des2.nombre) as viaje, uni.descripcion as unidad, condi.descripcion as condicion, (
                 SELECT cantidad FROM det_gastos_viaje d
                 WHERE d.idgastos_viaje = gastos_viaje.idgastos_viaje
                 ORDER BY d.iddet_gastos_viaje ASC
@@ -22,7 +21,7 @@ class GastosViajeModel extends Model
             ->join('destinos des', 'des.iddestino = gastos_viaje.destino_origen')
             ->join('destinos des2', 'des2.iddestino = gastos_viaje.destino_destino')
             ->join('unidades uni', 'uni.idunidades = gastos_viaje.idunidades')
-            ->join('condiciones_parametros_gastoviaje condi', 'condi.idcondiciones_parametros_gastoviaje = gastos_viaje.idcondicion')
+            ->join('condicion_gastoviaje condi', 'condi.idcondicion_gastoviaje = gastos_viaje.idcondicion')
             ->findAll();
     }
 
@@ -70,7 +69,7 @@ class GastosViajeModel extends Model
             ->join('condiciones_gastoviaje condi', 'condi.idcondiciones_gastoviaje = gastos_viaje.idcondicion')
             ->findAll();
     }
-    
+
     public function registrarGastosViaje(string $xmlContent): string
     {
         try {

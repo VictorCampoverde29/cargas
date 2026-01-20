@@ -98,7 +98,7 @@ Gastos Viajes
                                     <label for="cmbcondicion"><i class="fas fa-truck"></i> CONDICION:</label>
                                     <select class="form-control form-control-sm" id="cmbcondicion">
                                         <?php foreach ($condicion as $condiciones): ?>
-                                            <option value="<?= esc($condiciones['idcondiciones_gastoviaje']); ?>">
+                                            <option value="<?= esc($condiciones['idcondicion_gastoviaje']); ?>">
                                                 <?= esc($condiciones['descripcion']); ?>
                                             </option>
                                         <?php endforeach; ?>
@@ -118,6 +118,12 @@ Gastos Viajes
                                 <div class="form-group">
                                     <label for="txtdistancia"><i class="fas fa-truck"></i> DISTANCIA (KM):</label>
                                     <input type="number" class="form-control form-control-sm" id="txtdistancia" name="txtdistancia" step="0.01" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="txtglosa"><i class="fas fa-truck"></i> GLOSA:</label>
+                                    <input type="text" class="form-control form-control-sm" id="txtglosa" name="txtglosa" autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -144,25 +150,25 @@ Gastos Viajes
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="txtgalonesref"><i class="fas fa-truck"></i> TOTAL GALONES:</label>
-                                    <input type="text" class="form-control form-control-sm" id="txtgalonesref" name="txtgalonesref" autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" id="txtgalonesref" name="txtgalonesref" autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="txtpeajes"><i class="fas fa-truck"></i> TOTAL PEAJES:</label>
-                                    <input type="text" class="form-control form-control-sm" id="txtpeajes" name="txtpeajes" autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" id="txtpeajes" name="txtpeajes" autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="txtviatico"><i class="fas fa-truck"></i> VIATICOS:</label>
-                                    <input type="text" class="form-control form-control-sm" id="txtviatico" name="txtviatico" value=35 autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" id="txtviatico" name="txtviatico" value=35 autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="txtdias"><i class="fas fa-truck"></i> N° DIAS:</label>
-                                    <input type="text" class="form-control form-control-sm" id="txtdias" name="txtdias" value=1 autocomplete="off">
+                                    <input type="number" class="form-control form-control-sm" id="txtdias" name="txtdias" value=1 autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-md-3">

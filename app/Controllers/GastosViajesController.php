@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\CategoriaViajeModel;
-use App\Models\CondicionesParametrosGastosViajeModel;
+use App\Models\CondicionGastoViajeModel;
 use App\Models\ConsumoCombustibleModel;
 use App\Models\GastosViajeModel;
 use App\Models\VehiculosModel;
@@ -17,8 +17,8 @@ class GastosViajesController extends Controller
         $Unidades = new VehiculosModel();
         $CategoriaViaje = new CategoriaViajeModel();
         $ConsumoCombustible = new ConsumoCombustibleModel();
-        $CondicionesParametros = new CondicionesParametrosGastosViajeModel();
-        $data['condicion'] = $CondicionesParametros->getCondiciones();
+        $CondicionGastoViaje = new CondicionGastoViajeModel();
+        $data['condicion'] = $CondicionGastoViaje->cmbCondiciones();
         $data['consumo_combustible'] = $ConsumoCombustible->getDesPrecioKm();
         $data['categoria'] = $CategoriaViaje->getCategoriasActivas();
         $data['unidad'] = $Unidades->getUnidadesGuia();
@@ -77,6 +77,7 @@ class GastosViajesController extends Controller
                 'unidad'        => $this->request->getPost('unidad'),
                 'condicion'     => $this->request->getPost('condicion'),
                 'tramo_km'      => $this->request->getPost('tramo_km'),
+                'glosa'         => $this->request->getPost('glosa'),
                 'carreta'       => $this->request->getPost('carreta'),
                 'precio_galon'  => $this->request->getPost('precio_galon'),
                 'cant_galones'  => $this->request->getPost('cant_galones'),
@@ -98,15 +99,13 @@ class GastosViajesController extends Controller
 
             $gastosModel = new GastosViajeModel();
             $mensaje = $gastosModel->registrarGastosViaje($xml->outputMemory());
+            log_message('error', 'Mensaje al registrar gastos de viaje: ' . $xml->outputMemory());
 
             return $this->response->setJSON([
                 'success' => strpos($mensaje, 'ERROR') === false,
                 'message' => $mensaje
             ]);
         } catch (\Exception $e) {
-
-            log_message('error', 'Error al registrar gastos de viaje: ' . $e->getMessage());
-
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage()

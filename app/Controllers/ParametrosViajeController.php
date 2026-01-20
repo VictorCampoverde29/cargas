@@ -1,7 +1,7 @@
 <?php
 Namespace App\Controllers;
 
-use App\Models\CondicionesParametrosGastosViajeModel;
+use App\Models\CondicionGastoViajeModel;
 use App\Models\DestinosModel;
 use CodeIgniter\Controller;
 use App\Models\ParametrosViaje;
@@ -13,10 +13,10 @@ class ParametrosViajeController extends Controller
     {
         $destinos = new DestinosModel();
         $unidades = new VehiculosModel();
-        $condiciones = new CondicionesParametrosGastosViajeModel();
+        $condiciones = new CondicionGastoViajeModel();
         $data['destinos'] = $destinos->getDestinos();
         $data['vehiculos'] = $unidades->getUnidadesGuia();
-        $data['condiciones'] = $condiciones->getCondiciones();
+        $data['condiciones'] = $condiciones->cmbCondiciones();
         return view('mant_parametros/index', $data);
     }
 
@@ -39,7 +39,7 @@ class ParametrosViajeController extends Controller
         $idunidades = $this->request->getPost('unidad');
         $destino_origen = $this->request->getPost('origen');
         $destino_destino = $this->request->getPost('destino');
-        $idcondiciones_parametros_gastoviaje = $this->request->getPost('condicion');
+        $idcondicion = $this->request->getPost('condicion');
         $carreta = $this->request->getPost('carreta');
 
         $parametrosViajeModel = new ParametrosViaje();
@@ -47,7 +47,7 @@ class ParametrosViajeController extends Controller
             $idunidades,
             $destino_origen,
             $destino_destino,
-            $idcondiciones_parametros_gastoviaje,
+            $idcondicion,
             $carreta
         );
 
@@ -61,7 +61,7 @@ class ParametrosViajeController extends Controller
             'destino_origen' => $this->request->getPost('origen'),
             'destino_destino' => $this->request->getPost('destino'),
             'idunidades' => $this->request->getPost('unidad'),
-            'idcondiciones_parametros_gastoviaje' => $this->request->getPost('condicion'),
+            'idcondicion' => $this->request->getPost('condicion'),
             'carreta' => $this->request->getPost('carreta'),
             'galones' => $this->request->getPost('galones'),
             'peajes' => $this->request->getPost('peajes'),
@@ -85,7 +85,7 @@ class ParametrosViajeController extends Controller
             'destino_origen' => $this->request->getPost('origen'),
             'destino_destino' => $this->request->getPost('destino'),
             'idunidades' => $this->request->getPost('unidad'),
-            'idcondiciones_parametros_gastoviaje' => $this->request->getPost('condicion'),
+            'idcondicion' => $this->request->getPost('condicion'),
             'carreta' => $this->request->getPost('carreta'),
             'galones' => $this->request->getPost('galones'),
             'peajes' => $this->request->getPost('peajes'),

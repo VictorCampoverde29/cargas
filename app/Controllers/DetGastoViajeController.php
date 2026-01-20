@@ -41,4 +41,21 @@ class DetGastoViajeController extends Controller
             return $this->response->setJSON(['status' => 'error', 'message' => 'Error al eliminar el gasto: ' . $e->getMessage()]);
         }
     }
+    public function update()
+    {
+        $id = $this->request->getPost('iddet_gastos_viaje');
+        $data = [
+            'descripcion' => $this->request->getPost('descripcion'),
+            'monto' => $this->request->getPost('monto'),
+            'cantidad' => $this->request->getPost('cantidad'),
+            'total' => $this->request->getPost('total')
+        ];
+        try {
+            $dtgastoviaje = new DetalleGastosViajeModel();
+            $dtgastoviaje->update($id, $data);
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Gasto actualizado correctamente']);
+        } catch (\Exception $e) {
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Error al actualizar el gasto: ' . $e->getMessage()]);
+        }
+    }
 }

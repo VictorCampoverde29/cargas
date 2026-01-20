@@ -505,8 +505,8 @@ function cargarGastosEnAcordeon(gastos) {
             columns: [
                 { data: "descripcion" },
                 { data: "monto", width: "14%" },
-                { data: "cantidad" , width: "14%" },
-                { data: "total" , width: "14%"},
+                { data: "cantidad", width: "14%" },
+                { data: "total", width: "14%" },
                 {
                     data: null,
                     orderable: false,
@@ -637,6 +637,7 @@ function cargarGastosEnAcordeonConsulta(gastos) {
         }
         gastosPorCategoria[catNombre].push(gasto);
     });
+    let total = 0;
     Object.keys(gastosPorCategoria).forEach(function (catNombre) {
         const items = gastosPorCategoria[catNombre];
         const acuerdoId = "accordion-cat-" + catNombre.replace(/[^a-zA-Z0-9_-]/g, "_");
@@ -645,6 +646,7 @@ function cargarGastosEnAcordeonConsulta(gastos) {
         const totalCategoria = items.reduce(function (sum, item) {
             return sum + (parseFloat(item.total) || 0);
         }, 0);
+        total += totalCategoria;
         console.log('Categoría:', catNombre, 'Total:', totalCategoria);
 
         if (catNombre && catNombre.toUpperCase().trim().includes('COMBUSTIBLE')) {
@@ -673,7 +675,7 @@ function cargarGastosEnAcordeonConsulta(gastos) {
                     float: right;
                     font-size: 1rem;
                     font-weight: 600;
-                    color: #17a2b8 !important;
+                    color: #0c0c0cff !important;
                 }
                 </style>
                 <div class="card card-sm card-info">
@@ -721,6 +723,22 @@ function cargarGastosEnAcordeonConsulta(gastos) {
             responsive: true
         });
     });
+    $("#total-general-gastos").remove();
+    let totalGeneralHtml = `  
+        <div id="total-general-gastos">
+    <div class="d-flex justify-content-center align-items-center caja-chica" 
+         style="background: rgb(222, 237, 220); 
+                border: 1px solid rgb(25, 197, 28); 
+                color: rgb(25, 197, 28);
+                height: 40px; /* Aumenta la altura */
+                padding: 15px 20px; /* Aumenta el padding interno */
+                font-size: 18px; /* Aumenta el tamaño de fuente */">
+        <span class="font-weight-bold">TOTAL GENERAL: </span>
+        <span class="font-weight-bold"><span id="spestado">S/. ${total.toFixed(2)}</span></span>
+    </div>
+</div>
+    `;
+    $("#accordion").after(totalGeneralHtml);
 }
 
 function obtenerGastosViajes() {
@@ -728,6 +746,7 @@ function obtenerGastosViajes() {
         orig: $('#cmbfiltrorigen').val(),
         dest: $('#cmbfiltrodestino').val(),
         uni: $('#cmbfiltrounidad').val(),
+        condi: $('#cmbfiltrocondicion').val(),
     }
     const url = baseURL + "consultar_gv";
     $.ajax({

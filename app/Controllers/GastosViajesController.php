@@ -47,8 +47,9 @@ class GastosViajesController extends Controller
         $orig = $this->request->getGet('orig');
         $dest = $this->request->getGet('dest');
         $uni = $this->request->getGet('uni');
+        $condi = $this->request->getGet('condi');
         $gastosviaje = new GastosViajeModel();
-        $data = $gastosviaje->obtenerGastosViajePorCodigo($orig, $dest, $uni);
+        $data = $gastosviaje->obtenerGastosViajePorCodigo($orig, $dest, $uni, $condi);
         return $this->response->setJSON(['data' => $data]);
     }
 

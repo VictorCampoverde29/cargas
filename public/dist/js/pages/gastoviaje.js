@@ -497,11 +497,10 @@ function cargarGastosEnAcordeon(gastos) {
         $("#" + acuerdoId).DataTable({
             data: items,
             language: Español,
-            lengthChange: false,
+            lengthChange: true,
             autoWidth: false,
             responsive: true,
             scrollX: false,
-            paging: false,
             columns: [
                 { data: "descripcion" },
                 { data: "monto", width: "14%" },
@@ -909,16 +908,6 @@ function guardarEdicionGasto(id, btn) {
         cantidad: cantidad,
         total: total
     };
-    for (const key in parametros) {
-        if (parametros[key] === undefined || parametros[key] === null || parametros[key].toString().trim() === "") {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Campos requeridos',
-                text: 'Ningún campo puede estar vacío.'
-            });
-            return;
-        }
-    }
     $.ajax({
         type: "POST",
         url: baseURL + "gastos_viajes/editar_dt",

@@ -2,7 +2,7 @@
 
 namespace App\Filters;
 
-use App\Models\BarrasPerfilModel;
+use App\Models\ModulosModel;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -33,25 +33,22 @@ class AuthFilter implements FilterInterface
 
         $uri = service('uri');
         $routePath = implode('/', $uri->getSegments());
-        log_message('error','variable routepath:'.$routePath); 
+        //log_message('error','variable routepath:'.$routePath); 
 
-        $perfil = session()->get('ca_perfil');
-        $barrasperfil=new BarrasPerfilModel();
-        $urls = $barrasperfil->geturlsxperfil($perfil); 
-     
-       
+        $perfil = session()->get('ca_idperfil');
+        $modulosModel = new ModulosModel();
+        $urls = $modulosModel->getUrlXPerfil($perfil);
+
         $matchingItems = array_filter($urls, function ($menuItem) use ($routePath) {
-            return $menuItem['ruta_ci'] == $routePath;
+            return $menuItem['submodulo_url'] == $routePath;
         });
 
-     
-        if ($routePath !== 'dashboard' && $routePath!=='') {
-
+        if ($routePath !== 'dashboard') {
             if (empty($matchingItems)) {
-                    return redirect()->to('login/unauthorized');
+                return redirect()->to('login/unauthorized');
             }
         }
-
+        
         $acceso = 'NO'; // Valor inicial
 
     }

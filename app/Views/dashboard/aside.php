@@ -1,11 +1,11 @@
 <?php
-$xmlPath = APPPATH . 'Views/dashboard/opciones.xml';
-$menu = simplexml_load_file($xmlPath);
+helper('sidebar');
+$menuAgrupado = getMenuAgrupadoPorPerfil(session()->get('ca_idperfil'));
 ?>
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
-  <a href="<?= base_url() ?>" class="brand-link text-center">
+  <a href="<?= base_url('dashboard') ?>" class="brand-link text-center">
     <img src="<?= base_url('public/dist/img/logogasiub.png') ?>" alt="Asiu Logo" width="120" >
   </a>
 
@@ -34,47 +34,47 @@ $menu = simplexml_load_file($xmlPath);
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <?php foreach ($menu->modulo as $modulo): ?>
-          <li class="nav-item <?= count($modulo->children()) > 0 ? 'has-treeview' : '' ?>">
-            <a href="#" class="nav-link">
+        <?php
+        foreach ($menuAgrupado as $modulo): ?>
+          <li class="nav-item <?= count($modulo['submodulos']) > 0 ? 'has-treeview' : '' ?>">
+            <a href="<?= !empty($modulo['ruta']) ? base_url($modulo['ruta']) : '#' ?>" class="nav-link">
               <i class="nav-icon <?= $modulo['icono'] ?>"></i>
               <p>
                 <?= strtoupper($modulo['nombre']) ?>
-                <i class="right fas fa-angle-left"></i>
+                <?php if (count($modulo['submodulos']) > 0): ?>
+                  <i class="right fas fa-angle-left"></i>
+                <?php endif; ?>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <?php foreach ($modulo->children() as $child): ?>
-                <?php if ($child->getName() === 'item'): ?>
-                  <li class="nav-item">
-                    <a href="<?= base_url((string)$child['ruta']) ?>" class="nav-link">
-                      <i class="far fa-circle nav-icon <?= $child['icono'] ?>"></i>
-                      <p><?= $child['nombre'] ?></p>
-                    </a>
-                  </li>
-                <?php elseif ($child->getName() === 'submodulo'): ?>
-                  <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon <?= $child['icono'] ?>"></i>
-                      <p>
-                        <?= $child['nombre'] ?>
-                        <i class="right fas fa-angle-left"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <?php foreach ($child->item as $subitem): ?>
-                        <li class="nav-item">
-                          <a href="<?= base_url((string)$subitem['ruta']) ?>" class="nav-link">
-                            <i class="far fa-dot-circle nav-icon <?= $subitem['icono'] ?>"></i>
-                            <p><?= $subitem['nombre'] ?></p>
-                          </a>
-                        </li>
-                      <?php endforeach; ?>
-                    </ul>
-                  </li>
-                <?php endif; ?>
-              <?php endforeach; ?>
-            </ul>
+            <?php if (count($modulo['submodulos']) > 0): ?>
+              <ul class="nav nav-treeview">
+                  <?php
+                  $recorrer = function($submodulos) use (&$recorrer) {
+                    foreach ($submodulos as $sub) {
+                      $tieneHijos = !empty($sub['submodulos']);
+                      ?>
+                      <li class="nav-item <?= $tieneHijos ? 'has-treeview' : '' ?>">
+                        <a href="<?= !empty($sub['ruta']) ? base_url($sub['ruta']) : '#' ?>" class="nav-link">
+                          <i class="far fa-circle nav-icon <?= $sub['icono'] ?? '' ?>"></i>
+                          <p><?= $sub['nombre'] ?></p>
+                          <?php if ($tieneHijos): ?>
+                            <i class="right fas fa-angle-left"></i>
+                          <?php endif; ?>
+                        </p>
+                        </a>
+                        <?php if ($tieneHijos): ?>
+                          <ul class="nav nav-treeview">
+                            <?php $recorrer($sub['submodulos']); ?>
+                          </ul>
+                        <?php endif; ?>
+                      </li>
+                      <?php
+                    }
+                  };
+                  $recorrer($modulo['submodulos']);
+                  ?>
+              </ul>
+            <?php endif; ?>
           </li>
         <?php endforeach; ?>
       </ul>

@@ -14,7 +14,6 @@ $routes->get('det_gasto_consul', 'GastosViajesController::obtenerDetalleGastosVi
 $routes->group('', ['filter' => 'AuthFilter'], function ($routes) {
     $routes->get('/', 'Home::index');
     $routes->get('dashboard', 'Home::index');
-    $routes->get('bpadres', 'BarrasPerfilController::ObtenerBarrasPerfilPadres');
 });
 
 $routes->group('login', function ($routes) {

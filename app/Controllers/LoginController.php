@@ -2,9 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\AlmacenModel;
-use App\Models\BarrasPerfilModel;
-use App\Models\SucursalModel;
+use App\Models\ModulosModel;
 use CodeIgniter\Controller;
 use App\Models\UsuariosModel;
 
@@ -35,7 +33,7 @@ class LoginController extends Controller
 
         try {
             $usuarioModel = new UsuariosModel();
-            $BarrasperfilModel = new BarrasPerfilModel();
+            $modulosModel = new ModulosModel();
 
             $userData = $usuarioModel->getUser($usuario, $clave);
 
@@ -46,17 +44,16 @@ class LoginController extends Controller
                 ]);
             }
 
-            // Obtener todas las rutas permitidas para este perfil
-            $perfil = $userData['perfil'];
-            $rutasPermitidas = $BarrasperfilModel->geturlsxperfil($perfil);
+            $rutasPermitidas = $modulosModel->getUrlXPerfil($userData['idperfil']);
 
             session()->set([
                 'ca_nombreusuariocorto' => $userData['usuario'],
                 'ca_usuario' => $userData['idusuarios'],
                 'ca_password' => $clave,
                 'ca_perfil' => $userData['perfil'],
+                'ca_idperfil' => $userData['idperfil'],
                 'ca_nombrepersonal' => $userData['nombre'] ?? '',
-                'ca_rutas_permitidas' => array_column($rutasPermitidas, 'ruta'),
+                'ca_rutas_permitidas' => array_column($rutasPermitidas, 'submodulo_url'),
                 'ca_is_logged' => true
             ]);
 
